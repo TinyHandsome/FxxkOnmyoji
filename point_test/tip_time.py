@@ -16,12 +16,24 @@
 """
 import time
 from random import uniform
+from point_test.configure_get import Configure
 
 
 class TipTime:
     def __init__(self):
-        self.click_many_times_range = (0.2, 0.5)
+        self.conf = Configure('config.ini')
+        # 鼠标狂点时间间隔
+        self.click_many_times_range = (self.conf.get_option('time', 'click_many_times_min', 'float'), self.conf.get_option('time', 'click_many_times_max', 'float'))
+        # 颜色检测时间间隔
+        self.color_check_range = (self.conf.get_option('time', 'color_check_min', 'float'), self.conf.get_option('time', 'click_many_times_max', 'float'))
 
-    def tip(self):
-        temp = uniform(self.click_many_times_range[0], self.click_many_times_range[1])
+    def tip(self, flag='mouse'):
+        if flag == 'mouse':
+            aim_set = self.click_many_times_range
+        elif flag == 'color':
+            aim_set = self.color_check_range
+        else:
+            raise Exception('狗贼，时间有问题！')
+
+        temp = uniform(aim_set[0], aim_set[1])
         time.sleep(temp)
