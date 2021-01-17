@@ -48,7 +48,7 @@ class GetDict:
             color_check_result = self.mkf.colorCheck(color, xy)
 
             if color_check_result:
-                print('检测到了颜色：', name)
+                print('检测到了【对象】：', name)
                 if operation == '0':
                     self.t.tip()
                 elif operation == '1':
@@ -70,6 +70,6 @@ class GetDict:
             return
 
         for name in self.names:
-            t = Thread(target=self.run_thread, args=(name,))
-            t.setDaemon(True)
+            t = Thread(target=self.run_thread, args=(name,), daemon=True, name='【线程】' + name)
             t.start()
+            print(t.name)

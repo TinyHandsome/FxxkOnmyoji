@@ -140,7 +140,6 @@ pyflakes==2.2.0
 PyGetWindow==0.0.8
 Pygments==2.6.1
 PyHamcrest==2.0.2
-pyHook @ file:///C:/Users/LITIAN/Downloads/pyHook-1.5.1-cp37-cp37m-win_amd64.whl
 pyinstaller==4.0
 pyinstaller-hooks-contrib==2020.9
 pylint==2.6.0

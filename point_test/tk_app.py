@@ -10,6 +10,8 @@
 @time: 2021/1/15 15:45
 @desc: 可视化界面
         1. [pip迁移](https://blog.csdn.net/weixin_38781498/article/details/94037008)：pip install -r requirements.txt
+        2. [Python3入门之线程threading常用方法](https://www.cnblogs.com/chengd/articles/7770898.html)
+        3. [threading之线程的开始,暂停和退出](https://www.cnblogs.com/cnhyk/p/13697121.html)
 """
 from dataclasses import dataclass
 from tkinter import *
@@ -18,8 +20,10 @@ from point_test.configure_get import Configure
 from point_test.function_get import GetDict
 from system_hotkey import SystemHotkey
 from point_test.mouse_action import MouseAction
-from threading import Thread, enumerate, current_thread
+from threading import Thread, enumerate, get_ident
 from time import sleep
+from point_test.set_windows import SetWin
+import json
 
 
 @dataclass
@@ -40,6 +44,8 @@ class App:
             self.settings.get_option('font', 'font_size_normal', 'int'))
 
         self.root = Tk()
+        # 置顶
+        self.root.wm_attributes('-topmost', 1)
         self.root.title('狗贼v0.1')
 
         self.frame_1 = Frame(self.root)
@@ -73,9 +79,13 @@ class App:
         self.cmb2.bind('<<ComboboxSelected>>', self.get_key)
         self.cmb2.pack(side=LEFT, fill=Y)
 
-        self.b_reset = Button(self.frame_1, text='保存当前到配置文件(S)', font=self.font_normal,
-                              command=lambda: self.save_settings())
-        self.b_reset.pack(side=LEFT, fill=BOTH, expand=YES)
+        self.b_adjust_win = Button(self.frame_1, text='调整界面(D)', font=self.font_normal,
+                                   command=self.set_two_win_left)
+        self.b_adjust_win.pack(side=LEFT, fill=BOTH, expand=YES)
+
+        self.b_save_conf = Button(self.frame_1, text='保存当前到配置文件(S)', font=self.font_normal,
+                                  command=lambda: self.save_config())
+        self.b_save_conf.pack(side=LEFT, fill=BOTH, expand=YES)
 
         self.frame_xyc = Frame(self.root)
 
@@ -101,8 +111,11 @@ class App:
         self.b1 = Button(self.frame_xyc, text='写入(W)', command=self.write_dict, font=self.font_normal)
         self.b1.pack(side=LEFT, fill=BOTH, expand=YES)
 
-        self.b2 = Button(self.frame_xyc, text='运行(R)', command=self.run, font=self.font_normal)
+        self.b2 = Button(self.frame_xyc, text='运行(R)', command=self.func_start, font=self.font_normal)
         self.b2.pack(side=LEFT, fill=BOTH, expand=YES)
+
+        self.b4 = Button(self.frame_xyc, text='暂停(P)', command=self.pause, font=self.font_normal)
+        self.b4.pack(side=LEFT, fill=BOTH, expand=YES)
 
         self.b3 = Button(self.frame_xyc, text='退出(C)', command=self.destroy, font=self.font_normal)
         self.b3.pack(side=LEFT, fill=BOTH, expand=YES)
@@ -119,6 +132,9 @@ class App:
         self.hk.register(('alt', 'w'), callback=lambda e: self.write_dict())
         self.hk.register(('alt', 'c'), callback=lambda e: self.destroy())
         self.hk.register(('alt', 'r'), callback=lambda e: self.func_start())
+        self.hk.register(('alt', 'p'), callback=lambda e: self.pause())
+        self.hk.register(('alt', 's'), callback=lambda e: self.save_config())
+        self.hk.register(('alt', 'l'), callback=lambda e: self.load_config())
 
         # 配置初始化
         self.settings = Configure('config.ini')
@@ -126,12 +142,30 @@ class App:
         # 当前配置文件中的字典
         self.gd = GetDict()
 
+        # 设置初始界面
+        self.sw = SetWin()
+
+    def set_two_win_left(self):
+        """设置两个阴阳师的界面排在左边"""
+        self.win_settings = self.settings.get_items('windows')
+        handles = self.sw.find_onmyoji_handle()
+
+        # 遍历阴阳师所有句柄
+        for h in range(len(handles)):
+            # 提取第h个坐标，h只有1的话，就只提取一个坐标
+            loc = [int(temp) for temp in self.win_settings[h][1].split(',')]
+            try:
+                self.sw.move_rect(handles[h], loc)
+            except Exception as e:
+                print('错误！未打开阴阳师！')
+
     def run(self):
         self.check_mouse_move()
         self.root.mainloop()
 
     def get_list(self, *args):
         """获取对应下拉框的list，方便写入后续下拉框"""
+
         check_flag = self.cmb1_value.get()[1]
         self.cmb2['values'], self.current_dict = self.gd.generate_data(check_flag)
 
@@ -140,7 +174,7 @@ class App:
         # return self.cmb2_value.get()
         ...
 
-    def save_settings(self):
+    def save_config(self):
         """保存当前设置"""
         # 功能，功能节点names，data
         save_data = {
@@ -148,11 +182,29 @@ class App:
             'names': self.cmb2['values'],
             'data': self.current_dict
         }
-        # TODO
+        try:
+            with open('templates/data.json', 'w', encoding='utf-8') as f:
+                json.dump(save_data, f)
+            print('配置文件保存成功！')
+        except Exception as e:
+            print('错误！保存文件出错！')
 
     def load_config(self):
         """载入数据"""
+        try:
+            with open("templates/data.json", "r", encoding="UTF-8") as f_load:
+                config_load = json.load(f_load)
+                self.current_dict = config_load['data']
+                print(self.current_dict)
+            print('读取配置文件成功！')
+        except Exception as e:
+            print('错误！读取配置文件出错！')
+            print(e)
+
+    def pause(self):
+        """暂停"""
         ...
+        # TODO
 
     def write_dict(self):
         """将信息写入到dict中"""
@@ -181,23 +233,28 @@ class App:
             self.e_color.insert(END, insert_info)
             return tensix
 
-    def check_mouse(self):
-        """循环检测鼠标"""
-        while True:
-            # 显示颜色设置
-            tensix = self.get_postion_color()
-            if tensix != '#-1-1-1':
-                self.e_color.configure(fg=tensix)
-            else:
-                self.e_color.configure(fg='red')
-            sleep(self.settings.get_option('mouse', 'mouse_check_speed', 'float'))
-
     def check_mouse_move(self):
         """检测鼠标移动，实时显示鼠标位置和颜色"""
-        t = Thread(target=self.check_mouse)
+
+        def check_mouse():
+            while True:
+                # 显示颜色设置
+                tensix = self.get_postion_color()
+                if tensix != '#-1-1-1':
+                    self.e_color.configure(fg=tensix)
+                    self.l_c.configure(fg=tensix)
+                else:
+                    self.e_color.configure(fg='red')
+                sleep(self.settings.get_option('mouse', 'mouse_check_speed', 'float'))
+
+        self.build_thread(check_mouse, '鼠标颜色检查')
+
+    def build_thread(self, func, func_name):
+        """建立线程"""
+        t = Thread(target=func, name='【线程】' + func_name, daemon=True)
         # 设置守护线程，主线程退出不必等待该线程
-        t.setDaemon(True)
         t.start()
+        print(t.name)
 
     def func_start(self):
         """运行"""

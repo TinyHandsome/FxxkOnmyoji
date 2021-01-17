@@ -42,9 +42,13 @@ class MKFactory:
 
         return self.state
 
-    def l1(self, xy):
-        """单击，停顿"""
-        self.m.mouse_click(xy[0], xy[1])
+    def l1(self, xy, is_random=True):
+        """单击，停顿，是否随机"""
+        if is_random:
+            x_bias, y_bias = self.t.get_mouse_bias()
+            self.m.mouse_click(xy[0]+x_bias, xy[1]+y_bias)
+        else:
+            self.m.mouse_click(xy[0], xy[1])
         self.t.tip()
 
     def ln(self, xy, times=None):
