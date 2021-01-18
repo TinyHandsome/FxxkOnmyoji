@@ -10,10 +10,10 @@
 @time: 2020/8/31 17:25
 @desc: 鼠标键盘模拟工场
 """
-from point_test.mouse_action import MouseAction
-from point_test.keyboard_action import KeyboardAction
-from point_test.tip_time import TipTime
-from point_test.configure_get import Configure
+from mouse_action import MouseAction
+from keyboard_action import KeyboardAction
+from tip_time import TipTime
+from configure_tools import Configure
 
 
 class MKFactory:
@@ -21,7 +21,7 @@ class MKFactory:
         self.m = MouseAction()
         self.k = KeyboardAction()
         self.t = TipTime()
-        self.cf = Configure('config.ini')
+        self.cf = Configure('configures/config.ini')
         self.state = True
         self.escape_steps = [1, 2, 3]
 
@@ -34,11 +34,17 @@ class MKFactory:
         # 进行循环的时候检测是否满足循环条件，即按键颜色是否符合目标颜色
         if isinstance(color, str):
             rgb_list = [int(a) for a in color.split(',')]
-        elif isinstance(color, tuple):
+        elif isinstance(color, tuple) or isinstance(color, list):
             rgb_list = color
         else:
             raise Exception('颜色格式不对')
-        self.state = self.m.check_mouse_color(rgb_list, coordinate)
+
+        try:
+            self.state = self.m.check_mouse_color(rgb_list, coordinate)
+        except Exception as e:
+            print('配置文件中的数据有误，有一种可能是你导入的别人的配置，'
+                  '但是别人的配置的电脑分辨率跟你的不一致，才导致的。')
+            self.state = 'colorCheck_error'
 
         return self.state
 

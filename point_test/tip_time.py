@@ -16,12 +16,12 @@
 """
 import time
 from random import uniform, randrange
-from point_test.configure_get import Configure
+from configure_tools import Configure
 
 
 class TipTime:
     def __init__(self):
-        self.conf = Configure('config.ini')
+        self.conf = Configure('configures/config.ini')
         # 鼠标狂点时间间隔
         self.click_many_times_range = (self.conf.get_option('time', 'click_many_times_min', 'float'),
                                        self.conf.get_option('time', 'click_many_times_max', 'float'))

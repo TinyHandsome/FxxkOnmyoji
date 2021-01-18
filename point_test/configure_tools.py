@@ -6,7 +6,7 @@
 @author: Li Tian
 @contact: litian_cup@163.com
 @software: pycharm
-@file: configure_get.py
+@file: configure_tools.py
 @time: 2021/1/16 10:54
 @desc: 一些配置文件
         1. [python之atexit模块的使用](https://www.cnblogs.com/wanghuixi/p/11254304.html)

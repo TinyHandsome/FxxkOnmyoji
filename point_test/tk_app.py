@@ -16,14 +16,15 @@
 from dataclasses import dataclass
 from tkinter import *
 from tkinter import ttk
-from point_test.configure_get import Configure
-from point_test.function_get import GetDict
+from tkinter.filedialog import askopenfilename
+from configure_tools import Configure
+from function_tools import FuncRun
 from system_hotkey import SystemHotkey
-from point_test.mouse_action import MouseAction
-from threading import Thread, enumerate, get_ident
+from mouse_action import MouseAction
+from function_factory import FuncFactory
 from time import sleep
-from point_test.set_windows import SetWin
-import json
+from set_windows import SetWin
+from methods import build_thread
 
 
 @dataclass
@@ -31,8 +32,17 @@ class App:
 
     def __post_init__(self):
 
+        self.global_var()
         self.init_area()
         self.init_tk()
+
+    def global_var(self):
+        """全局变量初始化"""
+
+        # 初始坐标和颜色
+        self.xy, self.color = '', ''
+        # 初始化功能信息
+        self.func = None
 
     def init_tk(self):
         """初始化tk"""
@@ -68,6 +78,7 @@ class App:
 
         self.cmb1 = ttk.Combobox(self.frame_1, textvariable=self.cmb1_value,
                                  width=self.settings.get_option('gui', 'cmb1_width', 'int'), font=self.font_normal)
+        # TODO，这里需要修改配置
         self.cmb1['values'] = ['【1】双人御魂（一个电脑）', '【2】待补充']
         # 选择第一个为默认
         # self.cmb1.current(0)
@@ -83,9 +94,11 @@ class App:
                                    command=self.set_two_win_left)
         self.b_adjust_win.pack(side=LEFT, fill=BOTH, expand=YES)
 
-        self.b_save_conf = Button(self.frame_1, text='保存当前到配置文件(S)', font=self.font_normal,
-                                  command=lambda: self.save_config())
-        self.b_save_conf.pack(side=LEFT, fill=BOTH, expand=YES)
+        self.b4 = Button(self.frame_1, text='载入默认配置(G)', command=self.load_default_config, font=self.font_normal)
+        self.b4.pack(side=LEFT, fill=BOTH, expand=YES)
+
+        self.b5 = Button(self.frame_1, text='选择配置文件(L)', command=self.load_user_config, font=self.font_normal)
+        self.b5.pack(side=LEFT, fill=BOTH, expand=YES)
 
         self.frame_xyc = Frame(self.root)
 
@@ -105,8 +118,9 @@ class App:
         self.e_xy.insert(END, self.color)
         self.e_color.pack(side=LEFT, fill=Y)
 
-        self.b4 = Button(self.frame_xyc, text='载入配置文件(L)', command=self.load_config, font=self.font_normal)
-        self.b4.pack(side=LEFT, fill=BOTH, expand=YES)
+        self.b_save_conf = Button(self.frame_xyc, text='保存当前配置文件(S)', font=self.font_normal,
+                                  command=lambda: self.save_config())
+        self.b_save_conf.pack(side=LEFT, fill=BOTH, expand=YES)
 
         self.b1 = Button(self.frame_xyc, text='写入(W)', command=self.write_dict, font=self.font_normal)
         self.b1.pack(side=LEFT, fill=BOTH, expand=YES)
@@ -126,24 +140,24 @@ class App:
     def init_area(self):
         """初始化区域"""
         # 全局快捷键设置
-        self.xy, self.color = '', ''
-        self.ma = MouseAction()
         self.hk = SystemHotkey()
         self.hk.register(('alt', 'w'), callback=lambda e: self.write_dict())
         self.hk.register(('alt', 'c'), callback=lambda e: self.destroy())
         self.hk.register(('alt', 'r'), callback=lambda e: self.func_start())
         self.hk.register(('alt', 'p'), callback=lambda e: self.pause())
         self.hk.register(('alt', 's'), callback=lambda e: self.save_config())
-        self.hk.register(('alt', 'l'), callback=lambda e: self.load_config())
+        self.hk.register(('alt', 'g'), callback=lambda e: self.load_default_config())
+        self.hk.register(('alt', 'd'), callback=lambda e: self.set_two_win_left())
+        self.hk.register(('alt', 'l'), callback=lambda e: self.load_user_config())
 
+        # 移动鼠标
+        self.ma = MouseAction()
         # 配置初始化
-        self.settings = Configure('config.ini')
-
-        # 当前配置文件中的字典
-        self.gd = GetDict()
-
+        self.settings = Configure('configures/config.ini')
         # 设置初始界面
         self.sw = SetWin()
+        # 操作功能配置文件的工具
+        self.ft = FuncFactory()
 
     def set_two_win_left(self):
         """设置两个阴阳师的界面排在左边"""
@@ -156,6 +170,7 @@ class App:
             loc = [int(temp) for temp in self.win_settings[h][1].split(',')]
             try:
                 self.sw.move_rect(handles[h], loc)
+                print('成功调整界面！')
             except Exception as e:
                 print('错误！未打开阴阳师！')
 
@@ -165,9 +180,10 @@ class App:
 
     def get_list(self, *args):
         """获取对应下拉框的list，方便写入后续下拉框"""
-
-        check_flag = self.cmb1_value.get()[1]
-        self.cmb2['values'], self.current_dict = self.gd.generate_data(check_flag)
+        cmb1_v = self.cmb1_value.get()
+        self.func = self.ft.init_config(cmb1_v)
+        # 设置下拉框的值
+        self.cmb2['values'] = self.func.get_procedure_names()
 
     def get_key(self, *args):
         """cmb2的对应的函数"""
@@ -176,30 +192,33 @@ class App:
 
     def save_config(self):
         """保存当前设置"""
-        # 功能，功能节点names，data
-        save_data = {
-            'func_name': self.cmb1.get(),
-            'names': self.cmb2['values'],
-            'data': self.current_dict
-        }
         try:
-            with open('templates/data.json', 'w', encoding='utf-8') as f:
-                json.dump(save_data, f)
+            self.func.save_function_to_json('templates/test.json')
             print('配置文件保存成功！')
         except Exception as e:
             print('错误！保存文件出错！')
 
-    def load_config(self):
+    def show_func(self, func):
+        """对于载入的func进行前端显示"""
+        self.cmb1.set(func.get_func_name())
+        self.cmb2['values'] = func.get_procedure_names()
+
+    def load_default_config(self, path='templates/data.json'):
         """载入数据"""
         try:
-            with open("templates/data.json", "r", encoding="UTF-8") as f_load:
-                config_load = json.load(f_load)
-                self.current_dict = config_load['data']
-                print(self.current_dict)
+            self.func = self.ft.create_function_from_json(path)
+            # 载入后设置前端显示
+            self.show_func(self.func)
+
             print('读取配置文件成功！')
+            print(self.func.get_data())
         except Exception as e:
             print('错误！读取配置文件出错！')
-            print(e)
+
+    def load_user_config(self):
+        """载入用户数据"""
+        file_path = askopenfilename()
+        self.load_default_config(file_path)
 
     def pause(self):
         """暂停"""
@@ -208,11 +227,10 @@ class App:
 
     def write_dict(self):
         """将信息写入到dict中"""
-        aim_key = self.cmb2_value.get()
-        aim_value = [self.xy, self.color]
-        if aim_key != '':
-            self.current_dict[aim_key] = aim_value
-            print(self.current_dict)
+        p_name = self.cmb2_value.get()
+        if p_name != '':
+            self.func.update(p_name, self.xy, self.color)
+            print(self.func.get_data())
 
     def get_postion_color(self):
         """设置绑定后的按键操作的值"""
@@ -247,18 +265,16 @@ class App:
                     self.e_color.configure(fg='red')
                 sleep(self.settings.get_option('mouse', 'mouse_check_speed', 'float'))
 
-        self.build_thread(check_mouse, '鼠标颜色检查')
-
-    def build_thread(self, func, func_name):
-        """建立线程"""
-        t = Thread(target=func, name='【线程】' + func_name, daemon=True)
-        # 设置守护线程，主线程退出不必等待该线程
-        t.start()
-        print(t.name)
+        build_thread(check_mouse, '鼠标颜色检查')
 
     def func_start(self):
         """运行"""
-        self.gd.func_demo()
+        # 当前配置文件中的字典
+        if self.func is not None:
+            fr = FuncRun(self.func)
+            fr.func_demo()
+        else:
+            print('错误！请创建流程，或者导入流程！')
 
     def destroy(self):
         self.root.quit()

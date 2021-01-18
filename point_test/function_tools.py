@@ -6,32 +6,29 @@
 @author: Li Tian
 @contact: litian_cup@163.com
 @software: pycharm
-@file: function_get.py
+@file: function_tools.py
 @time: 2021/1/16 14:18
 @desc: 获取point_configures中的配置信息
 """
 from dataclasses import dataclass
-from point_test.configure_get import Configure
-from point_test.mk_factory import MKFactory
-from threading import Thread
-from point_test.tip_time import TipTime
+from mk_factory import MKFactory
+from tip_time import TipTime
+from function_factory import Function
+from methods import build_thread
 
 
 @dataclass
-class GetDict:
+class FuncRun:
+    func: Function
+
     def __post_init__(self):
-        self.cf = Configure('functions.ini')
         self.t = TipTime()
         self.mkf = MKFactory()
-        self.data = {}
-        self.names = None
 
-    def generate_data(self, flag):
-        self.names = self.cf.get_option(flag, 'indexs').split('-')
-        for name in self.names:
-            self.data[name] = ''
-
-        return self.names, self.data
+        # 配置文件：名字：(坐标，颜色)
+        self.data = self.func.get_data()
+        # 配置文件：[名字]
+        self.names = self.func.get_procedure_names()
 
     def check_settings(self):
         """检查流程设置的字典中是否有空值"""
@@ -46,6 +43,9 @@ class GetDict:
         while True:
             xy, color = self.data.get(name)
             color_check_result = self.mkf.colorCheck(color, xy)
+            if isinstance(color_check_result, str):
+                print(color_check_result)
+                return
 
             if color_check_result:
                 print('检测到了【对象】：', name)
@@ -63,13 +63,8 @@ class GetDict:
         check_result = self.check_settings()
         if not check_result:
             print('错误！配置流程中有没有配置的结点！')
-            return
-
-        if self.names is None:
-            print('错误！还没有进行坐标配置！')
+            print(self.data)
             return
 
         for name in self.names:
-            t = Thread(target=self.run_thread, args=(name,), daemon=True, name='【线程】' + name)
-            t.start()
-            print(t.name)
+            build_thread(self.run_thread, name, (name,))
