@@ -79,7 +79,7 @@ class App:
         self.cmb1 = ttk.Combobox(self.frame_1, textvariable=self.cmb1_value,
                                  width=self.settings.get_option('gui', 'cmb1_width', 'int'), font=self.font_normal)
         # TODO，这里需要修改配置
-        self.cmb1['values'] = ['【1】双人御魂（一个电脑）', '【2】待补充']
+        self.cmb1['values'] = self.ff.get_func_names()
         # 选择第一个为默认
         # self.cmb1.current(0)
         self.cmb1.bind('<<ComboboxSelected>>', self.get_list)
@@ -90,15 +90,8 @@ class App:
         self.cmb2.bind('<<ComboboxSelected>>', self.get_key)
         self.cmb2.pack(side=LEFT, fill=Y)
 
-        self.b_adjust_win = Button(self.frame_1, text='调整界面(D)', font=self.font_normal,
-                                   command=self.set_two_win_left)
-        self.b_adjust_win.pack(side=LEFT, fill=BOTH, expand=YES)
-
-        self.b4 = Button(self.frame_1, text='载入默认配置(G)', command=self.load_default_config, font=self.font_normal)
-        self.b4.pack(side=LEFT, fill=BOTH, expand=YES)
-
-        self.b5 = Button(self.frame_1, text='选择配置文件(L)', command=self.load_user_config, font=self.font_normal)
-        self.b5.pack(side=LEFT, fill=BOTH, expand=YES)
+        self.b2 = Button(self.frame_1, text='运行(r)', command=self.func_start, font=self.font_normal)
+        self.b2.pack(side=LEFT, fill=BOTH, expand=YES)
 
         self.frame_xyc = Frame(self.root)
 
@@ -118,24 +111,38 @@ class App:
         self.e_xy.insert(END, self.color)
         self.e_color.pack(side=LEFT, fill=Y)
 
-        self.b_save_conf = Button(self.frame_xyc, text='保存当前配置文件(S)', font=self.font_normal,
-                                  command=lambda: self.save_config())
-        self.b_save_conf.pack(side=LEFT, fill=BOTH, expand=YES)
+        self.b_adjust_win = Button(self.frame_xyc, text='调整界面(d)', font=self.font_normal,
+                                   command=self.set_two_win_left)
+        self.b_adjust_win.pack(side=LEFT, fill=BOTH, expand=YES)
 
-        self.b1 = Button(self.frame_xyc, text='写入(W)', command=self.write_dict, font=self.font_normal)
-        self.b1.pack(side=LEFT, fill=BOTH, expand=YES)
-
-        self.b2 = Button(self.frame_xyc, text='运行(R)', command=self.func_start, font=self.font_normal)
-        self.b2.pack(side=LEFT, fill=BOTH, expand=YES)
-
-        self.b4 = Button(self.frame_xyc, text='暂停(P)', command=self.pause, font=self.font_normal)
+        self.b4 = Button(self.frame_xyc, text='暂停(p)', command=self.pause, font=self.font_normal)
         self.b4.pack(side=LEFT, fill=BOTH, expand=YES)
 
-        self.b3 = Button(self.frame_xyc, text='退出(C)', command=self.destroy, font=self.font_normal)
+        self.b3 = Button(self.frame_xyc, text='退出(c)', command=self.destroy, font=self.font_normal)
         self.b3.pack(side=LEFT, fill=BOTH, expand=YES)
 
+        self.frame_2 = Frame(self.root)
+
+        self.b1 = Button(self.frame_2, text='写入信息(w)', command=self.write_dict, font=self.font_normal)
+        self.b1.pack(side=LEFT, fill=BOTH, expand=YES)
+
+        self.b_save_conf = Button(self.frame_2, text='保存为默认(s)', font=self.font_normal,
+                                  command=lambda: self.save_config_as_default())
+        self.b_save_conf.pack(side=LEFT, fill=BOTH, expand=YES)
+
+        self.b_save_conf = Button(self.frame_2, text='保存到文件(S)', font=self.font_normal,
+                                  command=...)  # TODO
+        self.b_save_conf.pack(side=LEFT, fill=BOTH, expand=YES)
+
+        self.b4 = Button(self.frame_2, text='载入默认配置(l)', command=self.load_default_config, font=self.font_normal)
+        self.b4.pack(side=LEFT, fill=BOTH, expand=YES)
+
+        self.b5 = Button(self.frame_2, text='选择配置文件(L)', command=self.load_user_config, font=self.font_normal)
+        self.b5.pack(side=LEFT, fill=BOTH, expand=YES)
+
         self.frame_1.pack(side=TOP, fill=BOTH)
-        self.frame_xyc.pack(side=BOTTOM, fill=BOTH)
+        self.frame_xyc.pack(side=TOP, fill=BOTH)
+        self.frame_2.pack(side=TOP, fill=BOTH)
 
     def init_area(self):
         """初始化区域"""
@@ -145,10 +152,10 @@ class App:
         self.hk.register(('alt', 'c'), callback=lambda e: self.destroy())
         self.hk.register(('alt', 'r'), callback=lambda e: self.func_start())
         self.hk.register(('alt', 'p'), callback=lambda e: self.pause())
-        self.hk.register(('alt', 's'), callback=lambda e: self.save_config())
-        self.hk.register(('alt', 'g'), callback=lambda e: self.load_default_config())
+        self.hk.register(('alt', 's'), callback=lambda e: self.save_config_as_default())
+        self.hk.register(('alt', 'l'), callback=lambda e: self.load_default_config())
         self.hk.register(('alt', 'd'), callback=lambda e: self.set_two_win_left())
-        self.hk.register(('alt', 'l'), callback=lambda e: self.load_user_config())
+        self.hk.register(('alt', 'shift', 'l'), callback=lambda e: self.load_user_config())
 
         # 移动鼠标
         self.ma = MouseAction()
@@ -157,7 +164,7 @@ class App:
         # 设置初始界面
         self.sw = SetWin()
         # 操作功能配置文件的工具
-        self.ft = FuncFactory()
+        self.ff = FuncFactory()
 
     def set_two_win_left(self):
         """设置两个阴阳师的界面排在左边"""
@@ -181,7 +188,7 @@ class App:
     def get_list(self, *args):
         """获取对应下拉框的list，方便写入后续下拉框"""
         cmb1_v = self.cmb1_value.get()
-        self.func = self.ft.init_config(cmb1_v)
+        self.func = self.ff.init_config(cmb1_v)
         # 设置下拉框的值
         self.cmb2['values'] = self.func.get_procedure_names()
 
@@ -190,7 +197,7 @@ class App:
         # return self.cmb2_value.get()
         ...
 
-    def save_config(self):
+    def save_config_as_default(self):
         """保存当前设置"""
         try:
             self.func.save_function_to_json('templates/test.json')
@@ -206,7 +213,7 @@ class App:
     def load_default_config(self, path='templates/data.json'):
         """载入数据"""
         try:
-            self.func = self.ft.create_function_from_json(path)
+            self.func = self.ff.create_function_from_json(path)
             # 载入后设置前端显示
             self.show_func(self.func)
 

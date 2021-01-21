@@ -29,6 +29,11 @@ class Configure:
         """获取section中的所有option"""
         return self.conf.options(sec)
 
+    def get_values(self, sec):
+        """获取secion中的的所有values"""
+        _, values = zip(*self.get_items(sec))
+        return values
+
     def get_items(self, sec):
         """获取section中所有的键值对"""
         return self.conf.items(sec)
@@ -49,3 +54,6 @@ class Configure:
         print(self.conf.sections())
 
 
+if __name__ == '__main__':
+    cf = Configure('configures/functions.ini')
+    print(cf.get_values('func_names'))

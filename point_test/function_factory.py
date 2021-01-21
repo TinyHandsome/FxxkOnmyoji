@@ -120,3 +120,7 @@ class FuncFactory:
             data[name] = ['', '']
 
         return self.create_function_from_data(func_name, data)
+
+    def get_func_names(self):
+        """获取功能名称"""
+        return self.cf.get_values('func_names')
