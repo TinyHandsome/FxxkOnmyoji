@@ -78,7 +78,6 @@ class App:
 
         self.cmb1 = ttk.Combobox(self.frame_1, textvariable=self.cmb1_value,
                                  width=self.settings.get_option('gui', 'cmb1_width', 'int'), font=self.font_normal)
-        # TODO，这里需要修改配置
         self.cmb1['values'] = self.ff.get_func_names()
         # 选择第一个为默认
         # self.cmb1.current(0)
