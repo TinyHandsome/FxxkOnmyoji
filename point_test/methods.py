@@ -17,5 +17,5 @@ def build_thread(func, func_name, args=()):
     """建立线程"""
     t = Thread(target=func, name='【线程】' + func_name, daemon=True, args=args)
     # 设置守护线程，主线程退出不必等待该线程
-    print(t.name + '，启动...')
+    # print(t.name + '，启动...')
     t.start()

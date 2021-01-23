@@ -29,6 +29,12 @@ class FuncRun:
         self.data = self.func.get_data()
         # 配置文件：[名字]
         self.names = self.func.get_procedure_names()
+        # 当前的信息
+        self.current_info = None
+
+    def update_current_info(self, *params):
+        """设置当前的信息"""
+        self.current_info = params
 
     def check_settings(self):
         """检查流程设置的字典中是否有空值"""
@@ -48,7 +54,9 @@ class FuncRun:
                 return
 
             if color_check_result:
-                print('检测到了【对象】：', name)
+                # print('检测到了【对象】：', name)
+                self.set_current_info('检测到了【对象】' + name + '...', 'blue')
+                self.current_info = []
                 if operation == '0':
                     self.t.tip()
                 elif operation == '1':
@@ -62,9 +70,8 @@ class FuncRun:
         """功能1，双人御魂（一个电脑）"""
         check_result = self.check_settings()
         if not check_result:
-            print('错误！配置流程中有没有配置的结点！')
-            print(self.data)
-            return
+            return '错误！配置流程中有没有配置的结点！', 'red'
+            # print(self.data)
 
         for name in self.names:
             build_thread(self.run_thread, name, (name,))
