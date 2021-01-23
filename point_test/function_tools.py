@@ -29,8 +29,6 @@ class FuncRun:
         self.data = self.func.get_data()
         # 配置文件：[名字]
         self.names = self.func.get_procedure_names()
-        # 当前的信息
-        self.current_info = None
 
     def update_current_info(self, *params):
         """设置当前的信息"""
@@ -48,10 +46,14 @@ class FuncRun:
         operation = name.split('_')[-1]
         while True:
             xy, color = self.data.get(name)
-            color_check_result = self.mkf.colorCheck(color, xy)
+            try:
+                color_check_result = self.mkf.colorCheck(color, xy)
+            except Exception as e:
+                return '流程不完整', 'red'
+
             if isinstance(color_check_result, str):
-                print(color_check_result)
-                return
+                # TODO：其他类返回值怎么写入tk中
+                return color_check_result
 
             if color_check_result:
                 # print('检测到了【对象】：', name)
@@ -70,8 +72,11 @@ class FuncRun:
         """功能1，双人御魂（一个电脑）"""
         check_result = self.check_settings()
         if not check_result:
-            # return '错误！配置流程中有没有配置的结点！', 'red'
-            print(self.update_current_info('错误！配置流程中有没有配置的结点！', 'red'))
+            return '错误！配置流程中有没有配置的结点！', 'red'
 
-        for name in self.names:
-            build_thread(self.run_thread, name, (name,))
+        try:
+            for name in self.names:
+                result = build_thread(self.run_thread, name, (name,))
+                print(result)
+        except Exception as e:
+            return '流程启动失败...', 'red'

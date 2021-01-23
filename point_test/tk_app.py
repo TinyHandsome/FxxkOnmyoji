@@ -31,6 +31,31 @@ from methods import build_thread
 
 
 @dataclass
+class InfoPip:
+
+    def __post_init__(self):
+        # 左边是入口，右边是出口
+        self.line_info = ['', '', '']
+        self.first_color = ''
+
+    def get_two_var(self):
+        """将当前的pip结果放到var中去，获得两个str"""
+        return self.first_color, self.line_info[0], '\n'.join(self.line_info[1:])
+
+    def set_first_line(self, info, color):
+        """设置first line，进最新的值，出最后一个值"""
+        self.first_color = color
+        for i in range(len(self.line_info)-1, 0, -1):
+            self.line_info[i] = self.line_info[i - 1]
+        self.line_info[0] = info
+
+    def get_pip_history(self, info, color):
+        """将上述功能进行合并"""
+        self.set_first_line(info, color)
+        return self.get_two_var()
+
+
+@dataclass
 class App:
 
     def __post_init__(self):
@@ -47,8 +72,6 @@ class App:
         self.xy, self.color = '', ''
         # 初始化功能信息
         self.current_func = None
-        # 信息输出栈 TODO
-        self.info_stack = []
 
         # 日记文件，一天一个，每次启动时删除七天前的文件
         self.current_time = datetime.datetime.now()
@@ -69,6 +92,8 @@ class App:
         e_xy_length = self.settings.get_option('gui', 'e_xy_length', 'int')
         e_color_length = self.settings.get_option('gui', 'e_color_length', 'int')
         windows_width_input = self.settings.get_option('gui', 'windows_width_input', 'int')
+        block_color = self.settings.get_option('gui', 'block_color')
+
         default_windows_width = self.settings.get_option('windows', 'win1_loc').split(',')[-1]
 
         """设置各种字体"""
@@ -85,19 +110,20 @@ class App:
         font_labelframe = (
             font_type,
             self.settings.get_option('font', 'font_size_label', 'int'))
+        # log字体大小
+        font_labelLog = (
+            font_type,
+            self.settings.get_option('font', 'font_size_log', 'int'))
 
         """底层root初始化"""
         self.root = Tk()
-        # 置顶
-        # self.root.wm_attributes('-topmost', 0)
-
-        self.root.title('狗贼v0.1')
+        self.root.title('狗贼v0.2  【作者：李英俊小朋友】')
 
         """frame1_外框，功能、运行、暂停、退出、调整界面"""
-        self.frame_1 = LabelFrame(self.root, text='海的那边',
+        self.frame_1 = LabelFrame(self.root, text='| 海的那边 |',
                                   labelanchor=N, font=font_labelframe,
                                   padx=frame_label_pad,
-                                  pady=frame_label_pad)
+                                  pady=frame_label_pad, fg=block_color)
         self.f11 = Frame(self.frame_1)
 
         self.cmb1_value = StringVar()
@@ -166,9 +192,8 @@ class App:
         self.f13.pack(fill=BOTH)
 
         """frame2外框_各种坐标处理"""
-
-        self.frame_2 = LabelFrame(self.root, text='坐标之力', labelanchor=N, font=font_labelframe, padx=frame_label_pad,
-                                  pady=frame_label_pad)
+        self.frame_2 = LabelFrame(self.root, text='| 坐标之力 |', labelanchor=N, font=font_labelframe, padx=frame_label_pad,
+                                  pady=frame_label_pad, fg=block_color)
         self.f21 = Frame(self.frame_2)
 
         self.l_xy = Label(self.f21, text='坐标', font=font_normal)
@@ -208,36 +233,36 @@ class App:
         self.f22.pack(fill=BOTH)
 
         """frame3 待开发"""
-
-        self.frame_3 = LabelFrame(self.root, text='献出心脏', labelanchor=N,
+        self.frame_3 = LabelFrame(self.root, text='| 献出心脏 |', labelanchor=N,
                                   font=font_labelframe,
                                   padx=frame_label_pad,
-                                  pady=frame_label_pad)
+                                  pady=frame_label_pad,
+                                  fg=block_color)
         self.f31 = Frame(self.frame_3)
 
-        # self.SHOWTIME = StringVar()
-        # self.l_time = Label(self.f31, textvariable=self.SHOWTIME, justify=LEFT, fg='grey')
-        # self.l_time.pack(anchor=NW, side=TOP)
+        self.current_info = StringVar()
+        self.l_first = Label(self.f31, textvariable=self.current_info, justify=LEFT, font=font_labelLog)
+        self.l_first.pack(anchor=NW, side=TOP)
 
-        self.SHOWINFO = StringVar()
-        self.l_show_info = Label(self.f31,
-                                 textvariable=self.SHOWINFO,
-                                 # wraplength=200,
-                                 justify='left',
-                                 # font=font_normal,
-                                 )
-        # self.SHOWINFO.set('')
-        self.l_show_info.pack(anchor=NW, side=TOP)
+        self.history_info = StringVar()
+        self.l_history = Label(self.f31,
+                               textvariable=self.history_info,
+                               # wraplength=200,
+                               justify='left',
+                               font=font_labelLog,
+                               fg='grey'
+                               )
+        self.l_history.pack(anchor=NW, side=TOP)
 
-        self.l_me = Label(self.f31, text='作者：李英俊小朋友', justify=RIGHT)
-        self.l_me.pack(anchor=SE, side=BOTTOM)
+        # self.l_me = Label(self.f31, text='作者：李英俊小朋友', justify=RIGHT)
+        # self.l_me.pack(anchor=SE, side=BOTTOM)
 
         self.f31.pack(side=LEFT, fill=BOTH, expand=True)
 
         """布局"""
         # padx、pady是框架外部距离框架的距离
         self.frame_1.pack(side=TOP, fill=None, anchor=NW, padx=frame_label_pad, pady=frame_label_pad)
-        self.frame_2.pack(side=LEFT, fill=None, anchor=NW, padx=frame_label_pad, pady=frame_label_pad)
+        self.frame_2.pack(side=LEFT, fill=Y, anchor=NW, padx=frame_label_pad, pady=frame_label_pad)
         self.frame_3.pack(side=LEFT, fill=BOTH, anchor=NW, padx=frame_label_pad, pady=frame_label_pad,
                           expand=True)
 
@@ -262,15 +287,22 @@ class App:
         self.sw = SetWin()
         # 操作功能配置文件的工具
         self.ff = FuncFactory()
+        # 信息输出栈
+        self.info_stack = InfoPip()
 
     def show_info(self, word, fg='green'):
         """输出问题"""
         current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-        self.SHOWINFO.set(word)
-        self.l_show_info.configure(fg=fg)
+
+        w1_color, w1, w2 = self.info_stack.get_pip_history(word, fg)
+
+        self.current_info.set(w1)
+        self.l_first.configure(fg=fg)
+
+        self.history_info.set(w2)
 
         # 写入日志
-        self.log_file.write(current_time + ': \n' + word + '\n\n')
+        self.log_file.write(current_time + ': \n' + w1 + '\n\n')
 
     def clear_logs(self):
         """清除7天前的日志数据"""
@@ -286,7 +318,7 @@ class App:
                 os.remove(os.path.join(path, file_name))
                 count += 1
 
-        self.show_info('成功删除了【' + str(count) + '】个日志文件...', 'grey')
+        self.show_info('成功删除了【' + str(count) + '】个日志文件...', 'black')
 
     def set_top_window(self):
         """设置是否置顶"""
@@ -430,7 +462,8 @@ class App:
         # 当前配置文件中的字典
         if self.current_func is not None:
             fr = FuncRun(self.current_func)
-            fr.func_demo()
+            result_info = fr.func_demo()
+            self.show_info(*result_info)
         else:
             self.show_info('错误！请创建流程，或者导入流程！', 'red')
 
