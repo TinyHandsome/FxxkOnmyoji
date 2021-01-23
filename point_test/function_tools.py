@@ -55,7 +55,7 @@ class FuncRun:
 
             if color_check_result:
                 # print('检测到了【对象】：', name)
-                self.set_current_info('检测到了【对象】' + name + '...', 'blue')
+                self.update_current_info('检测到了【对象】' + name + '...', 'blue')
                 self.current_info = []
                 if operation == '0':
                     self.t.tip()
@@ -70,8 +70,8 @@ class FuncRun:
         """功能1，双人御魂（一个电脑）"""
         check_result = self.check_settings()
         if not check_result:
-            return '错误！配置流程中有没有配置的结点！', 'red'
-            # print(self.data)
+            # return '错误！配置流程中有没有配置的结点！', 'red'
+            print(self.update_current_info('错误！配置流程中有没有配置的结点！', 'red'))
 
         for name in self.names:
             build_thread(self.run_thread, name, (name,))

@@ -46,7 +46,7 @@ class App:
         # 初始坐标和颜色
         self.xy, self.color = '', ''
         # 初始化功能信息
-        self.func = None
+        self.current_func = None
         # 信息输出栈 TODO
         self.info_stack = []
 
@@ -340,9 +340,9 @@ class App:
     def get_list(self, *args):
         """获取对应下拉框的list，方便写入后续下拉框"""
         cmb1_v = self.cmb1_value.get()
-        self.func = self.ff.init_config(cmb1_v)
+        self.current_func = self.ff.init_config(cmb1_v)
         # 设置下拉框的值
-        self.cmb2['values'] = self.func.get_procedure_names()
+        self.cmb2['values'] = self.current_func.get_procedure_names()
 
     def get_key(self, *args):
         """cmb2的对应的函数"""
@@ -352,7 +352,7 @@ class App:
     def save_config_as_default(self):
         """保存当前设置"""
         try:
-            self.func.save_function_to_json('templates/test.json')
+            self.current_func.save_function_to_json('templates/test.json')
             self.show_info('配置文件保存成功！')
         except Exception as e:
             self.show_info('错误！保存文件出错！', 'red')
@@ -365,10 +365,10 @@ class App:
     def load_default_config(self, path='templates/data.json'):
         """载入数据"""
         try:
-            self.func = self.ff.create_function_from_json(path)
+            self.current_func = self.ff.create_function_from_json(path)
             # 载入后设置前端显示
             self.show_info('读取配置文件成功！')
-            # print(self.func.get_data())
+            # print(self.current_func.get_data())
         except Exception as e:
             self.show_info('错误！读取配置文件出错！', 'red')
 
@@ -386,8 +386,8 @@ class App:
         """将信息写入到dict中"""
         p_name = self.cmb2_value.get()
         if p_name != '':
-            self.func.update(p_name, self.xy, self.color)
-            # print(self.func.get_data())
+            self.current_func.update(p_name, self.xy, self.color)
+            # print(self.current_func.get_data())
             self.show_info('成功写入【' + p_name + '】的坐标...')
 
     def get_postion_color(self):
@@ -428,10 +428,9 @@ class App:
     def func_start(self):
         """运行"""
         # 当前配置文件中的字典
-        if self.func is not None:
-            fr = FuncRun(self.func)
-            return_info = fr.func_demo()
-            self.show_info(return_info)
+        if self.current_func is not None:
+            fr = FuncRun(self.current_func)
+            fr.func_demo()
         else:
             self.show_info('错误！请创建流程，或者导入流程！', 'red')
 
