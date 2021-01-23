@@ -52,13 +52,16 @@ class App:
         self.font_normal = (
             self.settings.get_option('font', 'font_type'),
             self.settings.get_option('font', 'font_size_normal', 'int'))
+        self.font_labelframe = (
+            self.settings.get_option('font', 'font_type'),
+            self.settings.get_option('font', 'font_size_label', 'int'))
 
         self.root = Tk()
         # 置顶
         self.root.wm_attributes('-topmost', 1)
         self.root.title('狗贼v0.1')
 
-        self.frame_1 = Frame(self.root)
+        self.frame_1 = LabelFrame(self.root, text='坐标', labelanchor=N, font=self.font_labelframe, padx=20, pady=20)
 
         self.cmb1_value = StringVar()
         self.cmb2_value = StringVar()
