@@ -50,7 +50,6 @@ class FuncRun:
                 color_check_result = self.mkf.colorCheck(color, xy)
             except Exception as e:
                 # self.current_info = ('流程不完整', 'red')
-                # print(repr(e))
                 return
 
             if isinstance(color_check_result, str):

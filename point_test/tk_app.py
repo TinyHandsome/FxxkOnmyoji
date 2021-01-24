@@ -28,6 +28,7 @@ import time
 import datetime
 from set_windows import SetWin
 from methods import build_thread
+from traceback import print_exc, format_exc
 
 
 @dataclass
@@ -394,7 +395,8 @@ class App:
 
     def save_config_to_file(self):
         try:
-            file_path = asksaveasfilename(defaultextension='.json', filetypes=[("Json文件", ".json")], initialdir='dir', title='Save as')
+            file_path = asksaveasfilename(defaultextension='.json', filetypes=[("Json文件", ".json")], initialdir='dir',
+                                          title='Save as')
             self.current_func.save_function_to_json(file_path)
             self.show_info('配置文件保存成功！')
         except Exception as e:
