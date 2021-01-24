@@ -17,7 +17,7 @@ import os
 from dataclasses import dataclass
 from tkinter import *
 from tkinter import ttk
-from tkinter.filedialog import askopenfilename
+from tkinter.filedialog import askopenfilename, asksaveasfilename
 from configure_tools import Configure
 from function_tools import FuncRun
 from system_hotkey import SystemHotkey
@@ -45,7 +45,7 @@ class InfoPip:
     def set_first_line(self, info, color):
         """设置first line，进最新的值，出最后一个值"""
         self.first_color = color
-        for i in range(len(self.line_info)-1, 0, -1):
+        for i in range(len(self.line_info) - 1, 0, -1):
             self.line_info[i] = self.line_info[i - 1]
         self.line_info[0] = info
 
@@ -134,6 +134,7 @@ class App:
 
         self.cmb1 = ttk.Combobox(self.f11, textvariable=self.cmb1_value,
                                  width=cmb1_width, font=font_normal)
+        # 初始化功能名字，从ini文件中获取
         self.cmb1['values'] = self.ff.get_func_names()
         # 选择第一个为默认
         # self.cmb1.current(0)
@@ -222,11 +223,11 @@ class App:
         self.b1.pack(side=LEFT, fill=BOTH, ipadx=button_ipadx, expand=True)
 
         self.b_save_conf = Button(self.f22, text='保存为默认(s)', font=font_normal,
-                                  command=lambda: self.save_config_as_default())
+                                  command=self.save_config_as_default)
         self.b_save_conf.pack(side=LEFT, fill=BOTH, expand=YES)
 
         self.b_save_conf = Button(self.f22, text='保存到文件(S)', font=font_normal,
-                                  command=...)  # TODO
+                                  command=self.save_config_to_file)
         self.b_save_conf.pack(side=LEFT, fill=BOTH, expand=YES)
 
         self.f21.pack(fill=BOTH)
@@ -275,9 +276,10 @@ class App:
         self.hk.register(('alt', 'r'), callback=lambda e: self.func_start())
         self.hk.register(('alt', 'p'), callback=lambda e: self.pause())
         self.hk.register(('alt', 's'), callback=lambda e: self.save_config_as_default())
+        self.hk.register(('alt', 'shift', 's'), callback=lambda e: self.save_config_to_file())
         self.hk.register(('alt', 'l'), callback=lambda e: self.load_default_config())
-        self.hk.register(('alt', 'd'), callback=lambda e: self.set_two_win_left())
         self.hk.register(('alt', 'shift', 'l'), callback=lambda e: self.load_user_config())
+        self.hk.register(('alt', 'd'), callback=lambda e: self.set_two_win_left())
 
         # 移动鼠标
         self.ma = MouseAction()
@@ -372,6 +374,7 @@ class App:
     def get_list(self, *args):
         """获取对应下拉框的list，方便写入后续下拉框"""
         cmb1_v = self.cmb1_value.get()
+        # 从配置文件中获取功能类
         self.current_func = self.ff.init_config(cmb1_v)
         # 设置下拉框的值
         self.cmb2['values'] = self.current_func.get_procedure_names()
@@ -387,6 +390,15 @@ class App:
             self.current_func.save_function_to_json('templates/test.json')
             self.show_info('配置文件保存成功！')
         except Exception as e:
+            self.show_info('错误！保存文件出错！', 'red')
+
+    def save_config_to_file(self):
+        try:
+            file_path = asksaveasfilename(defaultextension='.json', filetypes=[("Json文件", ".json")], initialdir='dir', title='Save as')
+            self.current_func.save_function_to_json(file_path)
+            self.show_info('配置文件保存成功！')
+        except Exception as e:
+            # print(repr(e))
             self.show_info('错误！保存文件出错！', 'red')
 
     def show_func(self, func):
@@ -460,10 +472,16 @@ class App:
     def func_start(self):
         """运行"""
         # 当前配置文件中的字典
+        self.show_info(self.current_func.get_func_name() + '启动...')
+
+        # 这里检查None，是因为如果没有导入，或者没有选择的话，当前的功能类就是None，就不能运行
         if self.current_func is not None:
             fr = FuncRun(self.current_func)
             result_info = fr.func_demo()
-            self.show_info(*result_info)
+
+            # 获取错误信息，正确就不输出了
+            if result_info is not None:
+                self.show_info(*result_info)
         else:
             self.show_info('错误！请创建流程，或者导入流程！', 'red')
 

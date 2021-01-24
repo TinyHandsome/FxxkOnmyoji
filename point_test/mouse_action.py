@@ -79,8 +79,11 @@ class MouseAction:
         r, g, b = self.get_mouse_color()
         return Location(x, y, r, g, b)
 
-    def check_mouse_color(self, rgb, position=None):
-        """检查颜色是否符合，如果没有指定位置，则为当前鼠标位置的颜色是否对应目标颜色"""
+    def check_mouse_color(self, rgb, position=None) -> bool:
+        """
+        检查颜色是否符合，如果没有指定位置，则为当前鼠标位置的颜色是否对应目标颜色
+        :return 是否匹配成功，True 或 False
+        """
         if position is None:
             position = self.m.position()
         return pyautogui.pixelMatchesColor(position[0], position[1], rgb)

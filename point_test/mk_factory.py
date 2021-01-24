@@ -37,14 +37,14 @@ class MKFactory:
         elif isinstance(color, tuple) or isinstance(color, list):
             rgb_list = color
         else:
-            raise Exception('颜色格式不对')
+            self.state = '颜色格式不对...', 'red'
 
         try:
             self.state = self.m.check_mouse_color(rgb_list, coordinate)
         except Exception as e:
-            print('配置文件中的数据有误，有一种可能是你导入的别人的配置，'
-                  '但是别人的配置的电脑分辨率跟你的不一致，才导致的。')
-            self.state = 'colorCheck_error'
+            # print('配置文件中的数据有误，有一种可能是你导入的别人的配置，'
+            #       '但是别人的配置的电脑分辨率跟你的不一致，才导致的。')
+            self.state = '颜色匹配错误，坐标可能越界...', 'red'
 
         return self.state
 
@@ -61,7 +61,7 @@ class MKFactory:
         """单击很多次"""
         if times is None:
             times = self.cf.get_option('mouse', 'mouse_multi_times', 'int')
-        for i in range(times):
+        for i in range(self.t.get_times_randint(times)):
             self.l1(xy)
 
     def l2(self, xy):

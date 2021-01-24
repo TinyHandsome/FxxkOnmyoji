@@ -15,7 +15,7 @@
             1. 鼠标连续点击随机时间：[0.2, 0.5]，用途：结算界面疯狂点击的时候
 """
 import time
-from random import uniform, randrange
+from random import uniform, randrange, randint
 from configure_tools import Configure
 
 
@@ -32,8 +32,10 @@ class TipTime:
         self.mouse_bias = self.conf.get_option('mouse', 'mouse_bias', 'int')
 
     def tip(self, flag='mouse'):
+        """获取停顿时间"""
         if flag == 'mouse':
             aim_set = self.click_many_times_range
+
         elif flag == 'color':
             aim_set = self.color_check_range
         else:
@@ -49,6 +51,10 @@ class TipTime:
             return randrange(-self.mouse_bias, self.mouse_bias)
 
         return gb(), gb()
+
+    def get_times_randint(self, times):
+        """获取点击次数的随机值"""
+        return randrange(1, times)
 
 
 if __name__ == '__main__':

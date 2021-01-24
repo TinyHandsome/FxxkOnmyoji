@@ -92,6 +92,8 @@ class Function:
 class FuncFactory:
     def __post_init__(self):
         self.cf = Configure('configures/functions.ini')
+        # function的列表
+        self.func_list = []
 
     def create_function_from_data(self, func_name, data):
         """普通创建function"""
@@ -114,6 +116,7 @@ class FuncFactory:
         """从config中读取数据，获取配置数据，初始化data"""
         # 获取功能名的编号
         flag = func_name[flag_index]
+        # 获取对应编号的节点名
         names = self.cf.get_option(flag, 'indexs').split('-')
         data = {}
         for name in names:
@@ -122,5 +125,5 @@ class FuncFactory:
         return self.create_function_from_data(func_name, data)
 
     def get_func_names(self):
-        """获取功能名称"""
+        """获取功能名称列表"""
         return self.cf.get_values('func_names')
