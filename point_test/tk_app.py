@@ -346,6 +346,7 @@ class App:
             count += 1
             # 提取第h个坐标，h只有1的话，就只提取一个坐标
             loc = [int(temp) for temp in self.win_settings[h][1].split(',')]
+            # 按照输入的最新宽度设置界面宽度
             repair_width = int(self.reset_windows_width.get())
             if repair_width != '':
                 loc[-1] = repair_width
@@ -358,7 +359,7 @@ class App:
                     loc[1] = repair_width - 8
                 elif count == 3:
                     # 第三个界面，右上，23不动，调整14
-                    loc[0] = repair_width + 2
+                    loc[0] = repair_width + 280
                 else:
                     self.show_info('你有病不是？你打开这么多阴阳师干嘛啊？', 'red')
             try:
