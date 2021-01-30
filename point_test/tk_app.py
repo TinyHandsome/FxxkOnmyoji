@@ -321,7 +321,8 @@ class App:
                 os.remove(os.path.join(path, file_name))
                 count += 1
 
-        self.show_info('成功删除了【' + str(count) + '】个日志文件...', 'black')
+        if count != 0:
+            self.show_info('成功删除了【' + str(count) + '】个日志文件...', 'black')
 
     def set_top_window(self):
         """设置是否置顶"""
@@ -356,10 +357,18 @@ class App:
                     ...
                 elif count == 2:
                     # 第二个界面，13不动，调整24
-                    loc[1] = repair_width - 8
+                    win2_locked_2 = self.settings.get_option('windows', 'win2_locked_2', 'int')
+                    if win2_locked_2 == -1:
+                        loc[1] = repair_width - 8
+                    else:
+                        loc[1] = win2_locked_2
                 elif count == 3:
                     # 第三个界面，右上，23不动，调整14
-                    loc[0] = repair_width + 280
+                    win3_locked_1 = self.settings.get_option('windows', 'win3_locked_1', 'int')
+                    if win3_locked_1 == -1:
+                        loc[0] = repair_width + 280
+                    else:
+                        loc[0] = win3_locked_1
                 else:
                     self.show_info('你有病不是？你打开这么多阴阳师干嘛啊？', 'red')
             try:
