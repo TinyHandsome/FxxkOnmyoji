@@ -23,6 +23,9 @@ class Color:
     def __post_init__(self):
         ...
 
+    def get_values(self):
+        return self.r, self.g, self.b
+
 
 @dataclass
 class Location:
@@ -32,6 +35,8 @@ class Location:
     def __post_init__(self):
         ...
 
+    def get_values(self):
+        return self.x, self.y
 
 @dataclass
 class ColorLocation:
@@ -60,5 +65,13 @@ class ColorLocation:
     def set_color_location_from_values(self, r, g, b, x, y):
         self.set_color_from_rgb(r, g, b)
         self.set_location_from_xy(x, y)
+
+    def get_color(self):
+        """获取颜色数据"""
+        return self.c.get_values()
+
+    def get_loc(self):
+        """获取坐标数据"""
+        return self.l.get_values()
 
 

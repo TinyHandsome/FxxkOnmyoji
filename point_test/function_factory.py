@@ -14,16 +14,20 @@ from dataclasses import dataclass
 import json
 
 from configure_tools import Configure
+from color_location import ColorLocation
 
 
 @dataclass
 class Procedure:
     proce_name: str
-    proce_loc: tuple
-    proce_color: tuple
+    # 【v0.3】重构了流程节点类，现在传入的是CL类而不是直接的loc和color值
+    # proce_loc: tuple
+    # proce_color: tuple
+    cl: ColorLocation
 
     def __post_init__(self):
-        ...
+        self.proce_color = self.cl.get_color()
+        self.proce_loc = self.cl.get_loc()
 
     def reset_loc_color(self, loc, color):
         """设置loc和color"""
@@ -76,7 +80,7 @@ class Function:
         return json_data
 
     def update(self, p_name, p_xy, p_color):
-        """更新值"""
+        """更新值，需要更新是因为，后面是会改变流程节点的信息"""
         p = self.proce_dict.get(p_name)
         assert isinstance(p, Procedure)
         p.reset_loc_color(p_xy, p_color)
@@ -96,10 +100,16 @@ class FuncFactory:
         self.func_list = []
 
     def create_function_from_data(self, func_name, data):
-        """普通创建function"""
+        """
+        普通创建function
+        :param data: 流程名: CL的字典，一个功能的所有数据
+        """
         procedures = []
-        for k, v in data.items():
-            p = Procedure(k, v[0], v[1])
+        for k, cl in data.items():
+            # k：流程节点名；cl：ColorLocation类
+            # 【v0.3】Procedure初始化的方法改为对Colorlation处理
+            # p = Procedure(k, cl[0], cl[1])
+            p = Procedure(k, cl)
             procedures.append(p)
         return Function(func_name, procedures)
 
@@ -117,11 +127,15 @@ class FuncFactory:
         # 获取功能名的编号
         flag = func_name[flag_index]
         # 获取对应编号的节点名
-        names = self.cf.get_option(flag, 'indexs').split('-')
+        procedure_names = self.cf.get_option(flag, 'indexs').split('-')
         data = {}
-        for name in names:
-            data[name] = ['', '']
+        for name in procedure_names:
+            # 循环初始化一个功能的，每个节点的流程信息
+            # 【v0.3】这里是初始化每个流程的坐标和时间信息，这里将初始化改为cl类
+            # data[name] = ['', '']
+            data[name] = ColorLocation()
 
+        # 返回新建的流程节点的功能
         return self.create_function_from_data(func_name, data)
 
     def get_func_names(self):
