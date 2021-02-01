@@ -21,11 +21,17 @@ from color_location import ColorLocation
 
 @dataclass
 class Procedure:
-    """流程，负责检测画面中是否出现目标区域，如果出现了，则点击一处或多处"""
+    """
+    流程，负责检测画面中是否出现目标区域，如果出现了，则点击一处或多处
+    一个功能由多个流程组成，每个流程有：
+        流程名
+        流程字符串，即原始function.ini的字符串
+
+    """
     proce_name: str
     # 【v0.3】重构了流程节点类，现在传入的是CL类而不是直接的loc和color值
     # 每一个流程有多个位置、颜色点，和多个点击点，点击点包含在位置颜色点中，根据流程名指定点击点
-    cl: [ColorLocation]
+    cl: ColorLocation
 
     # TODO
 
@@ -127,7 +133,6 @@ class FuncFactory:
     def json2functions(self, json_var):
         """将json配置数据处理成Function列表"""
 
-
     def create_functionFactory_from_json(self, path):
         """从json中加载功能数据"""
         with open(path, "r", encoding="UTF-8") as f_load:
@@ -141,14 +146,15 @@ class FuncFactory:
         """从config中读取数据，获取配置数据，初始化data"""
         # 获取功能名的编号
         flag = func_name[flag_index]
-        # 获取对应编号的节点名
-        procedure_names = self.cf.get_option(flag, 'indexs').split('-')
+        # 获取对应编号的流程名列表，并封装为Procedure
+        procedure_names = self.cf.get_values(flag)
+        # 循环封装
         data = {}
         for name in procedure_names:
             # 循环初始化一个功能的，每个节点的流程信息
             # 【v0.3】这里是初始化每个流程的坐标和时间信息，这里将初始化改为cl类
             # data[name] = ['', '']
-            data[name] = ColorLocation()
+            data[name] = Procedure(name, ColorLocation())
 
         # 返回新建的流程节点的功能
         return self.create_function_from_data(func_name, data)
