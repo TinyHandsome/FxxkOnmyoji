@@ -421,7 +421,8 @@ class App:
     def load_default_config(self, path='templates/data.json'):
         """载入数据"""
         try:
-            self.current_func = self.ff.create_function_from_json(path)
+            # 从json中创建数据
+            self.ff.create_function_from_json(path)
             # 载入后设置前端显示
             self.show_info('读取配置文件成功！')
             # print(self.current_func.get_data())

@@ -74,4 +74,10 @@ class ColorLocation:
         """获取坐标数据"""
         return self.l.get_values()
 
+    def get_dict(self):
+        """获取颜色位置数据"""
+        return {'color': self.get_color(), 'loc': self.get_loc()}
+
+
+
 
