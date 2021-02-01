@@ -37,9 +37,44 @@
   - [ ] 优化配置文件
   
     - 可以配置多个流程
+    
     - 全空的流程无法运行
+    
     - 封装流程，保存多个流程
-  - 流程信息跟配置文件关联，一一对应
+    
+    - 流程信息跟配置文件关联，一一对应
+    
+    - 配置信息json构造设想，相关类放在structure文件夹中
+    
+      ```python
+      [
+          # 多个function
+          {
+              "func_name": func_name,
+              "func_code": func_code,
+              # 步骤分两种，一种是常规步骤
+              "steps": [
+                  # 多个Step
+                  {
+                      "step_name": step_name,
+                      "points": [
+                          # 每个步骤会有多个点位信息Point
+                          {
+                              "point_name": point_name,
+                              "point_type": point_type,
+                              "point_location": point_location,
+                              "point_color": point_color,
+                              # 0代表不点击
+                              "click_times": click_times,
+                          }
+                      ],
+                  }
+              ]
+              # 另一种是关联步骤
+              "connections": [c1, c2, c3]
+          }
+      ]
+      ```
   
 - 如果导入流程，重名的取导入的，最新的要最新的，没有流程取旧的，配置信息全空。
   

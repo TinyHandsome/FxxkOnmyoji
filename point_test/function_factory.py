@@ -12,7 +12,7 @@
         [Python标记函数或类为废弃](https://blog.csdn.net/u013632755/article/details/106066972)
 """
 from dataclasses import dataclass
-
+import re
 import json
 
 from configure_tools import Configure
@@ -142,22 +142,24 @@ class FuncFactory:
 
         return self.create_function_from_data(func_name, data)
 
-    def init_config(self, func_name, flag_index=1):
-        """从config中读取数据，获取配置数据，初始化data"""
-        # 获取功能名的编号
-        flag = func_name[flag_index]
+    def init_function_from_name(self, func_name):
+        """【v0.3：√】获取功能名，返回初始化的Function类"""
+        # 获取功能名的编号，这里使用正则表达式
+        pattern = re.compile(r'【(.*)】(.*)')
+        # 获取功能名和编号
+        code, f_name = re.search(pattern, func_name).groups()
+
         # 获取对应编号的流程名列表，并封装为Procedure
-        procedure_names = self.cf.get_values(flag)
+        procedure_names = self.cf.get_values(code)
         # 循环封装
-        data = {}
+        procedure_list = []
         for name in procedure_names:
             # 循环初始化一个功能的，每个节点的流程信息
             # 【v0.3】这里是初始化每个流程的坐标和时间信息，这里将初始化改为cl类
-            # data[name] = ['', '']
-            data[name] = Procedure(name, ColorLocation())
+            procedure_list.append(Procedure(name, ColorLocation()))
 
-        # 返回新建的流程节点的功能
-        return self.create_function_from_data(func_name, data)
+        # 返回初始化的功能
+        return Function(func_name, procedure_list)
 
     def get_func_names(self):
         """获取功能名称列表"""
