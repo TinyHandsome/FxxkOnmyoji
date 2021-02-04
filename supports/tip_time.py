@@ -15,8 +15,8 @@
             1. 鼠标连续点击随机时间：[0.2, 0.5]，用途：结算界面疯狂点击的时候
 """
 import time
-from random import uniform, randrange, randint
-from configure_tools import Configure
+from random import uniform, randrange
+from supports.configure_tools import Configure
 
 
 class TipTime:

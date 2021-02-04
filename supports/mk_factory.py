@@ -10,10 +10,10 @@
 @time: 2020/8/31 17:25
 @desc: 鼠标键盘模拟工场
 """
-from mouse_action import MouseAction
-from keyboard_action import KeyboardAction
-from tip_time import TipTime
-from configure_tools import Configure
+from supports.mouse_action import MouseAction
+from supports.keyboard_action import KeyboardAction
+from supports.tip_time import TipTime
+from supports.configure_tools import Configure
 
 
 class MKFactory:

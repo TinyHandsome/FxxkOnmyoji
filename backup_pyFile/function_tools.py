@@ -11,10 +11,9 @@
 @desc: 获取point_configures中的配置信息
 """
 from dataclasses import dataclass
-from mk_factory import MKFactory
-from tip_time import TipTime
-from function_factory import Function
-from methods import build_thread
+from supports.mk_factory import MKFactory
+from supports.tip_time import TipTime
+from supports.methods import build_thread
 
 
 @dataclass

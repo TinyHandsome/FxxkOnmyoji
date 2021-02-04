@@ -15,8 +15,8 @@ from dataclasses import dataclass
 import re
 import json
 
-from configure_tools import Configure
-from color_location import ColorLocation
+from supports.configure_tools import Configure
+from supports.color_location import ColorLocation
 
 
 @dataclass
@@ -111,7 +111,7 @@ class FuncFactory:
     """用于处理各个功能流程的读取、保存、更改等，不涉及具体实施，实施用function_tool"""
 
     def __post_init__(self):
-        self.cf = Configure('configures/functions.ini')
+        self.cf = Configure('../configures/functions.ini')
         # function的列表，这里保存了所有的功能信息，也是读取和保存的点
         self.func_list = []
 

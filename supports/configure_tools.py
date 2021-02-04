@@ -55,5 +55,5 @@ class Configure:
 
 
 if __name__ == '__main__':
-    cf = Configure('configures/functions.ini')
+    cf = Configure('../configures/functions.ini')
     print(cf.get_values('func_names'))

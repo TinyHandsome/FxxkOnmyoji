@@ -15,7 +15,7 @@ from dataclasses import dataclass
 import re
 import json
 
-from configure_tools import Configure
+from supports.configure_tools import Configure
 from structure.function import Function
 
 
@@ -24,11 +24,12 @@ class FunctionFactory:
 
     def __post_init__(self):
         # 功能名映射功能的字典 工具
-        self.function_dict = {}
+        self.function_dict_by_code = {}
+        self.function_dict_by_name = {}
 
     def init_functions_from_config(self):
         """从functions.ini文件中读取数据，获取初始化的[Function]"""
-        cf = Configure('../configures/functions.ini')
+        cf = Configure('configures/functions.ini')
         func_names = cf.get_values('func_names')
 
         functions = []
@@ -47,7 +48,7 @@ class FunctionFactory:
                     connections = value.split('-')
 
             f = Function(name, code, shown, step_infos, connections)
-            # f_json = f.get_dict()
+            f.init_function()
             functions.append(f)
         return functions
 
@@ -72,11 +73,22 @@ class FunctionFactory:
     def create_functions_dict(self, functions: [Function]):
         """创建按一个从function_name到function的字典"""
         for f in functions:
-            self.function_dict[f.func_code] = f
+            self.function_dict_by_code[f.func_code] = f
+            self.function_dict_by_name[f.func_name] = f
 
-    def update(self, function_code, point_name, loc, color):
-        """更新某个功能某个点位的位置和颜色"""
-        self.function_dict[function_code].update_point(point_name, loc, color)
+    def get_function_names(self) -> list:
+        """获取所有功能的名字"""
+        values = [(f.func_shown, f.func_name) for func_name, f in self.function_dict_by_name.items()]
+        show_func_names = []
+        for shown, name in values:
+            if shown == 1:
+                show_func_names.append(name)
+        return show_func_names
+
+    def get_function_from_function_name(self, func_name) -> Function:
+        """根据功能名获取功能对象"""
+        return self.function_dict_by_name[func_name]
+
 
 
 if __name__ == '__main__':
@@ -93,5 +105,9 @@ if __name__ == '__main__':
     test_ff.create_functions_dict(f)
     test_ff.update('001', '挑战@lc_1', [1, 2], [1, 2, 3])
 
-    print(f[0].func_name)
-    print(f[0].steps[0].points)
+    # 获取所有的功能
+    function_names = test_ff.get_function_names()
+    print(function_names)
+    # 获取某一个功能的步骤
+    print(test_ff.get_step_names_from_function_name(function_names[0]))
+

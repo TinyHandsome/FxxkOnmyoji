@@ -65,6 +65,13 @@ class Function:
         """更新该类中的点信息"""
         self.point_dict[point_name].update(loc, color)
 
+    def get_point_names(self):
+        """获取function中所有Point的名字"""
+        points = []
+        for s in self.steps:
+            points += s.points
+        return [p.point_name for p in points]
+
     @classmethod
     def get_function_from_dict(cls, function_dict: dict):
         """从json获取的dict字典中生成function"""

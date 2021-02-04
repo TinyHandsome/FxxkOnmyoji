@@ -18,42 +18,18 @@ from dataclasses import dataclass
 from tkinter import *
 from tkinter import ttk
 from tkinter.filedialog import askopenfilename, asksaveasfilename
-from configure_tools import Configure
-from function_tools import FuncRun
+from supports.configure_tools import Configure
+from backup_pyFile.function_tools import FuncRun
 from system_hotkey import SystemHotkey
-from mouse_action import MouseAction
-from function_factory import FuncFactory
+
+from supports.info_pip import InfoPip
+from supports.mouse_action import MouseAction
+from structure.function_factory import FunctionFactory
 from time import sleep
 import time
 import datetime
-from set_windows import SetWin
-from methods import build_thread
-from traceback import print_exc, format_exc
-
-
-@dataclass
-class InfoPip:
-
-    def __post_init__(self):
-        # 左边是入口，右边是出口
-        self.line_info = ['', '', '']
-        self.first_color = ''
-
-    def get_two_var(self):
-        """将当前的pip结果放到var中去，获得两个str"""
-        return self.first_color, self.line_info[0], '\n'.join(self.line_info[1:])
-
-    def set_first_line(self, info, color):
-        """设置first line，进最新的值，出最后一个值"""
-        self.first_color = color
-        for i in range(len(self.line_info) - 1, 0, -1):
-            self.line_info[i] = self.line_info[i - 1]
-        self.line_info[0] = info
-
-    def get_pip_history(self, info, color):
-        """将上述功能进行合并"""
-        self.set_first_line(info, color)
-        return self.get_two_var()
+from supports.set_windows import SetWin
+from supports.methods import build_thread
 
 
 @dataclass
@@ -64,7 +40,12 @@ class App:
         self.init_area()
         self.global_var()
         self.init_tk()
+
+        # 清除过期的log
         self.clear_logs()
+
+        # 执行置顶的默认
+        self.set_top_window()
 
     def global_var(self):
         """全局变量初始化"""
@@ -72,6 +53,7 @@ class App:
         # 初始坐标和颜色
         self.xy, self.color = '', ''
         # 初始化功能信息
+        self.functions = None
         self.current_func = None
 
         # 日记文件，一天一个，每次启动时删除七天前的文件
@@ -136,7 +118,9 @@ class App:
         self.cmb1 = ttk.Combobox(self.f11, textvariable=self.cmb1_value,
                                  width=cmb1_width, font=font_normal)
         # 初始化功能名字，从ini文件中获取
-        self.cmb1['values'] = self.ff.get_func_names()
+        self.functions = self.ff.init_functions_from_config()
+        self.ff.create_functions_dict(self.functions)
+        self.cmb1['values'] = self.ff.get_function_names()
         # 选择第一个为默认
         # self.cmb1.current(0)
         self.cmb1.bind('<<ComboboxSelected>>', self.get_list)
@@ -176,7 +160,7 @@ class App:
                                justify='left',
                                )
         # 初始化是否置顶
-        self.cb_var_whether_top.set(False)
+        self.cb_var_whether_top.set(True)
         self.cb1.pack(side=LEFT, fill=Y, ipadx=label_ipadx)
 
         self.b4 = Button(self.f12, text='载入默认配置(l)', command=self.load_default_config, font=font_normal)
@@ -220,7 +204,7 @@ class App:
 
         self.f22 = Frame(self.frame_2)
 
-        self.b1 = Button(self.f22, text='写入信息(w)', command=self.write_dict, font=font_normal)
+        self.b1 = Button(self.f22, text='写入信息(w)', command=self.write_info, font=font_normal)
         self.b1.pack(side=LEFT, fill=BOTH, ipadx=button_ipadx, expand=True)
 
         self.b_save_conf = Button(self.f22, text='保存为默认(s)', font=font_normal,
@@ -272,7 +256,7 @@ class App:
         """初始化区域"""
         # 全局快捷键设置
         self.hk = SystemHotkey()
-        self.hk.register(('alt', 'w'), callback=lambda e: self.write_dict())
+        self.hk.register(('alt', 'w'), callback=lambda e: self.write_info())
         self.hk.register(('alt', 'c'), callback=lambda e: self.destroy())
         self.hk.register(('alt', 'r'), callback=lambda e: self.func_start())
         self.hk.register(('alt', 'p'), callback=lambda e: self.pause())
@@ -289,9 +273,21 @@ class App:
         # 设置初始界面
         self.sw = SetWin()
         # 操作功能配置文件的工具
-        self.ff = FuncFactory()
+        self.ff = FunctionFactory()
         # 信息输出栈
         self.info_stack = InfoPip()
+
+    def info(self, word, type):
+        """简化输出"""
+        if type == 1:
+            # 点击事件
+            self.show_info('【选择】' + word + '...', 'black')
+        elif type == 2:
+            # 错误事件
+            self.show_info('【错误】' + word + '...', 'red')
+        elif type == 3:
+            # 成功事件
+            self.show_info('【成功】' + word + '...', 'green')
 
     def show_info(self, word, fg='green'):
         """输出问题"""
@@ -322,15 +318,15 @@ class App:
                 count += 1
 
         if count != 0:
-            self.show_info('成功删除了【' + str(count) + '】个日志文件...', 'black')
+            self.info('删除了【' + str(count) + '】个日志文件...', 3)
 
     def set_top_window(self):
         """设置是否置顶"""
         if self.cb_var_whether_top.get():
-            self.show_info('设置软件【置顶】')
+            self.info('设置软件置顶', 1)
             self.root.wm_attributes('-topmost', 1)
         else:
-            self.show_info('取消软件【置顶】')
+            self.info('取消软件置顶', 1)
             self.root.wm_attributes('-topmost', 0)
 
     def set_two_win_left(self):
@@ -338,7 +334,7 @@ class App:
         self.win_settings = self.settings.get_items('windows')
         handles = self.sw.find_onmyoji_handle()
         if handles[0] == 0:
-            self.show_info('错误！未打开阴阳师！', 'red')
+            self.info('未打开阴阳师！', 2)
             return
 
         # 遍历阴阳师所有句柄
@@ -370,12 +366,12 @@ class App:
                     else:
                         loc[0] = win3_locked_1
                 else:
-                    self.show_info('你有病不是？你打开这么多阴阳师干嘛啊？', 'red')
+                    self.info('你有病不是？你打开这么多阴阳师干嘛啊', 2)
             try:
                 self.sw.move_rect(handles[h], loc)
-                self.show_info('成功调整界面！')
+                self.info('调整界面', 3)
             except Exception as e:
-                self.show_info('调整界面失败...', 'red')
+                self.info('调整界面失败', 2)
                 return
 
     def run(self):
@@ -383,51 +379,46 @@ class App:
         self.root.mainloop()
 
     def get_list(self, *args):
-        """获取对应下拉框的list，方便写入后续下拉框"""
+        """cmb1对应的函数，获取对应下拉框的list，方便写入后续下拉框"""
         cmb1_v = self.cmb1_value.get()
-        # 从配置文件中获取功能类
-        self.current_func = self.ff.init_config(cmb1_v)
+        self.info(cmb1_v, 1)
+        # 当前功能为
+        self.current_func = self.ff.get_function_from_function_name(cmb1_v)
         # 设置下拉框的值
-        self.cmb2['values'] = self.current_func.get_procedure_names()
+        self.cmb2['values'] = self.current_func.get_point_names()
 
     def get_key(self, *args):
         """cmb2的对应的函数"""
-        # return self.cmb2_value.get()
-        ...
+        cmb2_v = self.cmb2_value.get()
+        self.info(cmb2_v, 1)
 
     def save_config_as_default(self):
         """保存当前设置"""
         try:
-            self.current_func.save_function_to_json('templates/test.json')
-            self.show_info('配置文件保存成功！')
+            self.ff.save_functions2json(self.functions, 'templates/default_save_file.json')
+            self.info('配置文件保存成功', 3)
         except Exception as e:
-            self.show_info('错误！保存文件出错！', 'red')
+            self.info('保存文件出错', 2)
 
     def save_config_to_file(self):
         try:
             file_path = asksaveasfilename(defaultextension='.json', filetypes=[("Json文件", ".json")], initialdir='dir',
                                           title='Save as')
-            self.current_func.save_function_to_json(file_path)
-            self.show_info('配置文件保存成功！')
+            self.ff.save_functions2json(self.functions, file_path)
+            self.info('配置文件保存成功', 3)
         except Exception as e:
             # print(repr(e))
-            self.show_info('错误！保存文件出错！', 'red')
-
-    def show_func(self, func):
-        """对于载入的func进行前端显示"""
-        self.cmb1.set(func.get_func_name())
-        self.cmb2['values'] = func.get_procedure_names()
+            self.info('保存文件出错！', 2)
 
     def load_default_config(self, path='templates/data.json'):
         """载入数据"""
         try:
             # 从json中创建数据
-            self.ff.create_function_from_json(path)
+            self.functions = self.ff.load_functions_from_json(path)
             # 载入后设置前端显示
-            self.show_info('读取配置文件成功！')
-            # print(self.current_func.get_data())
+            self.info('读取配置文件成功', 3)
         except Exception as e:
-            self.show_info('错误！读取配置文件出错！', 'red')
+            self.info('读取配置文件出错！', 2)
 
     def load_user_config(self):
         """载入用户数据"""
@@ -439,13 +430,12 @@ class App:
         ...
         # TODO
 
-    def write_dict(self):
+    def write_info(self):
         """将信息写入到dict中"""
         p_name = self.cmb2_value.get()
         if p_name != '':
-            self.current_func.update(p_name, self.xy, self.color)
-            # print(self.current_func.get_data())
-            self.show_info('成功写入【' + p_name + '】的坐标...')
+            self.current_func.update_point(p_name, self.xy, self.color)
+            self.info('写入【' + p_name + '】的坐标', 3)
 
     def get_postion_color(self):
         """设置绑定后的按键操作的值"""
@@ -484,19 +474,15 @@ class App:
 
     def func_start(self):
         """运行"""
-        # 当前配置文件中的字典
-        self.show_info(self.current_func.get_func_name() + '启动...')
+        # 当前配置文件中的字典 TODO
+        self.info(self.current_func.func_name + '启动...', 1)
 
-        # 这里检查None，是因为如果没有导入，或者没有选择的话，当前的功能类就是None，就不能运行
-        if self.current_func is not None:
-            fr = FuncRun(self.current_func)
-            result_info = fr.func_demo()
+        fr = FuncRun(self.functions)
+        result_info = fr.func_demo()
 
-            # 获取错误信息，正确就不输出了
-            if result_info is not None:
-                self.show_info(*result_info)
-        else:
-            self.show_info('错误！请创建流程，或者导入流程！', 'red')
+        # 获取错误信息，正确就不输出了
+        if result_info is not None:
+            self.show_info(*result_info)
 
     def destroy(self):
         self.root.quit()
