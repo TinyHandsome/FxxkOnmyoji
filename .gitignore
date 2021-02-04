@@ -1,3 +1,5 @@
 ./temp_img
 .*
 !/.gitignore
+point_test/logs
+__pycache__
