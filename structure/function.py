@@ -24,9 +24,31 @@ class Function:
     connections: [str]
 
     def __post_init__(self):
-        # 将步骤转为Step类
         self.steps = []
-        self.info2step()
+        if self.step_infos is not None:
+            # 如果是另一种初始化类的方式，则不用转换，否则将步骤转为Step类
+            self.info2step()
+
+    def init_function(self):
+        """载入数据时，需要对各种字典进行初始化"""
+        # 该功能下所有的点信息的名字-Point映射
+        self.create_points_dict()
+
+    def info2step(self):
+        """根据step信息转为Step"""
+        for info in self.step_infos:
+            self.steps.append(Step(info))
+
+    def create_points_dict(self):
+        """在funciton中创建：根据func_name和point_name找到point的字典"""
+        self.point_dict = {}
+        for step in self.steps:
+            for point in step.points:
+                self.point_dict[point.point_name] = point
+
+    def set_steps(self, steps: [Step]):
+        """设置steps的信息"""
+        self.steps = steps
 
     def get_dict(self):
         steps_dict = [s.get_dict() for s in self.steps]
@@ -39,7 +61,17 @@ class Function:
         }
         return function_dict
 
-    def info2step(self):
-        """根据step信息转为Step"""
-        for info in self.step_infos:
-            self.steps.append(Step(info))
+    def update_point(self, point_name, loc, color):
+        """更新该类中的点信息"""
+        self.point_dict[point_name].update(loc, color)
+
+    @classmethod
+    def get_function_from_dict(cls, function_dict: dict):
+        """从json获取的dict字典中生成function"""
+        new_steps = [Step.get_step_from_dict(s) for s in function_dict.pop('steps')]
+
+        function_dict['step_infos'] = None
+        function = Function(**function_dict)
+        function.set_steps(new_steps)
+
+        return function

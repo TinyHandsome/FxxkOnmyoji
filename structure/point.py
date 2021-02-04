@@ -18,16 +18,16 @@ from dataclasses import dataclass
 class Point:
     point_name: str
     point_type: str
-    point_location: tuple
-    point_color: tuple
+    point_location: list or tuple
+    point_color: list or tuple
     click_times: int
 
     def __post_init__(self):
-        self.x = self.point_location[0]
-        self.y = self.point_location[1]
-        self.r = self.point_color[0]
-        self.g = self.point_color[1]
-        self.b = self.point_color[2]
+        ...
+
+    def get_loc_color(self):
+        """获取位置和颜色信息"""
+        return self.point_location, self.point_color
 
     def get_dict(self):
         """将点位的所有信息转化为字典格式"""
@@ -40,3 +40,7 @@ class Point:
         }
         return point_dict
 
+    def update(self, loc, color):
+        """重新设置loc和color"""
+        self.point_location = loc
+        self.point_color = color

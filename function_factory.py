@@ -33,7 +33,6 @@ class Procedure:
     # 每一个流程有多个位置、颜色点，和多个点击点，点击点包含在位置颜色点中，根据流程名指定点击点
     cl: ColorLocation
 
-    # TODO
 
     def __post_init__(self):
         # 【v0.3】是否新增下面代码，应该是不用的，重设位置和颜色的话，直接设cl的结果就行

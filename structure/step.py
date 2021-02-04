@@ -21,6 +21,11 @@ class Step:
     step_info: str
 
     def __post_init__(self):
+        if self.step_info != '':
+            # 如果初始化该类不是用的init，则step_info指定为''，此时不需要进行下面的操作，否则就需要进行
+            self.generate_points_stepName()
+
+    def generate_points_stepName(self):
         self.points = []
         # 从步骤信息中获取步骤名和各点操作
         self.step_name, self.step_points = self.step_info.split('@')
@@ -29,7 +34,7 @@ class Step:
         count = 0
         for point_info in self.step_points.split('-'):
             count += 1
-            point_name = 'point_name_auto_generate_' + str(count)
+            point_name = self.step_name + '@' + point_info
 
             # 对每个点，进行点的类型和点击次数的获取，如果没有_，则点击次数为0，类型肯定为l
             if '_' in point_info:
@@ -47,3 +52,20 @@ class Step:
             'points': points_dict
         }
         return step_dict
+
+    def set_step(self, step_name: str, points: [Point]):
+        """设置本类的step名字和点信息"""
+        self.step_name = step_name
+        self.points = points
+
+    @classmethod
+    def get_step_from_dict(cls, step_dict):
+        """从step的字典中生成step"""
+        step = Step('')
+
+        points = []
+        for point_dict in step_dict['points']:
+            points.append(Point(**point_dict))
+
+        step.set_step(step_dict['step_name'], points)
+        return step

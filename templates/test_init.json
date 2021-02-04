@@ -1,0 +1,195 @@
+[
+    {
+        "func_name": "双人御魂（一个电脑）",
+        "func_code": "001",
+        "func_shown": 1,
+        "steps": [
+            {
+                "step_name": "挑战",
+                "points": [
+                    {
+                        "point_name": "挑战@lc_1",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "队员结算状态1",
+                "points": [
+                    {
+                        "point_name": "队员结算状态1@lc_3",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 3
+                    }
+                ]
+            },
+            {
+                "step_name": "队长结算状态1",
+                "points": [
+                    {
+                        "point_name": "队长结算状态1@lc_3",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 3
+                    }
+                ]
+            },
+            {
+                "step_name": "队员结算状态2",
+                "points": [
+                    {
+                        "point_name": "队员结算状态2@lc_3",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 3
+                    }
+                ]
+            },
+            {
+                "step_name": "队长结算状态2",
+                "points": [
+                    {
+                        "point_name": "队长结算状态2@lc_3",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 3
+                    }
+                ]
+            }
+        ],
+        "connections": [
+            "901",
+            "902"
+        ]
+    },
+    {
+        "func_name": "关闭体力",
+        "func_code": "901",
+        "func_shown": 0,
+        "steps": [
+            {
+                "step_name": "界面1",
+                "points": [
+                    {
+                        "point_name": "界面1@l",
+                        "point_type": "l",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 0
+                    },
+                    {
+                        "point_name": "界面1@lc_1",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            }
+        ],
+        "connections": []
+    },
+    {
+        "func_name": "关闭/打开御魂双倍",
+        "func_code": "902",
+        "func_shown": 1,
+        "steps": [
+            {
+                "step_name": "双倍开关",
+                "points": [
+                    {
+                        "point_name": "双倍开关@lc",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 0
+                    }
+                ]
+            },
+            {
+                "step_name": "点击关闭",
+                "points": [
+                    {
+                        "point_name": "点击关闭@lc",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 0
+                    }
+                ]
+            }
+        ],
+        "connections": []
+    }
+]
