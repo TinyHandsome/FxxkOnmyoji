@@ -18,8 +18,9 @@ from dataclasses import dataclass
 from tkinter import *
 from tkinter import ttk
 from tkinter.filedialog import askopenfilename, asksaveasfilename
+
+from structure.run_function import RunFunction
 from supports.configure_tools import Configure
-from backup_pyFile.function_tools import FuncRun
 from system_hotkey import SystemHotkey
 
 from supports.info_pip import InfoPip
@@ -252,6 +253,9 @@ class App:
         self.frame_3.pack(side=LEFT, fill=BOTH, anchor=NW, padx=frame_label_pad, pady=frame_label_pad,
                           expand=True)
 
+        # 信息输出栈
+        self.info_stack = InfoPip(self.current_info, self.history_info, self.l_first, self.log_file)
+
     def init_area(self):
         """初始化区域"""
         # 全局快捷键设置
@@ -274,8 +278,6 @@ class App:
         self.sw = SetWin()
         # 操作功能配置文件的工具
         self.ff = FunctionFactory()
-        # 信息输出栈
-        self.info_stack = InfoPip()
 
     def info(self, word, type):
         """简化输出"""
@@ -329,7 +331,7 @@ class App:
             self.info('取消软件置顶', 1)
             self.root.wm_attributes('-topmost', 0)
 
-    def set_two_win_left(self):
+    def set_two_win_left(self, is_print=True):
         """设置两个阴阳师的界面排在左边"""
         self.win_settings = self.settings.get_items('windows')
         handles = self.sw.find_onmyoji_handle()
@@ -369,7 +371,8 @@ class App:
                     self.info('你有病不是？你打开这么多阴阳师干嘛啊', 2)
             try:
                 self.sw.move_rect(handles[h], loc)
-                self.info('调整界面', 3)
+                if is_print:
+                    self.info('调整界面', 3)
             except Exception as e:
                 self.info('调整界面失败', 2)
                 return
@@ -472,17 +475,24 @@ class App:
 
         build_thread(check_mouse, '鼠标颜色检查')
 
+    def check_before_run(self):
+        """运行前的检查"""
+        # 检查是否选择了功能
+        if self.current_func is None:
+            self.info('没有选择功能', 2)
+            return False
+
+        return True
+
     def func_start(self):
         """运行"""
-        # 当前配置文件中的字典 TODO
+        if not self.check_before_run():
+            return
+
         self.info(self.current_func.func_name + '启动...', 1)
 
-        fr = FuncRun(self.functions)
-        result_info = fr.func_demo()
-
-        # 获取错误信息，正确就不输出了
-        if result_info is not None:
-            self.show_info(*result_info)
+        rf = RunFunction(self.current_func)
+        rf.run_function()
 
     def destroy(self):
         self.root.quit()

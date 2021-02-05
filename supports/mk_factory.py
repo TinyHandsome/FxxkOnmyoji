@@ -44,7 +44,7 @@ class MKFactory:
         except Exception as e:
             # print('配置文件中的数据有误，有一种可能是你导入的别人的配置，'
             #       '但是别人的配置的电脑分辨率跟你的不一致，才导致的。')
-            self.state = '颜色匹配错误，坐标可能越界...', 'red'
+            self.state = '坐标格式问题', 2
 
         return self.state
 

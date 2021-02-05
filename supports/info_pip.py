@@ -11,10 +11,17 @@
 @desc: 信息管道
 """
 from dataclasses import dataclass
+import time
+from tkinter import StringVar, Label
+from _io import TextIOWrapper
 
 
 @dataclass
 class InfoPip:
+    current_info: StringVar
+    history_info: StringVar
+    l_first: Label
+    log_file: TextIOWrapper
 
     def __post_init__(self):
         # 左边是入口，右边是出口
@@ -37,3 +44,17 @@ class InfoPip:
         """将上述功能进行合并，进入新的信息，获取输出的信息"""
         self.set_first_line(info, color)
         return self.get_two_var()
+
+    def show_info(self, word, fg='green'):
+        """输出问题"""
+        current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+
+        w1_color, w1, w2 = self.get_pip_history(word, fg)
+
+        self.current_info.set(w1)
+        self.l_first.configure(fg=fg)
+
+        self.history_info.set(w2)
+
+        # 写入日志
+        self.log_file.write(current_time + ': \n' + w1 + '\n\n')

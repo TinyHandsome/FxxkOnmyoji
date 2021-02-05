@@ -53,6 +53,24 @@ class Step:
         }
         return step_dict
 
+    def get_location_points(self):
+        """获取步骤中需要检查颜色的点"""
+        l_points = []
+        for p in self.points:
+            if p.check_type('l'):
+                l_points.append(p)
+
+        return l_points
+
+    def get_click_points(self):
+        """获取步骤中需要点击的点"""
+        c_points = []
+        for p in self.points:
+            if p.check_type('c'):
+                c_points.append(p)
+
+        return c_points
+
     def set_step(self, step_name: str, points: [Point]):
         """设置本类的step名字和点信息"""
         self.step_name = step_name

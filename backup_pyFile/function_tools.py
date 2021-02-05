@@ -18,7 +18,7 @@ from supports.methods import build_thread
 
 @dataclass
 class FuncRun:
-    func: Function
+    # func: Function
 
     def __post_init__(self):
         self.t = TipTime()

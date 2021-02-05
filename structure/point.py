@@ -25,6 +25,10 @@ class Point:
     def __post_init__(self):
         ...
 
+    def get_type_click_time(self):
+        """获取点的类型和点击次数"""
+        return self.point_type, self.click_times
+
     def get_loc_color(self):
         """获取位置和颜色信息"""
         return self.point_location, self.point_color
@@ -44,3 +48,12 @@ class Point:
         """重新设置loc和color"""
         self.point_location = loc
         self.point_color = color
+
+    def check_type(self, p_type):
+        """该点的类型是否是location，即检查颜色点"""
+        if p_type in self.point_type:
+            return True
+        else:
+            return False
+
+
