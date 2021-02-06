@@ -90,7 +90,6 @@ class FunctionFactory:
         return self.function_dict_by_name[func_name]
 
 
-
 if __name__ == '__main__':
     test_ff = FunctionFactory()
     functions = test_ff.init_functions_from_config()
@@ -110,4 +109,3 @@ if __name__ == '__main__':
     print(function_names)
     # 获取某一个功能的步骤
     print(test_ff.get_step_names_from_function_name(function_names[0]))
-
