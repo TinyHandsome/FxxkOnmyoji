@@ -16,13 +16,16 @@ from structure.function import Function
 from structure.step import Step
 from structure.point import Point
 from supports.mk_factory import MKFactory
+from supports.thread_management import ThreadManagement
 from supports.tip_time import TipTime
-from supports.methods import build_thread
+from supports.info_pip import InfoPip
 
 
 @dataclass
 class RunFunction:
     func: Function
+    tm: ThreadManagement
+    info_stack: InfoPip
 
     def __post_init__(self):
         self.t = TipTime()
@@ -32,14 +35,20 @@ class RunFunction:
 
     def run_step(self, step: Step):
         """运行一个步骤"""
-        # 获取每个点的检查结果，如果标记带l的都是True则执行标记带c的点
+        # 【检查step中点的颜色】获取每个点的检查结果，如果标记带l的都是True则执行标记带c的点
         location_result = [self.check_point_color(p) for p in step.get_location_points()]
 
-        # 如果检查的结果都为True，则识别该流程被触发，执行点击事件
+        # 【颜色都对，则运行有loc和color值的点】如果检查的结果都为True，则识别该流程被触发，执行点击事件
         if sum(location_result) == len(location_result):
             c_points = step.get_click_points()
-            for cp in c_points:
-                self.click_points(cp)
+
+            # 这里可能没有点信息
+            # TODO
+            if not c_points:
+                self.info_stack.info('步骤：' + step.step_name + '无效...', 2)
+            else:
+                for cp in c_points:
+                    self.click_points(cp)
         else:
             # 都不是True能怎么办，啥都不干呗
             ...
@@ -78,4 +87,4 @@ class RunFunction:
     def run_function(self):
         """运行一个功能，包括多个步骤"""
         for s in self.func.steps:
-            build_thread(self.run_step(s), s.step_name)
+            self.tm.build_thread(self.run_step, s.step_name, (s,))

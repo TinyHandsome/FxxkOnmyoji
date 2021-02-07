@@ -57,7 +57,8 @@ class Step:
         """获取步骤中需要检查颜色的点"""
         l_points = []
         for p in self.points:
-            if p.check_type('l'):
+            # 在这里对不完善信息的点进行了过滤
+            if p.check_type('l') and p.point_info_check():
                 l_points.append(p)
 
         return l_points
@@ -66,7 +67,8 @@ class Step:
         """获取步骤中需要点击的点"""
         c_points = []
         for p in self.points:
-            if p.check_type('c'):
+            # 在这里对不完善信息的点进行了过滤
+            if p.check_type('c') and p.point_info_check():
                 c_points.append(p)
 
         return c_points

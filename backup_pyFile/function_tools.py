@@ -13,7 +13,7 @@
 from dataclasses import dataclass
 from supports.mk_factory import MKFactory
 from supports.tip_time import TipTime
-from supports.methods import build_thread
+from supports.thread_management import build_thread
 
 
 @dataclass

@@ -30,7 +30,7 @@ from time import sleep
 import time
 import datetime
 from supports.set_windows import SetWin
-from supports.methods import build_thread
+from supports.thread_management import ThreadManagement
 
 
 @dataclass
@@ -278,32 +278,8 @@ class App:
         self.sw = SetWin()
         # 操作功能配置文件的工具
         self.ff = FunctionFactory()
-
-    def info(self, word, type):
-        """简化输出"""
-        if type == 1:
-            # 点击事件
-            self.show_info('【选择】' + word + '...', 'black')
-        elif type == 2:
-            # 错误事件
-            self.show_info('【错误】' + word + '...', 'red')
-        elif type == 3:
-            # 成功事件
-            self.show_info('【成功】' + word + '...', 'green')
-
-    def show_info(self, word, fg='green'):
-        """输出问题"""
-        current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-
-        w1_color, w1, w2 = self.info_stack.get_pip_history(word, fg)
-
-        self.current_info.set(w1)
-        self.l_first.configure(fg=fg)
-
-        self.history_info.set(w2)
-
-        # 写入日志
-        self.log_file.write(current_time + ': \n' + w1 + '\n\n')
+        # 线程管理
+        self.tm = ThreadManagement()
 
     def clear_logs(self):
         """清除7天前的日志数据"""
@@ -320,15 +296,15 @@ class App:
                 count += 1
 
         if count != 0:
-            self.info('删除了【' + str(count) + '】个日志文件...', 3)
+            self.info_stack.info('删除了【' + str(count) + '】个日志文件...', 3)
 
     def set_top_window(self):
         """设置是否置顶"""
         if self.cb_var_whether_top.get():
-            self.info('设置软件置顶', 1)
+            self.info_stack.info('设置软件置顶', 1)
             self.root.wm_attributes('-topmost', 1)
         else:
-            self.info('取消软件置顶', 1)
+            self.info_stack.info('取消软件置顶', 1)
             self.root.wm_attributes('-topmost', 0)
 
     def set_two_win_left(self, is_print=True):
@@ -336,7 +312,7 @@ class App:
         self.win_settings = self.settings.get_items('windows')
         handles = self.sw.find_onmyoji_handle()
         if handles[0] == 0:
-            self.info('未打开阴阳师！', 2)
+            self.info_stack.info('未打开阴阳师！', 2)
             return
 
         # 遍历阴阳师所有句柄
@@ -368,23 +344,23 @@ class App:
                     else:
                         loc[0] = win3_locked_1
                 else:
-                    self.info('你有病不是？你打开这么多阴阳师干嘛啊', 2)
+                    self.info_stack.info('你有病不是？你打开这么多阴阳师干嘛啊', 2)
             try:
                 self.sw.move_rect(handles[h], loc)
                 if is_print:
-                    self.info('调整界面', 3)
+                    self.info_stack.info('调整界面', 3)
             except Exception as e:
-                self.info('调整界面失败', 2)
+                self.info_stack.info('调整界面失败', 2)
                 return
 
     def run(self):
-        self.check_mouse_move()
+        self.tm.build_thread(self.check_mouse_move, '鼠标颜色检查')
         self.root.mainloop()
 
     def get_list(self, *args):
         """cmb1对应的函数，获取对应下拉框的list，方便写入后续下拉框"""
         cmb1_v = self.cmb1_value.get()
-        self.info(cmb1_v, 1)
+        self.info_stack.info(cmb1_v, 1)
         # 当前功能为
         self.current_func = self.ff.get_function_from_function_name(cmb1_v)
         # 设置下拉框的值
@@ -393,25 +369,25 @@ class App:
     def get_key(self, *args):
         """cmb2的对应的函数"""
         cmb2_v = self.cmb2_value.get()
-        self.info(cmb2_v, 1)
+        self.info_stack.info(cmb2_v, 1)
 
     def save_config_as_default(self):
         """保存当前设置"""
         try:
             self.ff.save_functions2json(self.functions, 'templates/default_save_file.json')
-            self.info('配置文件保存成功', 3)
+            self.info_stack.info('配置文件保存成功', 3)
         except Exception as e:
-            self.info('保存文件出错', 2)
+            self.info_stack.info('保存文件出错', 2)
 
     def save_config_to_file(self):
         try:
             file_path = asksaveasfilename(defaultextension='.json', filetypes=[("Json文件", ".json")], initialdir='dir',
                                           title='Save as')
             self.ff.save_functions2json(self.functions, file_path)
-            self.info('配置文件保存成功', 3)
+            self.info_stack.info('配置文件保存成功', 3)
         except Exception as e:
             # print(repr(e))
-            self.info('保存文件出错！', 2)
+            self.info_stack.info('保存文件出错！', 2)
 
     def load_default_config(self, path='templates/data.json'):
         """载入数据"""
@@ -419,9 +395,9 @@ class App:
             # 从json中创建数据
             self.functions = self.ff.load_functions_from_json(path)
             # 载入后设置前端显示
-            self.info('读取配置文件成功', 3)
+            self.info_stack.info('读取配置文件成功', 3)
         except Exception as e:
-            self.info('读取配置文件出错！', 2)
+            self.info_stack.info('读取配置文件出错！', 2)
 
     def load_user_config(self):
         """载入用户数据"""
@@ -438,7 +414,7 @@ class App:
         p_name = self.cmb2_value.get()
         if p_name != '':
             self.current_func.update_point(p_name, self.xy, self.color)
-            self.info('写入【' + p_name + '】的坐标', 3)
+            self.info_stack.info('写入【' + p_name + '】的坐标', 3)
 
     def get_postion_color(self):
         """设置绑定后的按键操作的值"""
@@ -462,24 +438,20 @@ class App:
     def check_mouse_move(self):
         """检测鼠标移动，实时显示鼠标位置和颜色"""
 
-        def check_mouse():
-            while True:
-                # 显示颜色设置
-                tensix = self.get_postion_color()
-                if tensix != '#-1-1-1':
-                    self.e_color.configure(fg=tensix)
-                    self.l_c.configure(fg=tensix)
-                else:
-                    self.e_color.configure(fg='red')
-                sleep(self.settings.get_option('mouse', 'mouse_check_speed', 'float'))
-
-        build_thread(check_mouse, '鼠标颜色检查')
+        # 显示颜色设置
+        tensix = self.get_postion_color()
+        if tensix != '#-1-1-1':
+            self.e_color.configure(fg=tensix)
+            self.l_c.configure(fg=tensix)
+        else:
+            self.e_color.configure(fg='red')
+        sleep(self.settings.get_option('mouse', 'mouse_check_speed', 'float'))
 
     def check_before_run(self):
         """运行前的检查"""
         # 检查是否选择了功能
         if self.current_func is None:
-            self.info('没有选择功能', 2)
+            self.info_stack.info('没有选择功能', 2)
             return False
 
         return True
@@ -489,9 +461,9 @@ class App:
         if not self.check_before_run():
             return
 
-        self.info(self.current_func.func_name + '启动...', 1)
+        self.info_stack.info(self.current_func.func_name + '启动...', 1)
 
-        rf = RunFunction(self.current_func)
+        rf = RunFunction(self.current_func, self.tm, self.info_stack)
         rf.run_function()
 
     def destroy(self):

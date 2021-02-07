@@ -58,3 +58,15 @@ class InfoPip:
 
         # 写入日志
         self.log_file.write(current_time + ': \n' + w1 + '\n\n')
+
+    def info(self, word, type):
+        """简化输出"""
+        if type == 1:
+            # 点击事件
+            self.show_info('【选择】' + word + '...', 'black')
+        elif type == 2:
+            # 错误事件
+            self.show_info('【错误】' + word + '...', 'red')
+        elif type == 3:
+            # 成功事件
+            self.show_info('【成功】' + word + '...', 'green')

@@ -56,4 +56,11 @@ class Point:
         else:
             return False
 
+    def point_info_check(self):
+        """自身点位信息检查，只要坐标和颜色有一个为空值则False"""
+        if '' in self.point_location or '' in self.point_color:
+            return False
+        else:
+            return True
+
 
