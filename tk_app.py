@@ -27,7 +27,6 @@ from supports.info_pip import InfoPip
 from supports.mouse_action import MouseAction
 from structure.function_factory import FunctionFactory
 from time import sleep
-import time
 import datetime
 from supports.set_windows import SetWin
 from supports.thread_management import ThreadManagement
