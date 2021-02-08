@@ -55,6 +55,8 @@ class App:
         # 初始化功能信息
         self.functions = None
         self.current_func = None
+        # 暂停的标记，开始是不暂停
+        self.pause_flag = False
 
         # 日记文件，一天一个，每次启动时删除七天前的文件
         self.current_time = datetime.datetime.now()
@@ -100,7 +102,7 @@ class App:
 
         """底层root初始化"""
         self.root = Tk()
-        self.root.title('狗贼v0.2  【作者：李英俊小朋友】')
+        self.root.title('狗贼v0.3  【作者：李英俊小朋友】  仅供学习交流使用，禁止用于任何商业用途！')
 
         """frame1_外框，功能、运行、暂停、退出、调整界面"""
         self.frame_1 = LabelFrame(self.root, text='| 海的那边 |',
@@ -131,11 +133,11 @@ class App:
         self.cmb2.bind('<<ComboboxSelected>>', self.get_key)
         self.cmb2.pack(side=LEFT, fill=Y)
 
-        self.b2 = Button(self.f11, text='运行(r)', command=self.func_start, font=font_normal)
-        self.b2.pack(side=LEFT, fill=BOTH, ipadx=button_ipadx, expand=True)
+        self.b4 = Button(self.f11, text='暂停/继续(p)', command=self.pause, font=font_normal)
+        self.b4.pack(side=LEFT, fill=BOTH, ipadx=button_ipadx, expand=True)
 
-        self.b4 = Button(self.f11, text='暂停(p)', command=self.pause, font=font_normal, width=6)
-        self.b4.pack(side=LEFT, fill=Y, ipadx=button_ipadx)
+        self.b2 = Button(self.f11, text='运行(r)', command=self.func_start, font=font_normal, width=6)
+        self.b2.pack(side=LEFT, fill=Y, ipadx=button_ipadx)
 
         self.f12 = Frame(self.frame_1)
 
@@ -375,7 +377,7 @@ class App:
     def save_config_as_default(self):
         """保存当前设置"""
         try:
-            self.ff.save_functions2json(self.functions, 'templates/default_save_file.json')
+            self.ff.save_functions2json(self.functions, 'templates/默认保存文件.json')
             self.info_stack.info('配置文件保存成功', 3)
         except Exception as e:
             self.info_stack.info('保存文件出错', 2)
@@ -390,7 +392,7 @@ class App:
             # print(repr(e))
             self.info_stack.info('保存文件出错！', 2)
 
-    def load_default_config(self, path='templates/data.json'):
+    def load_default_config(self, path='templates/默认保存文件.json'):
         """载入数据"""
         try:
             # 从json中创建数据
@@ -407,8 +409,32 @@ class App:
 
     def pause(self):
         """暂停"""
-        ...
-        # TODO
+
+        def ignore_check(search_name):
+            """检查线程名是否被忽略"""
+            pause_ignore = ['鼠标颜色检查']
+            pause_ignore_names = ['【线程】' + name for name in pause_ignore]
+
+            if search_name in pause_ignore_names:
+                return True
+            else:
+                return False
+
+        # 需要暂停的线程
+        pause_threads = [p for p in self.tm.threads if not ignore_check(p.getName())]
+
+        if not self.pause_flag:
+            # 未暂停
+            self.pause_flag = True
+            for t in pause_threads:
+                t.pause()
+            self.info_stack.info('功能' + self.current_func.func_name + '已暂停', 3)
+        else:
+            # 暂停了则继续
+            self.pause_flag = False
+            for t in pause_threads:
+                t.resume()
+                self.info_stack.info('功能' + self.current_func.func_name + '已恢复', 3)
 
     def write_info(self):
         """将信息写入到dict中"""
