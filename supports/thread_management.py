@@ -23,9 +23,9 @@ class ThreadManagement:
         # 掌控所有的线程
         self.threads = []
 
-    def build_thread(self, func, func_name, args=()):
+    def build_thread(self, func, func_name, is_while=True, args=()):
         """建立线程"""
-        t = Job(target=func, name='【线程】' + func_name, daemon=True, args=args)
+        t = Job(target=func, name='【线程】' + func_name, daemon=True, is_while=is_while, args=args)
         self.threads.append(t)
         # 设置守护线程，主线程退出不必等待该线程
         # print(t.name + '，启动...')
@@ -33,18 +33,22 @@ class ThreadManagement:
 
 
 class Job(Thread):
-    def __init__(self, target, name, daemon, args):
+    def __init__(self, target, name, daemon, is_while, args):
         super().__init__(name=name, daemon=daemon)
         self.target = target
         self.args = args
+        self.is_while = is_while
         self.flag = Event()
 
         # 初始是打开的
         self.flag.set()
 
     def run(self):
-        while self.flag:
-            self.flag.wait()
+        if self.is_while:
+            while self.flag:
+                self.flag.wait()
+                self.target(*self.args)
+        else:
             self.target(*self.args)
 
     def pause(self):

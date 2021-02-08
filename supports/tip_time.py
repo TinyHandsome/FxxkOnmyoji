@@ -21,7 +21,7 @@ from supports.configure_tools import Configure
 
 class TipTime:
     def __init__(self):
-        self.conf = Configure('configures/config.ini')
+        self.conf = Configure('configures/configs.ini')
         # 鼠标狂点时间间隔
         self.click_many_times_range = (self.conf.get_option('time', 'click_many_times_min', 'float'),
                                        self.conf.get_option('time', 'click_many_times_max', 'float'))

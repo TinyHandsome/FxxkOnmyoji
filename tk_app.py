@@ -14,20 +14,22 @@
         3. [threading之线程的开始,暂停和退出](https://www.cnblogs.com/cnhyk/p/13697121.html)
 """
 import os
+import datetime
+from time import sleep
 from dataclasses import dataclass
+from system_hotkey import SystemHotkey
+
 from tkinter import *
 from tkinter import ttk
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 
 from structure.run_function import RunFunction
-from supports.configure_tools import Configure
-from system_hotkey import SystemHotkey
+from structure.function_factory import FunctionFactory
 
+from supports.configure_tools import Configure
 from supports.info_pip import InfoPip
 from supports.mouse_action import MouseAction
-from structure.function_factory import FunctionFactory
-from time import sleep
-import datetime
+from supports.others import Others
 from supports.set_windows import SetWin
 from supports.thread_management import ThreadManagement
 
@@ -38,16 +40,10 @@ class App:
     def __post_init__(self):
 
         self.init_area()
-        self.global_var()
+        self.init_global_var()
         self.init_tk()
 
-        # 清除过期的log
-        self.clear_logs()
-
-        # 执行置顶的默认
-        self.set_top_window(shown_info=False)
-
-    def global_var(self):
+    def init_global_var(self):
         """全局变量初始化"""
 
         # 初始坐标和颜色
@@ -261,6 +257,21 @@ class App:
         """初始化区域"""
         # 全局快捷键设置
         self.hk = SystemHotkey()
+        # 移动鼠标
+        self.ma = MouseAction()
+        # 配置初始化
+        self.settings = Configure('configures/configs.ini')
+        # 设置初始界面
+        self.sw = SetWin()
+        # 操作功能配置文件的工具
+        self.ff = FunctionFactory()
+        # 线程管理
+        self.tm = ThreadManagement()
+        # 其他效果管理
+        self.ot = Others()
+
+    def hotKey_bind(self):
+        """全局快捷键设置"""
         self.hk.register(('alt', 'w'), callback=lambda e: self.write_info())
         self.hk.register(('alt', 'c'), callback=lambda e: self.destroy())
         self.hk.register(('alt', 'r'), callback=lambda e: self.func_start())
@@ -270,17 +281,6 @@ class App:
         self.hk.register(('alt', 'l'), callback=lambda e: self.load_default_config())
         self.hk.register(('alt', 'shift', 'l'), callback=lambda e: self.load_user_config())
         self.hk.register(('alt', 'd'), callback=lambda e: self.set_two_win_left())
-
-        # 移动鼠标
-        self.ma = MouseAction()
-        # 配置初始化
-        self.settings = Configure('configures/config.ini')
-        # 设置初始界面
-        self.sw = SetWin()
-        # 操作功能配置文件的工具
-        self.ff = FunctionFactory()
-        # 线程管理
-        self.tm = ThreadManagement()
 
     def clear_logs(self):
         """清除7天前的日志数据"""
@@ -357,7 +357,24 @@ class App:
                 return
 
     def run(self):
-        self.tm.build_thread(self.check_mouse_move, '鼠标颜色检查')
+        """启动，预备设置"""
+
+        """其他线程建立"""
+        # 检查鼠标颜色
+        self.tm.build_thread(self.check_mouse_move, '_鼠标颜色检查')
+        # 检测是否打开notification
+        self.tm.build_thread(self.ot.show_my_words_at_first_open, '_打开notification', is_while=False)
+
+        """其他功能实现"""
+        # 全局快捷键设置
+        self.hotKey_bind()
+        # 清除过期的log
+        self.clear_logs()
+        # 执行置顶的默认
+        self.set_top_window(shown_info=False)
+
+        """界面循环"""
+        # 开始循环
         self.root.mainloop()
 
     def get_list(self, *args):
@@ -410,18 +427,22 @@ class App:
     def pause(self):
         """暂停"""
 
-        def ignore_check(search_name):
-            """检查线程名是否被忽略"""
-            pause_ignore = ['鼠标颜色检查']
-            pause_ignore_names = ['【线程】' + name for name in pause_ignore]
+        # def ignore_check(search_name):
+        #     """【v0.3 现在直接检查是否是_开头，_开头的线程没有暂停啥的】检查线程名是否被忽略"""
+        #     pause_ignore = ['鼠标颜色检查']
+        #     pause_ignore_names = ['【线程】' + name for name in pause_ignore]
+        #
+        #     if search_name in pause_ignore_names:
+        #         return True
+        #     else:
+        #         return False
 
-            if search_name in pause_ignore_names:
-                return True
-            else:
-                return False
-
-        # 需要暂停的线程
-        pause_threads = [p for p in self.tm.threads if not ignore_check(p.getName())]
+        # 需要暂停的线程，线程名不以_开头
+        pause_threads = [p for p in self.tm.threads if not p.getName().replace('【线程】', '').startswith('_')]
+        # 如果没有需要暂停的线程，即没有启动啥功能，则报错
+        if len(pause_threads) == 0:
+            self.info_stack.info('你啥也没启动啊，暂停个鬼啊', 2)
+            return
 
         if not self.pause_flag:
             # 未暂停
@@ -492,7 +513,7 @@ class App:
         if not self.check_before_run():
             return
 
-        self.info_stack.info(self.current_func.func_name + '启动...', 1)
+        self.info_stack.info(self.current_func.func_name + '启动...', 3)
 
         rf = RunFunction(self.current_func, self.tm, self.info_stack)
         rf.run_function()

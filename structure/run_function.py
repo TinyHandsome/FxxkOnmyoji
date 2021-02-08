@@ -94,4 +94,4 @@ class RunFunction:
     def run_function(self):
         """运行一个功能，包括多个步骤"""
         for s in self.func.steps:
-            self.tm.build_thread(self.run_step, s.step_name, (s,))
+            self.tm.build_thread(self.run_step, s.step_name, is_while=True, args=(s,))

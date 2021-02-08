@@ -49,11 +49,19 @@ class Configure:
         else:
             return self.conf.get(sec, opt)
 
+    def update_value(self, sec, opt, value, is_save=True):
+        """修改结果"""
+        self.conf.set(sec, opt, value)
+
+        if is_save:
+            with open(self.path, 'w', encoding='utf-8') as config_file:
+                self.conf.write(config_file)
+
     def print_test(self):
         """测试输出"""
         print(self.conf.sections())
 
 
 if __name__ == '__main__':
-    cf = Configure('../configures/functions.ini')
-    print(cf.get_values('func_names'))
+    cf = Configure('../configures/configs.ini')
+    cf.update_value('others', 'open_count', '0', True)

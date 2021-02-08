@@ -21,7 +21,7 @@ class MKFactory:
         self.m = MouseAction()
         self.k = KeyboardAction()
         self.t = TipTime()
-        self.cf = Configure('configures/config.ini')
+        self.cf = Configure('configures/configs.ini')
         self.state = True
         self.escape_steps = [1, 2, 3]
 
