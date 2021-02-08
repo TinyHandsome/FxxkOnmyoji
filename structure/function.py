@@ -72,6 +72,18 @@ class Function:
             points += s.points
         return [p.point_name for p in points]
 
+    def check_effective(self):
+        """检查功能中所有的点信息都有，如果都没有则为无效，有一个有就运行这一个"""
+        p_check_list = []
+        for p in self.point_dict.values():
+            p_check_list.append(p.point_info_check())
+
+        if sum(p_check_list) == 0:
+            """没有一个点是有效的"""
+            return False
+        else:
+            return True
+
     @classmethod
     def get_function_from_dict(cls, function_dict: dict):
         """从json获取的dict字典中生成function"""

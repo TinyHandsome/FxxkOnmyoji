@@ -452,6 +452,10 @@ class App:
         if self.current_func is None:
             self.info_stack.info('没有选择功能', 2)
             return False
+        # 检查功能中是否存在至少一个点是有效的
+        if not self.current_func.check_effective():
+            self.info_stack.info('功能中所有点都无效', 2)
+            return False
 
         return True
 

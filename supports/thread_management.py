@@ -9,8 +9,7 @@
 @file: thread_management.py
 @time: 2021/1/18 17:42
 @desc: 常用methods
-        1. [线程的关闭](https://stackoverflow.com/questions/323972/is-there-any-way-to-kill-a-thread
-)
+        1. [线程的关闭](https://stackoverflow.com/questions/323972/is-there-any-way-to-kill-a-thread)
 """
 from threading import Thread, Event
 from dataclasses import dataclass
