@@ -31,8 +31,6 @@ class RunFunction:
         self.t = TipTime()
         self.mkf = MKFactory()
 
-        self.temp_info = '', 0
-
     def run_step(self, step: Step):
         """运行一个步骤"""
         # 【检查step中点的颜色】获取每个点的检查结果，如果标记带l的都是True则执行标记带c的点
@@ -43,10 +41,11 @@ class RunFunction:
             c_points = step.get_click_points()
 
             # 这里可能没有点信息
-            # TODO
             if not c_points:
+                # 【v0.3】这里应该不会执行，因为在[check_before_run]函数中已经进行了判断
                 self.info_stack.info('步骤：' + step.step_name + '无效...', 2)
             else:
+                # 点击每一个需要click的点
                 for cp in c_points:
                     self.click_points(cp)
         else:
@@ -57,19 +56,27 @@ class RunFunction:
         self.t.tip('color')
 
     def check_point_color(self, point: Point):
-        """检查一个点的颜色"""
+        """【v0.3 需要根据l和n进行判断和返回】检查一个点的颜色"""
         xy, color = point.get_loc_color()
-        # p_type, p_times = point.get_type_click_time()
+        p_type, p_times = point.get_type_click_time()
         color_check_result = self.mkf.colorCheck(color, xy)
 
         try:
             assert isinstance(color_check_result, bool)
+            if 'l' in p_type:
+                # l的话，该返回啥返回啥
+                return color_check_result
+            elif 'n' in p_type:
+                # n的话，返回反过来的值
+                return not color_check_result
+            else:
+                # 讲道理这种情况是不会出现的，可万一呢
+                self.info_stack.info('狗贼！快联系管理员！', 2)
+                return False
         except Exception as e:
-            self.temp_info = color_check_result
-            print(self.temp_info)
+            # 如果颜色不是bool的话，那么color_check_result就是结果和颜色
+            self.info_stack.info(*color_check_result)
             return False
-
-        return color_check_result
 
     def click_points(self, point: Point):
         """点击"""

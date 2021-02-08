@@ -50,7 +50,7 @@ class Point:
         self.point_color = color
 
     def check_type(self, p_type):
-        """该点的类型是否是location，即检查颜色点"""
+        """【v0.3，新增no-location】该点的类型是否是location/no-location，即检查颜色点"""
         if p_type in self.point_type:
             return True
         else:

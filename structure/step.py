@@ -54,11 +54,12 @@ class Step:
         return step_dict
 
     def get_location_points(self):
-        """获取步骤中需要检查颜色的点"""
+        """【v0.3，新增no-location】获取步骤中需要检查颜色的点"""
         l_points = []
         for p in self.points:
             # 在这里对不完善信息的点进行了过滤
-            if p.check_type('l') and p.point_info_check():
+            # 【v0.3 新增n的检查】
+            if (p.check_type('l') or p.check_type('n')) and p.point_info_check():
                 l_points.append(p)
 
         return l_points

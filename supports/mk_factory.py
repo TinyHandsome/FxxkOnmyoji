@@ -37,7 +37,8 @@ class MKFactory:
         elif isinstance(color, tuple) or isinstance(color, list):
             rgb_list = color
         else:
-            self.state = '颜色格式不对...', 'red'
+            self.state = '颜色格式不对', 2
+            return self.state
 
         try:
             self.state = self.m.check_mouse_color(rgb_list, coordinate)
