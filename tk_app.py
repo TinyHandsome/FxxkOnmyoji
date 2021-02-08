@@ -45,7 +45,7 @@ class App:
         self.clear_logs()
 
         # 执行置顶的默认
-        self.set_top_window()
+        self.set_top_window(shown_info=False)
 
     def global_var(self):
         """全局变量初始化"""
@@ -297,13 +297,15 @@ class App:
         if count != 0:
             self.info_stack.info('删除了【' + str(count) + '】个日志文件...', 3)
 
-    def set_top_window(self):
+    def set_top_window(self, shown_info=True):
         """设置是否置顶"""
         if self.cb_var_whether_top.get():
-            self.info_stack.info('设置软件置顶', 1)
+            if shown_info:
+                self.info_stack.info('设置软件置顶', 1)
             self.root.wm_attributes('-topmost', 1)
         else:
-            self.info_stack.info('取消软件置顶', 1)
+            if shown_info:
+                self.info_stack.info('取消软件置顶', 1)
             self.root.wm_attributes('-topmost', 0)
 
     def set_two_win_left(self, is_print=True):
