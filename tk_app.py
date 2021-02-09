@@ -36,6 +36,7 @@ from supports.thread_management import ThreadManagement
 
 @dataclass
 class App:
+    is_test: bool
 
     def __post_init__(self):
 
@@ -268,7 +269,7 @@ class App:
         # 线程管理
         self.tm = ThreadManagement()
         # 其他效果管理
-        self.ot = Others()
+        self.ot = Others(is_test=self.is_test)
 
     def hotKey_bind(self):
         """全局快捷键设置"""
@@ -525,4 +526,4 @@ class App:
 
 
 if __name__ == '__main__':
-    App().run()
+    App(is_test=True).run()

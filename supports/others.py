@@ -18,6 +18,8 @@ import os
 
 @dataclass
 class Others:
+    is_test: False
+
     def __post_init__(self):
         self.cf = Configure('configures/update_configs.ini')
 
@@ -32,6 +34,8 @@ class Others:
             # 不然就啥都不干呗
             ...
 
-        open_count += 1
-        # 更新软件打开次数
-        self.cf.update_value('updateConfigs', 'open_count', str(open_count), True)
+        if not self.is_test:
+            # 如果是测试，则不搞更新
+            open_count += 1
+            # 更新软件打开次数
+            self.cf.update_value('updateConfigs', 'open_count', str(open_count), True)
