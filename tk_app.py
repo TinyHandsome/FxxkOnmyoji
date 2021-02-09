@@ -163,6 +163,8 @@ class App:
 
         self.b4 = Button(self.f12, text='载入默认配置(l)', command=self.load_default_config, font=font_normal)
         self.b4.pack(side=LEFT, fill=Y, ipadx=button_ipadx)
+        self.b_combine = Button(self.f12, text='融合载入(n)', command=self.combine_load, font=font_normal)
+        self.b_combine.pack(side=LEFT, fill=Y, ipadx=button_ipadx)
         self.b5 = Button(self.f12, text='选择用户配置(L)', command=self.load_user_config, font=font_normal)
         self.b5.pack(side=LEFT, fill=BOTH, ipadx=button_ipadx, expand=YES)
 
@@ -280,6 +282,7 @@ class App:
         self.hk.register(('alt', 'shift', 's'), callback=lambda e: self.save_config_to_file())
         self.hk.register(('alt', 'l'), callback=lambda e: self.load_default_config())
         self.hk.register(('alt', 'shift', 'l'), callback=lambda e: self.load_user_config())
+        self.hk.register(('alt', 'n'), callback=lambda e: self.combine_load())
         self.hk.register(('alt', 'd'), callback=lambda e: self.set_two_win_left())
 
     def clear_logs(self):
@@ -350,11 +353,11 @@ class App:
                     self.info_stack.info('你有病不是？你打开这么多阴阳师干嘛啊', 2)
             try:
                 self.sw.move_rect(handles[h], loc)
-                if is_print:
-                    self.info_stack.info('调整界面', 3)
             except Exception as e:
                 self.info_stack.info('调整界面失败', 2)
                 return
+        if is_print:
+            self.info_stack.info('调整界面', 3)
 
     def run(self):
         """启动，预备设置"""
@@ -432,6 +435,11 @@ class App:
         file_path = askopenfilename()
         self.load_default_config(file_path)
 
+    def combine_load(self):
+        """如何载入用户数据"""
+        # TODO
+        ...
+
     def pause(self):
         """暂停"""
 
@@ -463,7 +471,7 @@ class App:
             self.pause_flag = False
             for t in pause_threads:
                 t.resume()
-                self.info_stack.info('功能' + self.current_func.func_name + '已恢复', 3)
+            self.info_stack.info('功能' + self.current_func.func_name + '已恢复', 3)
 
     def write_info(self):
         """将信息写入到dict中"""

@@ -80,7 +80,7 @@ class Function:
         """检查功能中所有的点信息都有，如果都没有则为无效，有一个有就运行这一个"""
         p_check_list = []
         for p in self.point_dict.values():
-            p_check_list.append(p.point_info_check())
+            p_check_list.append(p.check_effective())
 
         if sum(p_check_list) == 0:
             """没有一个点是有效的"""

@@ -59,7 +59,7 @@ class Step:
         for p in self.points:
             # 在这里对不完善信息的点进行了过滤
             # 【v0.3 新增n的检查】
-            if (p.check_type('l') or p.check_type('n')) and p.point_info_check():
+            if (p.check_type('l') or p.check_type('n')) and p.check_effective():
                 l_points.append(p)
 
         return l_points
@@ -69,7 +69,7 @@ class Step:
         c_points = []
         for p in self.points:
             # 在这里对不完善信息的点进行了过滤
-            if p.check_type('c') and p.point_info_check():
+            if p.check_type('c') and p.check_effective():
                 c_points.append(p)
 
         return c_points
@@ -78,6 +78,20 @@ class Step:
         """设置本类的step名字和点信息"""
         self.step_name = step_name
         self.points = points
+
+    def check_effective(self):
+        """检查该step是否是有效的，即是否都为空"""
+        point_states = []
+        for point in self.points:
+            point_state = point.check_effective()
+            point_states.append(point_state)
+
+        if sum(point_states) == len(point_states):
+            """所有都为True"""
+            return True
+        else:
+            return False
+
 
     @classmethod
     def get_step_from_dict(cls, step_dict):

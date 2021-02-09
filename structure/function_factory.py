@@ -119,6 +119,10 @@ class FunctionFactory:
 
         return steps
 
+    def get_effective_steps(self, func: Function) -> [Step]:
+        """获取该功能的所有步骤和connections有效步骤"""
+        return [s for s in self.get_steps(func) if s.check_effective()]
+
 
 if __name__ == '__main__':
     test_ff = FunctionFactory()

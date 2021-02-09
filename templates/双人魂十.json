@@ -11,13 +11,13 @@
                         "point_name": "挑战@lc_1",
                         "point_type": "lc",
                         "point_location": [
-                            1128,
-                            1320
+                            1101,
+                            1328
                         ],
                         "point_color": [
-                            109,
-                            98,
-                            71
+                            94,
+                            82,
+                            60
                         ],
                         "click_times": 1
                     }
@@ -30,13 +30,13 @@
                         "point_name": "队员结算状态1@lc_3",
                         "point_type": "lc",
                         "point_location": [
-                            894,
-                            665
+                            996,
+                            534
                         ],
                         "point_color": [
-                            61,
-                            66,
-                            40
+                            46,
+                            64,
+                            49
                         ],
                         "click_times": 3
                     }
@@ -49,13 +49,13 @@
                         "point_name": "队长结算状态1@lc_3",
                         "point_type": "lc",
                         "point_location": [
-                            826,
-                            1278
+                            913,
+                            1307
                         ],
                         "point_color": [
-                            21,
-                            25,
-                            17
+                            26,
+                            31,
+                            20
                         ],
                         "click_times": 3
                     }
@@ -68,13 +68,13 @@
                         "point_name": "队员结算状态2@lc_3",
                         "point_type": "lc",
                         "point_location": [
-                            613,
-                            509
+                            620,
+                            533
                         ],
                         "point_color": [
-                            186,
-                            67,
-                            26
+                            183,
+                            34,
+                            25
                         ],
                         "click_times": 3
                     }
@@ -87,28 +87,165 @@
                         "point_name": "队长结算状态2@lc_3",
                         "point_type": "lc",
                         "point_location": [
-                            623,
-                            1227
+                            619,
+                            1237
                         ],
                         "point_color": [
-                            185,
-                            51,
-                            30
+                            163,
+                            20,
+                            20
                         ],
                         "click_times": 3
+                    }
+                ]
+            },
+            {
+                "step_name": "队员失败结算1",
+                "points": [
+                    {
+                        "point_name": "队员失败结算1@lc_3",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 3
+                    }
+                ]
+            },
+            {
+                "step_name": "队长失败结算1",
+                "points": [
+                    {
+                        "point_name": "队长失败结算1@lc_3",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 3
+                    }
+                ]
+            },
+            {
+                "step_name": "队长自动邀请",
+                "points": [
+                    {
+                        "point_name": "队长自动邀请@lc_1",
+                        "point_type": "lc",
+                        "point_location": [
+                            738,
+                            1138
+                        ],
+                        "point_color": [
+                            243,
+                            178,
+                            94
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "队员自动接受",
+                "points": [
+                    {
+                        "point_name": "队员自动接受@lc_1",
+                        "point_type": "lc",
+                        "point_location": [
+                            131,
+                            273
+                        ],
+                        "point_color": [
+                            86,
+                            179,
+                            97
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "1号位关闭悬赏",
+                "points": [
+                    {
+                        "point_name": "1号位关闭悬赏@l",
+                        "point_type": "l",
+                        "point_location": [
+                            669,
+                            209
+                        ],
+                        "point_color": [
+                            179,
+                            146,
+                            118
+                        ],
+                        "click_times": 0
+                    },
+                    {
+                        "point_name": "1号位关闭悬赏@lc_1",
+                        "point_type": "lc",
+                        "point_location": [
+                            703,
+                            171
+                        ],
+                        "point_color": [
+                            198,
+                            103,
+                            119
+                        ],
+                        "click_times": 1
                     }
                 ]
             }
         ],
         "connections": [
-            "901",
-            "902"
+            "903"
+        ]
+    },
+    {
+        "func_name": "测试",
+        "func_code": "010",
+        "func_shown": 1,
+        "steps": [
+            {
+                "step_name": "测试非",
+                "points": [
+                    {
+                        "point_name": "测试非@nc_1",
+                        "point_type": "nc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            }
+        ],
+        "connections": [
+            "903"
         ]
     },
     {
         "func_name": "关闭体力",
         "func_code": "901",
-        "func_shown": 0,
+        "func_shown": 1,
         "steps": [
             {
                 "step_name": "界面1",
@@ -186,6 +323,47 @@
                             ""
                         ],
                         "click_times": 0
+                    }
+                ]
+            }
+        ],
+        "connections": []
+    },
+    {
+        "func_name": "关闭悬赏",
+        "func_code": "903",
+        "func_shown": 1,
+        "steps": [
+            {
+                "step_name": "1号位关闭悬赏",
+                "points": [
+                    {
+                        "point_name": "1号位关闭悬赏@l",
+                        "point_type": "l",
+                        "point_location": [
+                            669,
+                            209
+                        ],
+                        "point_color": [
+                            179,
+                            146,
+                            118
+                        ],
+                        "click_times": 0
+                    },
+                    {
+                        "point_name": "1号位关闭悬赏@lc_1",
+                        "point_type": "lc",
+                        "point_location": [
+                            703,
+                            171
+                        ],
+                        "point_color": [
+                            198,
+                            103,
+                            119
+                        ],
+                        "click_times": 1
                     }
                 ]
             }

@@ -96,5 +96,5 @@ class RunFunction:
     def run_function(self):
         """运行一个功能，包括多个步骤"""
         # 获取该功能的所有步骤和connections的所有步骤
-        for s in self.ff.get_steps(self.func):
+        for s in self.ff.get_effective_steps(self.func):
             self.tm.build_thread(self.run_step, s.step_name, is_while=True, args=(s,))
