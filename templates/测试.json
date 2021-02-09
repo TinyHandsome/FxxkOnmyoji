@@ -1,0 +1,31 @@
+[
+    {
+        "func_name": "测试",
+        "func_code": "010",
+        "func_shown": 1,
+        "steps": [
+            {
+                "step_name": "测试非",
+                "points": [
+                    {
+                        "point_name": "测试非@nc_1",
+                        "point_type": "nc",
+                        "point_location": [
+                            449,
+                            1053
+                        ],
+                        "point_color": [
+                            90,
+                            84,
+                            81
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            }
+        ],
+        "connections": [
+            "903"
+        ]
+    }
+]

@@ -24,15 +24,14 @@ class Function:
     connections: [str]
 
     def __post_init__(self):
+        self.point_dict = {}
         self.steps = []
-        if self.step_infos is not None:
-            # 如果是另一种初始化类的方式，则不用转换，否则将步骤转为Step类
-            self.info2step()
 
-    def init_function(self):
-        """载入数据时，需要对各种字典进行初始化"""
-        # 该功能下所有的点信息的名字-Point映射
-        self.create_points_dict()
+        if self.step_infos is not None:
+            # 如果是初始化的情况，需要将step_infos转为step
+            self.info2step()
+            # 建立点映射
+            self.create_points_dict()
 
     def info2step(self):
         """根据step信息转为Step"""
@@ -41,10 +40,10 @@ class Function:
 
     def create_points_dict(self):
         """在funciton中创建：根据func_name和point_name找到point的字典"""
-        self.point_dict = {}
-        for step in self.steps:
-            for point in step.points:
-                self.point_dict[point.point_name] = point
+        self.point_dict.clear()
+        points = self.get_points()
+        for point in points:
+            self.point_dict[point.point_name] = point
 
     def set_steps(self, steps: [Step]):
         """设置steps的信息"""
@@ -65,11 +64,16 @@ class Function:
         """更新该类中的点信息"""
         self.point_dict[point_name].update(loc, color)
 
-    def get_point_names(self):
-        """获取function中所有Point的名字"""
+    def get_points(self):
+        """获取function中所有的point"""
         points = []
         for s in self.steps:
             points += s.points
+        return points
+
+    def get_point_names(self):
+        """获取function中所有Point的名字"""
+        points = self.get_points()
         return [p.point_name for p in points]
 
     def check_effective(self):
@@ -92,5 +96,8 @@ class Function:
         function_dict['step_infos'] = None
         function = Function(**function_dict)
         function.set_steps(new_steps)
+
+        # 建立点映射
+        function.create_points_dict()
 
         return function

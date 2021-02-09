@@ -9,14 +9,16 @@
 @file: function_factory.py
 @time: 2021/2/2 14:39
 @desc: 功能操作工厂：初始化功能模块给tk，保存，加载等
+        1. 无论导入json还是新建了初始化，都需要建立code-function和name-function的映射关系
 """
 
 from dataclasses import dataclass
 import re
 import json
+import pyperclip
 
 from supports.configure_tools import Configure
-from structure.function import Function
+from structure.function import Function, Step
 
 
 @dataclass
@@ -48,13 +50,26 @@ class FunctionFactory:
                     connections = value.split('-')
 
             f = Function(name, code, shown, step_infos, connections)
-            f.init_function()
             functions.append(f)
+
+        # 初始化functiondict
+        self.create_functions_dict(functions)
         return functions
+
+    def get_dict_from_functions(self, functions: [Function]):
+        """将functions转为dict"""
+        return [f.get_dict() for f in functions]
+
+    def get_json_from_functions(self, functions: [Function]):
+        """【测试专用】获取functions的json，并放到粘贴板"""
+        info = json.dumps(self.get_dict_from_functions(functions), indent=4, ensure_ascii=False)
+        pyperclip.copy(info)
+        print('json信息已经复制到粘贴板')
+        return info
 
     def save_functions2json(self, functions: [Function], save_path):
         """将functions的list保存为json文件"""
-        values_dict = [f.get_dict() for f in functions]
+        values_dict = self.get_dict_from_functions(functions)
         with open(save_path, 'w', encoding='utf-8') as f:
             # 这里ensure_ascii表示是否要转为ascii码，不转则保存为中文
             json.dump(values_dict, f, indent=4, ensure_ascii=False)
@@ -65,13 +80,17 @@ class FunctionFactory:
             json_values = json.load(f)
 
         functions = [Function.get_function_from_dict(v) for v in json_values]
-        for f in functions:
-            f.init_function()
+
+        # 初始化functiondict
+        self.create_functions_dict(functions)
 
         return functions
 
     def create_functions_dict(self, functions: [Function]):
         """创建按一个从function_name到function的字典"""
+        # 创建的时候，需要清空所有的字典
+        self.function_dict_by_code.clear()
+        self.function_dict_by_name.clear()
         for f in functions:
             self.function_dict_by_code[f.func_code] = f
             self.function_dict_by_name[f.func_name] = f
@@ -88,6 +107,17 @@ class FunctionFactory:
     def get_function_from_function_name(self, func_name) -> Function:
         """根据功能名获取功能对象"""
         return self.function_dict_by_name[func_name]
+
+    def get_steps(self, func: Function) -> [Step]:
+        """获取该功能的所有步骤和connections的所有步骤"""
+        steps = func.steps
+
+        # 关联的function
+        for code in func.connections:
+            temp_f = self.function_dict_by_code.get(code)
+            steps += temp_f.steps
+
+        return steps
 
 
 if __name__ == '__main__':

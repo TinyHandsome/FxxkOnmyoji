@@ -13,6 +13,7 @@
 
 from dataclasses import dataclass
 from structure.function import Function
+from structure.function_factory import FunctionFactory
 from structure.step import Step
 from structure.point import Point
 from supports.mk_factory import MKFactory
@@ -24,6 +25,7 @@ from supports.info_pip import InfoPip
 @dataclass
 class RunFunction:
     func: Function
+    ff: FunctionFactory
     tm: ThreadManagement
     info_stack: InfoPip
 
@@ -93,5 +95,6 @@ class RunFunction:
 
     def run_function(self):
         """运行一个功能，包括多个步骤"""
-        for s in self.func.steps:
+        # 获取该功能的所有步骤和connections的所有步骤
+        for s in self.ff.get_steps(self.func):
             self.tm.build_thread(self.run_step, s.step_name, is_while=True, args=(s,))

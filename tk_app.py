@@ -118,11 +118,10 @@ class App:
                                  width=cmb1_width, font=font_normal)
         # 初始化功能名字，从ini文件中获取
         self.functions = self.ff.init_functions_from_config()
-        self.ff.create_functions_dict(self.functions)
         self.cmb1['values'] = self.ff.get_function_names()
         # 选择第一个为默认
         # self.cmb1.current(0)
-        self.cmb1.bind('<<ComboboxSelected>>', self.get_list)
+        self.cmb1.bind('<<ComboboxSelected>>', self.get_cmb2_list_from_cmb1)
         self.cmb1.pack(side=LEFT, fill=Y)
 
         self.cmb2 = ttk.Combobox(self.f11, textvariable=self.cmb2_value,
@@ -378,7 +377,7 @@ class App:
         # 开始循环
         self.root.mainloop()
 
-    def get_list(self, *args):
+    def get_cmb2_list_from_cmb1(self, *args):
         """cmb1对应的函数，获取对应下拉框的list，方便写入后续下拉框"""
         cmb1_v = self.cmb1_value.get()
         self.info_stack.info(cmb1_v, 1)
@@ -386,6 +385,8 @@ class App:
         self.current_func = self.ff.get_function_from_function_name(cmb1_v)
         # 设置下拉框的值
         self.cmb2['values'] = self.current_func.get_point_names()
+        # 清空下拉框
+        self.cmb2_value.set('')
 
     def get_key(self, *args):
         """cmb2的对应的函数"""
@@ -417,6 +418,12 @@ class App:
             self.functions = self.ff.load_functions_from_json(path)
             # 载入后设置前端显示
             self.info_stack.info('读取配置文件成功', 3)
+            # 载入数据后，需要将两个值置为空
+            self.cmb1_value.set('')
+            self.cmb2_value.set('')
+
+            self.cmb1['values'] = self.ff.get_function_names()
+
         except Exception as e:
             self.info_stack.info('读取配置文件出错！', 2)
 
@@ -504,8 +511,17 @@ class App:
             return False
         # 检查功能中是否存在至少一个点是有效的
         if not self.current_func.check_effective():
-            self.info_stack.info('功能中所有点都无效', 2)
+            self.info_stack.info('【目标】功能中所有点都无效', 2)
             return False
+        # 检查功能的关联功能是否存在一个点是有效的
+        for code in self.current_func.connections:
+            temp_f = self.ff.function_dict_by_code.get(code)
+            if temp_f is None:
+                self.info_stack.info('未找到编号为' + code + '的功能', 2)
+                return False
+            if not temp_f.check_effective():
+                self.info_stack.info('【关联】功能：' + code + '所有点无效', 2)
+                return False
 
         return True
 
@@ -516,7 +532,7 @@ class App:
 
         self.info_stack.info(self.current_func.func_name + '启动...', 3)
 
-        rf = RunFunction(self.current_func, self.tm, self.info_stack)
+        rf = RunFunction(self.current_func, self.ff, self.tm, self.info_stack)
         rf.run_function()
 
     def destroy(self):
@@ -526,4 +542,4 @@ class App:
 
 
 if __name__ == '__main__':
-    App(is_test=True).run()
+    App(is_test=False).run()
