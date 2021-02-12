@@ -200,7 +200,7 @@ class App:
         self.e_color = Entry(self.f21, width=e_color_length,
                              textvariable=self.color_value, font=font_normal, justify='center')
         self.e_xy.insert(END, self.color)
-        self.e_color.pack(side=LEFT, fill=Y)
+        self.e_color.pack(side=LEFT, fill=BOTH, expand=True)
 
         self.f22 = Frame(self.frame_2)
 
@@ -488,10 +488,11 @@ class App:
             ten_six = "#%02x%02x%02x" % (color[0], color[1], color[2])
             return str(color) + '_' + ten_six, ten_six
 
-        temp_xy = self.xy
+        # 将暂停检查逻辑从坐标改为颜色
+        temp_color = self.color
         self.xy, self.color = self.ma.get_mouse_postion_color().get_info()
 
-        if self.xy != temp_xy:
+        if self.color != temp_color:
             self.e_xy.delete(0, END)
             self.e_xy.insert(END, str(self.xy))
             self.e_color.delete(0, END)

@@ -21,7 +21,6 @@
 
 from dataclasses import dataclass
 
-import cv2
 import win32con
 import win32gui
 # import win32ui
