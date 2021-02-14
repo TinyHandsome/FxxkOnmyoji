@@ -51,12 +51,12 @@ class MKFactory:
 
     def l1(self, xy, is_random=True):
         """单击，停顿，是否随机"""
-        self.t.tip()
         if is_random:
             x_bias, y_bias = self.t.get_mouse_bias()
             self.m.mouse_click(xy[0]+x_bias, xy[1]+y_bias)
         else:
             self.m.mouse_click(xy[0], xy[1])
+        self.t.tip()
 
     def ln(self, xy, times=None):
         """单击很多次"""
@@ -67,20 +67,20 @@ class MKFactory:
 
     def l2(self, xy):
         """双击，停顿"""
-        self.t.tip()
         self.m.mouse_doubleclick(xy[0], xy[1])
+        self.t.tip()
 
     def r1(self, xy):
         """右键单击，停顿"""
-        self.t.tip()
         self.m.mouse_right_click(xy[0], xy[1])
+        self.t.tip()
 
     def r2(self, xy):
         """右键双击，停顿"""
-        self.t.tip()
         self.m.mouse_right_doubleclick(xy[0], xy[1])
+        self.t.tip()
 
     def k_str(self, strs):
         """输入str，停顿"""
-        self.t.tip()
         self.k.key_input(strs)
+        self.t.tip()
