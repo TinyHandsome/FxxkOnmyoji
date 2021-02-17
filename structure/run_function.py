@@ -39,7 +39,7 @@ class RunFunction:
     def run_step(self, step: Step):
         """运行一个步骤"""
         # 时间管理大师，每一个步骤，单独有一个时间管理
-        self.tt = TickTime()
+        tt = TickTime()
 
         # 【检查step中点的颜色】获取每个点的检查结果，如果标记带l的都是True则执行标记带c的点
         location_result = [self.check_point_color(p) for p in step.get_location_points()]
@@ -54,14 +54,14 @@ class RunFunction:
                 self.info_stack.info('步骤：' + step.step_name + '无效...', 2)
             else:
                 # 时间检查，是否超时
-                if self.tt.update_time_and_check():
+                if tt.update_time_and_check():
                     # 超时返回的是True，结束叭，设置结束，并自己结束
                     self.info_stack.info('脚本检测超时，自动暂停所有功能', 2)
                     self.pause(shown_info=False)
 
                 # 点击每一个需要click的点
                 for cp in c_points:
-                    self.click_points(cp)
+                    self.click_point(cp)
 
         else:
             # 都不是True能怎么办，啥都不干呗
@@ -93,7 +93,7 @@ class RunFunction:
             self.info_stack.info(*color_check_result)
             return False
 
-    def click_points(self, point: Point):
+    def click_point(self, point: Point):
         """点击"""
         xy, color = point.get_loc_color()
         if point.click_times == '0':
