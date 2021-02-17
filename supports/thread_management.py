@@ -65,7 +65,7 @@ class Job(Thread):
                     if self.tt.update_time_and_check():
                         # 超时返回的是True，结束叭，设置结束，并自己结束
                         self.stop()
-                        print('结束了')
+                        print(self.name + '结束了')
                         break
 
                 self.flag.wait()
