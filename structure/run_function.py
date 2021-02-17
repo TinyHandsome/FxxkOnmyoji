@@ -56,7 +56,7 @@ class RunFunction:
                 if self.tt.update_time_and_check():
                     # 超时返回的是True，结束叭，设置结束，并自己结束
                     self.info_stack.info('脚本检测超时，自动暂停所有功能', 2)
-                    self.pause()
+                    self.pause(shown_info=False)
 
                 # 点击每一个需要click的点
                 for cp in c_points:
@@ -111,7 +111,7 @@ class RunFunction:
         for s in self.ff.get_effective_steps(self.func):
             self.tm.build_thread(self.run_step, s.step_name, is_while=True, args=(s,))
 
-    def pause(self):
+    def pause(self, shown_info=True):
         """暂停"""
 
         # 需要暂停的线程，线程名不以_开头
@@ -126,7 +126,8 @@ class RunFunction:
             self.pause_flag = True
             for t in pause_threads:
                 t.pause()
-            self.info_stack.info('功能' + self.func.func_name + '已暂停', 3)
+            if shown_info:
+                self.info_stack.info('功能' + self.func.func_name + '已暂停', 3)
         else:
             # 暂停了则继续
             self.pause_flag = False
