@@ -20,6 +20,7 @@ from supports.mk_factory import MKFactory
 from supports.thread_management import ThreadManagement
 from supports.tip_time import TipTime
 from supports.info_pip import InfoPip
+from supports.tip_time import TickTime
 
 
 @dataclass
@@ -34,6 +35,8 @@ class RunFunction:
         self.mkf = MKFactory()
         # 暂停的标记，开始是不暂停
         self.pause_flag = False
+        # 时间管理大师
+        self.tt = TickTime()
 
     def run_step(self, step: Step):
         """运行一个步骤"""
@@ -49,9 +52,16 @@ class RunFunction:
                 # 【v0.3】这里应该不会执行，因为在[check_before_run]函数中已经进行了判断
                 self.info_stack.info('步骤：' + step.step_name + '无效...', 2)
             else:
+                # 时间检查，是否超时
+                if self.tt.update_time_and_check():
+                    # 超时返回的是True，结束叭，设置结束，并自己结束
+                    self.info_stack.info('脚本检测超时，自动暂停所有功能', 2)
+                    self.pause()
+
                 # 点击每一个需要click的点
                 for cp in c_points:
                     self.click_points(cp)
+
         else:
             # 都不是True能怎么办，啥都不干呗
             ...
