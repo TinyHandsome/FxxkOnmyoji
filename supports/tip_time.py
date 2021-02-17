@@ -40,7 +40,7 @@ class TickTime:
         """
         new_time = self.time_list[-1]
         old_time = self.time_list[0]
-        minus_seconds = new_time - old_time
+        minus_seconds = (new_time - old_time).seconds
 
         # 时间对比，这里第一个时间不能是初始化的时间
         if old_time != self.init_time and minus_seconds < self.time_limit:

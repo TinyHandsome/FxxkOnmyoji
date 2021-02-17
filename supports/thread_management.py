@@ -49,6 +49,8 @@ class Job(Thread):
 
         # 时间管理大师
         self.tt = TickTime()
+        # 是否需要时间管理
+        self.is_check_tt = '_' not in name
 
     def run(self):
         if self.is_while:
@@ -59,10 +61,12 @@ class Job(Thread):
                     break
 
                 # 时间检查，是否超时
-                if self.tt.update_time_and_check():
-                    # 超时返回的是True，结束叭，设置结束，并自己结束
-                    self.stop()
-                    break
+                if self.is_check_tt:
+                    if self.tt.update_time_and_check():
+                        # 超时返回的是True，结束叭，设置结束，并自己结束
+                        self.stop()
+                        print('结束了')
+                        break
 
                 self.flag.wait()
                 self.target(*self.args)

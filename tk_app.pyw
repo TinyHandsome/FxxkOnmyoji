@@ -55,8 +55,6 @@ class App:
         self.current_func = None
         # 初始化运行的功能
         self.rf = None
-        # 暂停的标记，开始是不暂停
-        self.pause_flag = False
 
         # 日记文件，一天一个，每次启动时删除七天前的文件
         self.current_time = datetime.datetime.now()

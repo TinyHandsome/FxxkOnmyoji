@@ -32,6 +32,8 @@ class RunFunction:
     def __post_init__(self):
         self.t = TipTime()
         self.mkf = MKFactory()
+        # 暂停的标记，开始是不暂停
+        self.pause_flag = False
 
     def run_step(self, step: Step):
         """运行一个步骤"""
