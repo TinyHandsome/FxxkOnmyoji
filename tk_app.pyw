@@ -49,9 +49,12 @@ class App:
 
         # 初始坐标和颜色
         self.xy, self.color = '', ''
-        # 初始化功能信息
+        # 初始化功能集合
         self.functions = None
+        # 初始化当前选择的功能
         self.current_func = None
+        # 初始化运行的功能
+        self.rf = None
         # 暂停的标记，开始是不暂停
         self.pause_flag = False
 
@@ -442,25 +445,10 @@ class App:
 
     def pause(self):
         """暂停"""
-        # 需要暂停的线程，线程名不以_开头
-        pause_threads = [p for p in self.tm.threads if not p.getName().replace('【线程】', '').startswith('_')]
-        # 如果没有需要暂停的线程，即没有启动啥功能，则报错
-        if len(pause_threads) == 0:
-            self.info_stack.info('你啥也没启动啊，暂停个鬼啊', 2)
-            return
-
-        if not self.pause_flag:
-            # 未暂停
-            self.pause_flag = True
-            for t in pause_threads:
-                t.pause()
-            self.info_stack.info('功能' + self.current_func.func_name + '已暂停', 3)
+        if self.rf is not None:
+            self.rf.pause()
         else:
-            # 暂停了则继续
-            self.pause_flag = False
-            for t in pause_threads:
-                t.resume()
-            self.info_stack.info('功能' + self.current_func.func_name + '已恢复', 3)
+            self.info_stack.info('未运行任何功能', 2)
 
     def write_info(self):
         """将信息写入到dict中"""
@@ -530,8 +518,8 @@ class App:
 
         self.info_stack.info(self.current_func.func_name + '启动...', 3)
 
-        rf = RunFunction(self.current_func, self.ff, self.tm, self.info_stack)
-        rf.run_function()
+        self.rf = RunFunction(self.current_func, self.ff, self.tm, self.info_stack)
+        self.rf.run_function()
 
     def destroy(self):
         self.root.quit()

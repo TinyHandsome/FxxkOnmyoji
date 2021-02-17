@@ -98,3 +98,26 @@ class RunFunction:
         # 获取该功能的所有步骤和connections的所有步骤
         for s in self.ff.get_effective_steps(self.func):
             self.tm.build_thread(self.run_step, s.step_name, is_while=True, args=(s,))
+
+    def pause(self):
+        """暂停"""
+
+        # 需要暂停的线程，线程名不以_开头
+        pause_threads = [p for p in self.tm.threads if not p.getName().replace('【线程】', '').startswith('_')]
+        # 如果没有需要暂停的线程，即没有启动啥功能，则报错
+        if len(pause_threads) == 0:
+            self.info_stack.info('你啥也没启动啊，暂停个鬼啊', 2)
+            return
+
+        if not self.pause_flag:
+            # 未暂停
+            self.pause_flag = True
+            for t in pause_threads:
+                t.pause()
+            self.info_stack.info('功能' + self.func.func_name + '已暂停', 3)
+        else:
+            # 暂停了则继续
+            self.pause_flag = False
+            for t in pause_threads:
+                t.resume()
+            self.info_stack.info('功能' + self.func.func_name + '已恢复', 3)

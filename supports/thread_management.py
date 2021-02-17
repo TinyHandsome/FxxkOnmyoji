@@ -13,6 +13,7 @@
 """
 from threading import Thread, Event
 from dataclasses import dataclass
+from supports.tip_time import TickTime
 
 
 @dataclass
@@ -40,12 +41,29 @@ class Job(Thread):
         self.is_while = is_while
         self.flag = Event()
 
+        # 停止按钮
+        self.stop_flag = False
+
         # 初始是打开的
         self.flag.set()
 
+        # 时间管理大师
+        self.tt = TickTime()
+
     def run(self):
         if self.is_while:
+            # 如果是循环检测线程，则一直循环
             while self.flag:
+                # 如果检测到停止按钮，就直接退出
+                if self.stop_flag:
+                    break
+
+                # 时间检查，是否超时
+                if self.tt.update_time_and_check():
+                    # 超时返回的是True，结束叭，设置结束，并自己结束
+                    self.stop()
+                    break
+
                 self.flag.wait()
                 self.target(*self.args)
         else:
@@ -56,3 +74,6 @@ class Job(Thread):
 
     def resume(self):
         self.flag.set()
+
+    def stop(self):
+        self.stop_flag = True
