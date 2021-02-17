@@ -36,11 +36,11 @@ class RunFunction:
         # 暂停的标记，开始是不暂停
         self.pause_flag = False
 
+        # 时间管理大师，管理功能的所有步骤，如果某一个步骤在短时间内点击多次，则暂停
+        self.tt = TickTime()
+
     def run_step(self, step: Step):
         """运行一个步骤"""
-        # 时间管理大师，每一个步骤，单独有一个时间管理
-        tt = TickTime()
-
         # 【检查step中点的颜色】获取每个点的检查结果，如果标记带l的都是True则执行标记带c的点
         location_result = [self.check_point_color(p) for p in step.get_location_points()]
 
@@ -54,7 +54,7 @@ class RunFunction:
                 self.info_stack.info('步骤：' + step.step_name + '无效...', 2)
             else:
                 # 时间检查，是否超时
-                if tt.update_time_and_check():
+                if self.tt.update_time_and_check(step.step_name):
                     # 超时返回的是True，结束叭，设置结束，并自己结束
                     self.info_stack.info('脚本检测超时，自动暂停所有功能', 2)
                     self.pause(shown_info=False)

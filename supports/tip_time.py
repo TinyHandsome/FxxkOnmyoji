@@ -27,11 +27,18 @@ class TickTime:
         conf = Configure('configures/configs.ini')
         # 获取多少时间内超过多少次算超时
         self.time_limit = conf.get_option('time', 'time_limit', 'int')
-        count_limit = conf.get_option('time', 'count_limit', 'int')
+        self.count_limit = conf.get_option('time', 'count_limit', 'int')
 
-        # 设置存放时间的list，这里因为检查次数为10，所以长度为10
+        # 设置存放时间的list，这里因为检查次数为3，所以数组的长度为3
+        self.init_time_list()
+
+        # 当前统计的步骤名，如果步骤发生变化，则重新计时
+        self.step_name = None
+
+    def init_time_list(self):
+        """初始化时间列表"""
         self.init_time = datetime.now()
-        self.time_list = [self.init_time] * count_limit
+        self.time_list = [self.init_time] * self.count_limit
 
     def check_time_if_timeout(self):
         """
@@ -55,9 +62,14 @@ class TickTime:
         self.time_list.append(current_time)
         self.time_list = self.time_list[1:]
 
-    def update_time_and_check(self):
+    def update_time_and_check(self, step_name):
         """综合获取时间和检查"""
-        self.update_time()
+        # 如果step_name为空  或者  step_name跟self.step_name相同，就开始记录和检查
+        if step_name is None or step_name == self.step_name:
+            self.update_time()
+        else:
+            # 如果step_name变了，则是在进行其他步骤，因此是正常的，所以重新初始化时间
+            self.init_time_list()
         return self.check_time_if_timeout()
 
 
