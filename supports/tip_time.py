@@ -65,11 +65,18 @@ class TickTime:
     def update_time_and_check(self, step_name):
         """综合获取时间和检查"""
         # 如果step_name为空  或者  step_name跟self.step_name相同，就开始记录和检查
-        if step_name is None or step_name == self.step_name:
+        if step_name == self.step_name:
             self.update_time()
         else:
             # 如果step_name变了，则是在进行其他步骤，因此是正常的，所以重新初始化时间
             self.init_time_list()
+        """
+        最后不管是不是同样的步骤，都要更新步骤名，None跟不同名一样
+        1. None：更新名字，初始化时间列表
+        2. 同名：更新跟不更新无所谓
+        3. 不同名：更新名字，并初始化时间列表
+        """
+        self.step_name = step_name
         return self.check_time_if_timeout()
 
 
