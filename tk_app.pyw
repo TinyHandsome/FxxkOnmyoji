@@ -442,17 +442,6 @@ class App:
 
     def pause(self):
         """暂停"""
-
-        # def ignore_check(search_name):
-        #     """【v0.3 现在直接检查是否是_开头，_开头的线程没有暂停啥的】检查线程名是否被忽略"""
-        #     pause_ignore = ['鼠标颜色检查']
-        #     pause_ignore_names = ['【线程】' + name for name in pause_ignore]
-        #
-        #     if search_name in pause_ignore_names:
-        #         return True
-        #     else:
-        #         return False
-
         # 需要暂停的线程，线程名不以_开头
         pause_threads = [p for p in self.tm.threads if not p.getName().replace('【线程】', '').startswith('_')]
         # 如果没有需要暂停的线程，即没有启动啥功能，则报错
