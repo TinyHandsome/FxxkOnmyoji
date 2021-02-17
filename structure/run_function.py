@@ -35,11 +35,12 @@ class RunFunction:
         self.mkf = MKFactory()
         # 暂停的标记，开始是不暂停
         self.pause_flag = False
-        # 时间管理大师
-        self.tt = TickTime()
 
     def run_step(self, step: Step):
         """运行一个步骤"""
+        # 时间管理大师，每一个步骤，单独有一个时间管理
+        self.tt = TickTime()
+
         # 【检查step中点的颜色】获取每个点的检查结果，如果标记带l的都是True则执行标记带c的点
         location_result = [self.check_point_color(p) for p in step.get_location_points()]
 
