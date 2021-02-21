@@ -114,7 +114,9 @@
                 ]
             }
         ],
-        "connections": []
+        "connections": [
+            "903"
+        ]
     },
     {
         "func_name": "搜索鬼王",
