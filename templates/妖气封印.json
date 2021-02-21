@@ -113,9 +113,6 @@
                     }
                 ]
             }
-        ],
-        "connections": [
-            "903"
         ]
     },
     {
@@ -591,47 +588,6 @@
                             ""
                         ],
                         "click_times": 0
-                    }
-                ]
-            }
-        ],
-        "connections": []
-    },
-    {
-        "func_name": "关闭悬赏",
-        "func_code": "903",
-        "func_shown": 1,
-        "steps": [
-            {
-                "step_name": "1号位关闭悬赏",
-                "points": [
-                    {
-                        "point_name": "1号位关闭悬赏@l",
-                        "point_type": "l",
-                        "point_location": [
-                            "",
-                            ""
-                        ],
-                        "point_color": [
-                            "",
-                            "",
-                            ""
-                        ],
-                        "click_times": 0
-                    },
-                    {
-                        "point_name": "1号位关闭悬赏@lc_1",
-                        "point_type": "lc",
-                        "point_location": [
-                            "",
-                            ""
-                        ],
-                        "point_color": [
-                            "",
-                            "",
-                            ""
-                        ],
-                        "click_times": 1
                     }
                 ]
             }
