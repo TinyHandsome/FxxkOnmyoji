@@ -441,8 +441,17 @@ class App:
     def load_user_config(self, show_info=True):
         """载入用户数据"""
         file_path = askopenfilename()
+        # 如果中途返回了，就当无事发生
+        if file_path == '':
+            return ''
+
         self.load_default_config(file_path, show_info)
         return file_path
+
+    def rebuild_function_factory(self):
+        """根据最新的functions，重建function_factory，并更新下拉框"""
+        self.ff.create_functions_dict(self.functions)
+        self.cmb1['values'] = self.ff.get_function_names()
 
     def combine_single_load(self):
         """
@@ -453,12 +462,19 @@ class App:
         """
         result_functions = self.functions
         file_path = self.load_user_config(show_info=False)
+
+        # 如果中途返回了，就当无事发生
+        if file_path == '':
+            return ''
+
         file_name_without_suffix = get_files_names(file_path)
 
         for f in self.functions:
             result_functions = self.ff.set_functions_func(result_functions, f)
 
+        # 手动更新functions，并重建字典和下拉框
         self.functions = result_functions
+        self.rebuild_function_factory()
 
         # 输出信息
         self.info_stack.info('<' + file_name_without_suffix + '>已融合进当前功能集中', 3)
@@ -479,12 +495,16 @@ class App:
             # 选取配置文件，并导入到self.functions
             file_paths = askopenfilenames()
 
+        # 如果中途返回了，则当无事发生
+        if file_paths == '':
+            return ''
+
         # 编辑获取成功后的输出
         file_name_without_suffix = get_files_names(file_paths)
         names = ['<' + fn + '>' for fn in file_name_without_suffix]
         file_name_without_suffix = '、'.join(names)
 
-        # 多个functions
+        # 获取多个functions
         functions_matrix = []
         for file_path in file_paths:
             functions = self.load_default_config(file_path, show_info=False)
@@ -502,8 +522,9 @@ class App:
                 # 遍历当前功能list，看每个func是否在result_func中有名字
                 result_functions = self.ff.set_functions_func(result_functions, func)
 
-        # 重设当前functions
+        # 手动更新functions，并重建字典和下拉框
         self.functions = result_functions
+        self.rebuild_function_factory()
 
         # 输出信息
         self.info_stack.info(file_name_without_suffix + '已融合进当前功能集中', 3)
@@ -516,6 +537,11 @@ class App:
         """
         template_path = './templates'
         files = [os.path.join(template_path, file) for file in os.listdir(template_path) if file.endswith('.json')]
+        if not files:
+            # 如果文件夹中没有.json文件
+            self.info_stack.info('你这里面啥也没有啊！', 2)
+            return None
+
         self.combine_multiple_load(files)
 
     def pause(self):
@@ -575,7 +601,7 @@ class App:
             return False
         # 检查功能中是否存在至少一个点是有效的
         if not self.current_func.check_effective():
-            self.info_stack.info('【目标】功能中所有点都无效', 2)
+            self.info_stack.info('目标功能中所有点都无效', 2)
             return False
         # 检查功能的关联功能是否存在一个点是有效的
         for code in self.current_func.connections:

@@ -12,10 +12,11 @@
 """
 
 from dataclasses import dataclass
+
 from structure.point import Point
 
 
-@dataclass
+@dataclass()
 class Step:
     # 步骤名为默认生成的step
     step_info: str
@@ -24,6 +25,9 @@ class Step:
         if self.step_info != '':
             # 如果初始化该类不是用的init，则step_info指定为''，此时不需要进行下面的操作，否则就需要进行
             self.generate_points_stepName()
+
+    def __repr__(self):
+        return str(self.points)
 
     def generate_points_stepName(self):
         self.points = []
@@ -91,7 +95,6 @@ class Step:
             return True
         else:
             return False
-
 
     @classmethod
     def get_step_from_dict(cls, step_dict):
