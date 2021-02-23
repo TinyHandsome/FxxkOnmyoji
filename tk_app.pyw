@@ -13,20 +13,20 @@
         2. [Python3入门之线程threading常用方法](https://www.cnblogs.com/chengd/articles/7770898.html)
         3. [threading之线程的开始,暂停和退出](https://www.cnblogs.com/cnhyk/p/13697121.html)
 """
-import os
 import datetime
-from time import sleep
+import os
 from dataclasses import dataclass
-from system_hotkey import SystemHotkey
-
+from time import sleep
 from tkinter import *
 from tkinter import ttk
-from tkinter.filedialog import askopenfilename, asksaveasfilename
+from tkinter.filedialog import askopenfilename, asksaveasfilename, askopenfilenames
 
-from structure.run_function import RunFunction
+from system_hotkey import SystemHotkey
+
 from structure.function_factory import FunctionFactory
-
+from structure.run_function import RunFunction
 from supports.configure_tools import Configure
+from supports.functions import get_files_names
 from supports.info_pip import InfoPip
 from supports.mouse_action import MouseAction
 from supports.others import Others
@@ -164,8 +164,6 @@ class App:
 
         self.b4 = Button(self.f12, text='载入默认配置(l)', command=self.load_default_config, font=font_normal)
         self.b4.pack(side=LEFT, fill=Y, ipadx=button_ipadx)
-        self.b_combine = Button(self.f12, text='融合载入(n)', command=self.combine_load, font=font_normal)
-        self.b_combine.pack(side=LEFT, fill=Y, ipadx=button_ipadx)
         self.b5 = Button(self.f12, text='选择用户配置(L)', command=self.load_user_config, font=font_normal)
         self.b5.pack(side=LEFT, fill=BOTH, ipadx=button_ipadx, expand=YES)
 
@@ -183,41 +181,45 @@ class App:
                                   pady=frame_label_pad, fg=block_color)
         self.f21 = Frame(self.frame_2)
 
-        self.l_xy = Label(self.f21, text='坐标', font=font_normal)
-        self.l_xy.pack(side=LEFT, fill=Y, ipadx=label_ipadx)
-
         # 两个entry的值
         self.xy_value = StringVar()
         self.color_value = StringVar()
 
+        self.l_c = Label(self.f21, text='坐标颜色', font=font_normal)
+        self.l_c.grid(row=0, column=0)
+
         self.e_xy = Entry(self.f21, width=e_xy_length,
                           textvariable=self.xy_value, font=font_normal, justify='center')
         self.e_xy.insert(END, self.xy)
-        self.e_xy.pack(side=LEFT, fill=Y)
-
-        self.l_c = Label(self.f21, text='颜色', font=font_normal)
-        self.l_c.pack(side=LEFT, fill=Y, ipadx=label_ipadx)
+        self.e_xy.grid(row=0, column=1, sticky='nesw')
 
         self.e_color = Entry(self.f21, width=e_color_length,
                              textvariable=self.color_value, font=font_normal, justify='center')
-        self.e_xy.insert(END, self.color)
-        self.e_color.pack(side=LEFT, fill=BOTH, expand=True)
+        self.e_color.insert(END, self.color)
+        self.e_color.grid(row=0, column=2, columnspan=2, sticky='nesw')
 
-        self.f22 = Frame(self.frame_2)
+        self.l_conf = Label(self.f21, text='保存配置', font=font_normal)
+        self.l_conf.grid(row=1, column=0)
 
-        self.b1 = Button(self.f22, text='写入信息(w)', command=self.write_info, font=font_normal)
-        self.b1.pack(side=LEFT, fill=BOTH, ipadx=button_ipadx, expand=True)
-
-        self.b_save_conf = Button(self.f22, text='保存为默认(s)', font=font_normal,
+        self.b1 = Button(self.f21, text='写入信息(w)', command=self.write_info, font=font_normal)
+        self.b1.grid(row=1, column=1, sticky='nesw')
+        self.b_save_conf = Button(self.f21, text='存为默认(s)', font=font_normal,
                                   command=self.save_config_as_default)
-        self.b_save_conf.pack(side=LEFT, fill=BOTH, expand=YES)
+        self.b_save_conf.grid(row=1, column=2, sticky='nesw')
+        self.b_save_to_file = Button(self.f21, text='存到文件(S)', font=font_normal,
+                                     command=self.save_config_to_file)
+        self.b_save_to_file.grid(row=1, column=3, sticky='nesw')
 
-        self.b_save_conf = Button(self.f22, text='保存到文件(S)', font=font_normal,
-                                  command=self.save_config_to_file)
-        self.b_save_conf.pack(side=LEFT, fill=BOTH, expand=YES)
+        self.l_combine = Label(self.f21, text='合并配置', font=font_normal)
+        self.l_combine.grid(row=2, column=0)
+        self.b_single_combine = Button(self.f21, text='单项融合(n)', command=self.combine_single_load, font=font_normal)
+        self.b_single_combine.grid(row=2, column=1, sticky='nesw')
+        self.b_multiple_combine = Button(self.f21, text='多项融合(N)', command=self.combine_multiple_load, font=font_normal)
+        self.b_multiple_combine.grid(row=2, column=2, sticky='nesw')
+        self.b_auto_combine = Button(self.f21, text='自动融合(a)', command=self.combine_auto_load, font=font_normal)
+        self.b_auto_combine.grid(row=2, column=3, sticky='nesw')
 
         self.f21.pack(fill=BOTH)
-        self.f22.pack(fill=BOTH)
 
         """frame3 待开发"""
         self.frame_3 = LabelFrame(self.root, text='| 献出心脏 |', labelanchor=N,
@@ -249,7 +251,7 @@ class App:
         """布局"""
         # padx、pady是框架外部距离框架的距离
         self.frame_1.pack(side=TOP, fill=None, anchor=NW, padx=frame_label_pad, pady=frame_label_pad)
-        self.frame_2.pack(side=LEFT, fill=Y, anchor=NW, padx=frame_label_pad, pady=frame_label_pad)
+        self.frame_2.pack(side=LEFT, fill=None, anchor=NW, padx=frame_label_pad, pady=frame_label_pad)
         self.frame_3.pack(side=LEFT, fill=BOTH, anchor=NW, padx=frame_label_pad, pady=frame_label_pad,
                           expand=True)
 
@@ -283,7 +285,9 @@ class App:
         self.hk.register(('alt', 'shift', 's'), callback=lambda e: self.save_config_to_file())
         self.hk.register(('alt', 'l'), callback=lambda e: self.load_default_config())
         self.hk.register(('alt', 'shift', 'l'), callback=lambda e: self.load_user_config())
-        self.hk.register(('alt', 'n'), callback=lambda e: self.combine_load())
+        self.hk.register(('alt', 'n'), callback=lambda e: self.combine_single_load())
+        self.hk.register(('alt', 'shift', 'n'), callback=lambda e: self.combine_multiple_load())
+        self.hk.register(('alt', 'a'), callback=lambda e: self.combine_auto_load())
         self.hk.register(('alt', 'd'), callback=lambda e: self.set_two_win_left())
 
     def clear_logs(self):
@@ -415,31 +419,104 @@ class App:
             # print(repr(e))
             self.info_stack.info('保存文件出错！', 2)
 
-    def load_default_config(self, path='templates/默认保存文件.json'):
+    def load_default_config(self, path='templates/默认保存文件.json', show_info=True):
         """载入数据"""
         try:
-            # 从json中创建数据
+            # 从json中创建数据，同时会获取初始化function_dict
             self.functions = self.ff.load_functions_from_json(path)
             # 载入后设置前端显示
-            self.info_stack.info('读取配置文件成功', 3)
+            if show_info:
+                self.info_stack.info('读取配置文件成功', 3)
             # 载入数据后，需要将两个值置为空
             self.cmb1_value.set('')
             self.cmb2_value.set('')
 
             self.cmb1['values'] = self.ff.get_function_names()
+            return self.functions
 
         except Exception as e:
-            self.info_stack.info('读取配置文件出错！', 2)
+            self.info_stack.info('读取失败：' + str(e), 2)
+            return None
 
-    def load_user_config(self):
+    def load_user_config(self, show_info=True):
         """载入用户数据"""
         file_path = askopenfilename()
-        self.load_default_config(file_path)
+        self.load_default_config(file_path, show_info)
+        return file_path
 
-    def combine_load(self):
-        """如何载入用户数据"""
-        # TODO
-        ...
+    def combine_single_load(self):
+        """
+        【单项融合】区别于多项融合
+            1. 开始需要导入一个json文件
+            2. 如果未导入，则使用默认初始化json，则该导入基本就无效了
+            3. 用导入的json填充当前json（遵守，点数量原则）
+        """
+        result_functions = self.functions
+        file_path = self.load_user_config(show_info=False)
+        file_name_without_suffix = get_files_names(file_path)
+
+        for f in self.functions:
+            result_functions = self.ff.set_functions_func(result_functions, f)
+
+        self.functions = result_functions
+
+        # 输出信息
+        self.info_stack.info('<' + file_name_without_suffix + '>已融合进当前功能集中', 3)
+
+    def combine_multiple_load(self, auto_file_paths=None):
+        """
+        【多项融合】融合载入用户数据
+            1. 基于基础functions.ini
+            2. 将所选json，融合到functions.ini，无序操作
+            3. 适用于，多个功能没有交叉使用的，
+            4. 不适用于，功能优化，比如以前的点标错了，在其他功能更新了
+            5. 建议保留原始json
+        """
+        if auto_file_paths is not None:
+            # 自动的话，选取templates目录下所有的.json文件
+            file_paths = auto_file_paths
+        else:
+            # 选取配置文件，并导入到self.functions
+            file_paths = askopenfilenames()
+
+        # 编辑获取成功后的输出
+        file_name_without_suffix = get_files_names(file_paths)
+        names = ['<' + fn + '>' for fn in file_name_without_suffix]
+        file_name_without_suffix = '、'.join(names)
+
+        # 多个functions
+        functions_matrix = []
+        for file_path in file_paths:
+            functions = self.load_default_config(file_path, show_info=False)
+            if functions is not None:
+                functions_matrix.append(functions)
+            else:
+                self.info_stack.info('多项融合出错', 2)
+
+        # 获取初始化的文件
+        result_functions = self.ff.init_functions_from_config()
+
+        for now_functions in functions_matrix:
+            # 将文件合并
+            for func in now_functions:
+                # 遍历当前功能list，看每个func是否在result_func中有名字
+                result_functions = self.ff.set_functions_func(result_functions, func)
+
+        # 重设当前functions
+        self.functions = result_functions
+
+        # 输出信息
+        self.info_stack.info(file_name_without_suffix + '已融合进当前功能集中', 3)
+
+    def combine_auto_load(self):
+        """
+        【自动融合】融合templates目录下的所有json文件
+            1. 基于combine_multiple_load实现
+            2. 融合时，自动识别templates目录下的所有.json结尾的文件
+        """
+        template_path = './templates'
+        files = [os.path.join(template_path, file) for file in os.listdir(template_path) if file.endswith('.json')]
+        self.combine_multiple_load(files)
 
     def pause(self):
         """暂停"""
@@ -481,10 +558,13 @@ class App:
         # 显示颜色设置
         tensix = self.get_postion_color()
         if tensix != '#-1-1-1':
-            self.e_color.configure(fg=tensix)
+            # 不改变entry的颜色
+            # self.e_color.configure(fg=tensix)
+
             self.l_c.configure(fg=tensix)
         else:
-            self.e_color.configure(fg='red')
+            # self.e_color.configure(fg='red')
+            ...
         sleep(self.settings.get_option('mouse', 'mouse_check_speed', 'float'))
 
     def check_before_run(self):

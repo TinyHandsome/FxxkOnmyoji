@@ -76,17 +76,26 @@ class Function:
         points = self.get_points()
         return [p.point_name for p in points]
 
-    def check_effective(self):
-        """检查功能中所有的点信息都有，如果都没有则为无效，有一个有就运行这一个"""
+    def check_effective(self, return_num=False):
+        """
+        检查功能中所有的点信息都有，如果都没有则为无效，有一个有就运行这一个
+            1. 注意：这里只检查基础流程有效点的数量，不检查连接流程
+        """
+
         p_check_list = []
         for p in self.point_dict.values():
             p_check_list.append(p.check_effective())
 
-        if sum(p_check_list) == 0:
-            """没有一个点是有效的"""
-            return False
+        if return_num:
+            # 是否返回有效点的数量
+            return sum(p_check_list)
         else:
-            return True
+            if sum(p_check_list) == 0:
+                """没有一个点是有效的"""
+                return False
+            else:
+                # 否则返回有效点数量
+                return True
 
     @classmethod
     def get_function_from_dict(cls, function_dict: dict):

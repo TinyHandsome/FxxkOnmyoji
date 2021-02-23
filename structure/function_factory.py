@@ -123,6 +123,25 @@ class FunctionFactory:
         """获取该功能的所有步骤和connections有效步骤"""
         return [s for s in self.get_steps(func) if s.check_effective()]
 
+    def check_funcname(self, funcname):
+        """【暂时没用到】检查功能名是否在当前功能列表中"""
+        for fn in self.function_dict_by_name.keys():
+            if fn == funcname:
+                return True
+
+        return False
+
+    def set_functions_func(self, functions: [Function], func: Function):
+        """如果func的funcname在functions中有，则设置functions的func_name的function为func"""
+        result_functions = []
+        for f in functions:
+            if f.func_name == func.func_name and f.check_effective(True) <= func.check_effective(True):
+                result_functions.append(func)
+            else:
+                result_functions.append(f)
+
+        return result_functions
+
 
 if __name__ == '__main__':
     test_ff = FunctionFactory()

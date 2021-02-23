@@ -57,7 +57,11 @@ class Point:
             return False
 
     def check_effective(self):
-        """自身点位信息检查，只要坐标和颜色有一个为空值则False"""
+        """
+        自身点位信息检查，只要坐标和颜色有一个为空值则False
+            1. 注意：这里只检查点的颜色和坐标是否都有，有就是True
+        """
+
         if '' in self.point_location or '' in self.point_color:
             return False
         else:
