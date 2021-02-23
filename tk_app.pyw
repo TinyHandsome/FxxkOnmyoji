@@ -162,10 +162,13 @@ class App:
         self.cb_var_whether_top.set(True)
         self.cb1.pack(side=LEFT, fill=Y, ipadx=label_ipadx)
 
+        self.b6 = Button(self.f12, text='用户手册', command=lambda: self.ot.show_my_words_at_first_open(True), font=font_normal, bg='lightblue')
+        self.b6.pack(side=LEFT, fill=BOTH, ipadx=button_ipadx, expand=YES)
+
         self.b4 = Button(self.f12, text='载入默认配置(l)', command=self.load_default_config, font=font_normal)
         self.b4.pack(side=LEFT, fill=Y, ipadx=button_ipadx)
         self.b5 = Button(self.f12, text='选择用户配置(L)', command=self.load_user_config, font=font_normal)
-        self.b5.pack(side=LEFT, fill=BOTH, ipadx=button_ipadx, expand=YES)
+        self.b5.pack(side=LEFT, fill=Y, ipadx=button_ipadx)
 
         self.b3 = Button(self.f12, text='退出(c)', command=self.destroy, font=font_normal, width=6)
         self.b3.pack(side=LEFT, fill=Y, ipadx=button_ipadx)
