@@ -1,0 +1,753 @@
+[
+    {
+        "func_name": "业原火",
+        "func_code": "007",
+        "func_shown": 1,
+        "steps": [
+            {
+                "step_name": "开始",
+                "points": [
+                    {
+                        "point_name": "开始@lc_1",
+                        "point_type": "lc",
+                        "point_location": [
+                            1769,
+                            978
+                        ],
+                        "point_color": [
+                            229,
+                            219,
+                            197
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "结算1",
+                "points": [
+                    {
+                        "point_name": "结算1@lc_3",
+                        "point_type": "lc",
+                        "point_location": [
+                            834,
+                            862
+                        ],
+                        "point_color": [
+                            42,
+                            38,
+                            35
+                        ],
+                        "click_times": 3
+                    }
+                ]
+            },
+            {
+                "step_name": "结算2",
+                "points": [
+                    {
+                        "point_name": "结算2@lc_1",
+                        "point_type": "lc",
+                        "point_location": [
+                            1002,
+                            789
+                        ],
+                        "point_color": [
+                            182,
+                            55,
+                            33
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            }
+        ],
+        "connections": []
+    },
+    {
+        "func_name": "界面最大化/最小化",
+        "func_code": "006",
+        "func_shown": 1,
+        "steps": [],
+        "connections": []
+    },
+    {
+        "func_name": "妖气封印",
+        "func_code": "005",
+        "func_shown": 1,
+        "steps": [
+            {
+                "step_name": "组队",
+                "points": [
+                    {
+                        "point_name": "组队@n",
+                        "point_type": "n",
+                        "point_location": [
+                            601,
+                            81
+                        ],
+                        "point_color": [
+                            88,
+                            62,
+                            27
+                        ],
+                        "click_times": 0
+                    },
+                    {
+                        "point_name": "组队@lc_1",
+                        "point_type": "lc",
+                        "point_location": [
+                            563,
+                            932
+                        ],
+                        "point_color": [
+                            229,
+                            226,
+                            224
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "自动匹配",
+                "points": [
+                    {
+                        "point_name": "自动匹配@lc_1",
+                        "point_type": "lc",
+                        "point_location": [
+                            1146,
+                            974
+                        ],
+                        "point_color": [
+                            243,
+                            177,
+                            94
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "准备",
+                "points": [
+                    {
+                        "point_name": "准备@lc_1",
+                        "point_type": "lc",
+                        "point_location": [
+                            1734,
+                            821
+                        ],
+                        "point_color": [
+                            255,
+                            242,
+                            207
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "结束1",
+                "points": [
+                    {
+                        "point_name": "结束1@lc_3",
+                        "point_type": "lc",
+                        "point_location": [
+                            764,
+                            216
+                        ],
+                        "point_color": [
+                            153,
+                            28,
+                            18
+                        ],
+                        "click_times": 3
+                    }
+                ]
+            },
+            {
+                "step_name": "结束2",
+                "points": [
+                    {
+                        "point_name": "结束2@lc_1",
+                        "point_type": "lc",
+                        "point_location": [
+                            1035,
+                            795
+                        ],
+                        "point_color": [
+                            187,
+                            55,
+                            26
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            }
+        ],
+        "connections": []
+    },
+    {
+        "func_name": "搜索鬼王",
+        "func_code": "004",
+        "func_shown": 1,
+        "steps": [
+            {
+                "step_name": "刷新",
+                "points": [
+                    {
+                        "point_name": "刷新@lc_1",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "加入",
+                "points": [
+                    {
+                        "point_name": "加入@lc_1",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            }
+        ],
+        "connections": []
+    },
+    {
+        "func_name": "双人御魂（一个电脑）",
+        "func_code": "001",
+        "func_shown": 1,
+        "steps": [
+            {
+                "step_name": "挑战",
+                "points": [
+                    {
+                        "point_name": "挑战@lc_1",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "队员结算状态1",
+                "points": [
+                    {
+                        "point_name": "队员结算状态1@lc_3",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 3
+                    }
+                ]
+            },
+            {
+                "step_name": "队长结算状态1",
+                "points": [
+                    {
+                        "point_name": "队长结算状态1@lc_3",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 3
+                    }
+                ]
+            },
+            {
+                "step_name": "队员结算状态2",
+                "points": [
+                    {
+                        "point_name": "队员结算状态2@lc_3",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 3
+                    }
+                ]
+            },
+            {
+                "step_name": "队长结算状态2",
+                "points": [
+                    {
+                        "point_name": "队长结算状态2@lc_3",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 3
+                    }
+                ]
+            },
+            {
+                "step_name": "队员失败结算1",
+                "points": [
+                    {
+                        "point_name": "队员失败结算1@lc_3",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 3
+                    }
+                ]
+            },
+            {
+                "step_name": "队长失败结算1",
+                "points": [
+                    {
+                        "point_name": "队长失败结算1@lc_3",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 3
+                    }
+                ]
+            },
+            {
+                "step_name": "队长自动邀请框",
+                "points": [
+                    {
+                        "point_name": "队长自动邀请框@l",
+                        "point_type": "l",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 0
+                    },
+                    {
+                        "point_name": "队长自动邀请框@lc_1",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "队长邀请",
+                "points": [
+                    {
+                        "point_name": "队长邀请@lc_1",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "队员接受",
+                "points": [
+                    {
+                        "point_name": "队员接受@lc_1",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "队员自动接受",
+                "points": [
+                    {
+                        "point_name": "队员自动接受@lc_1",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "队员准备",
+                "points": [
+                    {
+                        "point_name": "队员准备@lc_1",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "关闭体力不足",
+                "points": [
+                    {
+                        "point_name": "关闭体力不足@l",
+                        "point_type": "l",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 0
+                    },
+                    {
+                        "point_name": "关闭体力不足@lc_1",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "点开加成",
+                "points": [
+                    {
+                        "point_name": "点开加成@lc_1",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "关闭双倍",
+                "points": [
+                    {
+                        "point_name": "关闭双倍@lc_1",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            }
+        ],
+        "connections": [
+            "903"
+        ]
+    },
+    {
+        "func_name": "百鬼料理屋",
+        "func_code": "002",
+        "func_shown": 1,
+        "steps": [
+            {
+                "step_name": "挑战",
+                "points": [
+                    {
+                        "point_name": "挑战@lc_1",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "胜利",
+                "points": [
+                    {
+                        "point_name": "胜利@lc_1",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "结算",
+                "points": [
+                    {
+                        "point_name": "结算@lc_1",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            }
+        ],
+        "connections": []
+    },
+    {
+        "func_name": "关闭体力",
+        "func_code": "901",
+        "func_shown": 1,
+        "steps": [
+            {
+                "step_name": "界面1",
+                "points": [
+                    {
+                        "point_name": "界面1@l",
+                        "point_type": "l",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 0
+                    },
+                    {
+                        "point_name": "界面1@lc_1",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            }
+        ],
+        "connections": []
+    },
+    {
+        "func_name": "关闭/打开御魂双倍",
+        "func_code": "902",
+        "func_shown": 1,
+        "steps": [
+            {
+                "step_name": "双倍开关",
+                "points": [
+                    {
+                        "point_name": "双倍开关@lc",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 0
+                    }
+                ]
+            },
+            {
+                "step_name": "点击关闭",
+                "points": [
+                    {
+                        "point_name": "点击关闭@lc",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 0
+                    }
+                ]
+            }
+        ],
+        "connections": []
+    },
+    {
+        "func_name": "关闭悬赏",
+        "func_code": "903",
+        "func_shown": 1,
+        "steps": [
+            {
+                "step_name": "1号位关闭悬赏",
+                "points": [
+                    {
+                        "point_name": "1号位关闭悬赏@l",
+                        "point_type": "l",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 0
+                    },
+                    {
+                        "point_name": "1号位关闭悬赏@lc_1",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            }
+        ],
+        "connections": []
+    }
+]
