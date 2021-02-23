@@ -100,7 +100,7 @@ class App:
 
         """底层root初始化"""
         self.root = Tk()
-        self.root.title('狗贼v0.3  【作者：李英俊小朋友】  仅供学习交流使用，禁止用于任何商业用途！')
+        self.root.title('狗贼v0.31  【作者：李英俊小朋友】  仅供学习交流使用，禁止用于任何商业用途！')
 
         """frame1_外框，功能、运行、暂停、退出、调整界面"""
         self.frame_1 = LabelFrame(self.root, text='| 海的那边 |',
