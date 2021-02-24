@@ -97,6 +97,13 @@ class Function:
                 # 否则返回有效点数量
                 return True
 
+    def check_connections_not_null(self):
+        """检查connections是否为空"""
+        if self.connections:
+            return True
+        else:
+            return False
+
     @classmethod
     def get_function_from_dict(cls, function_dict: dict):
         """从json获取的dict字典中生成function"""

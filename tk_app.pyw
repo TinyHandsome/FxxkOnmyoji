@@ -204,7 +204,7 @@ class App:
         self.l_conf = Label(self.f21, text='保存配置', font=font_normal)
         self.l_conf.grid(row=1, column=0)
 
-        self.b1 = Button(self.f21, text='写入信息(w)', command=self.write_info, font=font_normal)
+        self.b1 = Button(self.f21, text='写入坐标(w)', command=self.write_info, font=font_normal)
         self.b1.grid(row=1, column=1, sticky='nesw')
         self.b_save_conf = Button(self.f21, text='存为默认(s)', font=font_normal,
                                   command=self.save_config_as_default)
@@ -458,12 +458,13 @@ class App:
 
     def combine_single_load(self):
         """
-        【单项融合】区别于多项融合
+        【单项融合】区别于多项融合，基于当前配置的（当前也可以是初始化配置）
             1. 开始需要导入一个json文件
             2. 如果未导入，则使用默认初始化json，则该导入基本就无效了
             3. 用导入的json填充当前json（遵守，点数量原则）
         """
         result_functions = self.functions
+        # 载入选择的配置作为融合配置，原来的配置作为基础融合配置
         file_path = self.load_user_config(show_info=False)
 
         # 如果中途返回了，就当无事发生
@@ -473,7 +474,7 @@ class App:
         file_name_without_suffix = get_files_names(file_path)
 
         for f in self.functions:
-            result_functions = self.ff.set_functions_func(result_functions, f)
+            result_functions = self.ff.set_functions_by_step(result_functions, f)
 
         # 手动更新functions，并重建字典和下拉框
         self.functions = result_functions
@@ -484,7 +485,7 @@ class App:
 
     def combine_multiple_load(self, auto_file_paths=None):
         """
-        【多项融合】融合载入用户数据
+        【多项融合】融合载入用户数据，基于初始化配置的
             1. 基于基础functions.ini
             2. 将所选json，融合到functions.ini，无序操作
             3. 适用于，多个功能没有交叉使用的，
@@ -523,7 +524,7 @@ class App:
             # 将文件合并
             for func in now_functions:
                 # 遍历当前功能list，看每个func是否在result_func中有名字
-                result_functions = self.ff.set_functions_func(result_functions, func)
+                result_functions = self.ff.set_functions_by_step(result_functions, func)
 
         # 手动更新functions，并重建字典和下拉框
         self.functions = result_functions
@@ -603,6 +604,7 @@ class App:
             self.info_stack.info('没有选择功能', 2)
             return False
         # 检查功能中是否存在至少一个点是有效的
+        print(self.current_func)
         if not self.current_func.check_effective():
             self.info_stack.info('目标功能中所有点都无效', 2)
             return False

@@ -131,14 +131,66 @@ class FunctionFactory:
 
         return False
 
-    def set_functions_func(self, functions: [Function], func: Function):
-        """如果func的funcname在functions中有，则设置functions的func_name的function为func"""
+    def set_functions_by_func(self, functions: [Function], func: Function):
+        """
+        【弃用】如果func的funcname在functions中有，则设置functions的func_name的function为func
+            1. 这里是直接把最新的function写进去
+            2. 而不是更新steps，这是个问题
+            3. 因为这样就不能根据最新的流程更新点位信息
+            4. 没有connections处理
+        """
+
         result_functions = []
         for f in functions:
             if f.func_name == func.func_name and f.check_effective(True) <= func.check_effective(True):
                 result_functions.append(func)
             else:
                 result_functions.append(f)
+
+        return result_functions
+
+    def set_functions_by_step(self, functions: [Function], func: Function):
+        """
+        对比step，将同名的func中，更新同名的step
+            1. 不同名的，弃用旧的，保留新的
+            2. 新增了connections的处理
+        """
+        result_functions = []
+        for f in functions:
+            if f.func_name == func.func_name:
+                # 如果检测到功能名相同，则把两个steps拿出来
+                aim_steps = f.steps
+                func_steps = func.steps
+
+                result_steps = []
+                # 遍历所有需要的steps
+                for ss in aim_steps:
+                    # 在func的steps中寻找
+                    is_find = False
+                    for func_ss in func_steps:
+                        # 如果找到了，且所有的点是有效的，就append，同时跳出循环
+                        if ss.step_name == func_ss.step_name:
+                            # 这里不写在一起是因为，找到了，有效就要，无效就撤，提高效率
+                            # 即，找到了，但无效，也不找了
+                            if func_ss.check_effective():
+                                result_steps.append(func_ss)
+                                is_find = True
+                            break
+
+                    # 没有找到，就用原来的
+                    if not is_find:
+                        result_steps.append(ss)
+
+                # 修改f的步骤
+                f.steps = result_steps
+
+                """
+                # 【连接信息应该以基础模板为主，暂时不支持connections的融合】修改f的connections
+                if func.check_connections_not_null():
+                    f.connections = func.connections
+                """
+
+            result_functions.append(f)
 
         return result_functions
 

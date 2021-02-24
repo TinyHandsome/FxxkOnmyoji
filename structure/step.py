@@ -84,7 +84,12 @@ class Step:
         self.points = points
 
     def check_effective(self):
-        """检查该step是否是有效的，即是否都为空"""
+        """
+        检查该step是否是有效的，即是否都为空
+            1. 步骤中所有点都有信息，就是有效的，这点跟function的不一样
+            2. 只要有一个点没信息，step就是无效的
+        """
+
         point_states = []
         for point in self.points:
             point_state = point.check_effective()
