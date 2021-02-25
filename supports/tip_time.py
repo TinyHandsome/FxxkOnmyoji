@@ -51,7 +51,7 @@ class TickTime:
 
         # 时间对比，这里第一个时间不能是初始化的时间
         if old_time != self.init_time and minus_seconds < self.time_limit:
-            # 触发10次竟然在10秒内，频率太快了，超时
+            # 触发5次竟然在10秒内，频率太快了，超时
             return True
         else:
             return False

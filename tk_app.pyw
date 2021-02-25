@@ -82,9 +82,9 @@ class App:
         """设置各种字体"""
         # 标题字体的大小
         font_type = self.settings.get_option('font', 'font_type')
-        font_label = (
+        font_combobox = (
             font_type,
-            self.settings.get_option('font', 'font_size_1', 'int'))
+            self.settings.get_option('font', 'font_size_combobox', 'int'))
         # 文字字体大小
         font_normal = (
             font_type,
