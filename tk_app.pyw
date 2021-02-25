@@ -29,7 +29,7 @@ from supports.configure_tools import Configure
 from supports.functions import get_files_names
 from supports.info_pip import InfoPip
 from supports.mouse_action import MouseAction
-from supports.others import Others
+from supports.update_configure_tools import UpdateConfigureTools
 from supports.set_windows import SetWin
 from supports.thread_management import ThreadManagement
 
@@ -162,7 +162,8 @@ class App:
         self.cb_var_whether_top.set(True)
         self.cb1.pack(side=LEFT, fill=Y, ipadx=label_ipadx)
 
-        self.b6 = Button(self.f12, text='用户手册', command=lambda: self.ot.show_my_words_at_first_open(True), font=font_normal, bg='lightblue')
+        self.b6 = Button(self.f12, text='用户手册', command=lambda: self.uct.show_my_words_at_first_open(True),
+                         font=font_normal, bg='lightblue')
         self.b6.pack(side=LEFT, fill=BOTH, ipadx=button_ipadx, expand=YES)
 
         self.b4 = Button(self.f12, text='载入默认配置(l)', command=self.load_default_config, font=font_normal)
@@ -276,7 +277,7 @@ class App:
         # 线程管理
         self.tm = ThreadManagement()
         # 其他效果管理
-        self.ot = Others(is_test=self.is_test)
+        self.uct = UpdateConfigureTools(is_test=self.is_test)
 
     def hotKey_bind(self):
         """全局快捷键设置"""
@@ -374,7 +375,7 @@ class App:
         # 检查鼠标颜色
         self.tm.build_thread(self.check_mouse_move, '_鼠标颜色检查')
         # 检测是否打开notification
-        self.tm.build_thread(self.ot.show_my_words_at_first_open, '_打开notification', is_while=False)
+        self.tm.build_thread(self.uct.show_my_words_at_first_open, '_打开notification', is_while=False)
 
         """其他功能实现"""
         # 全局快捷键设置
@@ -422,6 +423,23 @@ class App:
             # print(repr(e))
             self.info_stack.info('保存文件出错！', 2)
 
+    def set_last_open_funcname(self):
+        """
+        导入后，设置当前的功能名
+            1. 注意：只有show_info为True才设置，因为融合，不设置
+        """
+        last_func_name = self.uct.get_last_open_funcname()
+        current_func_names = self.cmb1['values']
+
+        # 如果功能名不在当前功能名list中，则设置为第一个
+        if last_func_name not in current_func_names:
+            self.cmb1.current(0)
+        else:
+            self.cmb1_value.set(last_func_name)
+
+        # 设置当前的func为所选功能
+        self.current_func = self.ff.get_function_from_function_name(self.cmb1_value.get())
+
     def load_default_config(self, path='templates/默认保存文件.json', show_info=True):
         """载入数据"""
         try:
@@ -435,6 +453,10 @@ class App:
             self.cmb2_value.set('')
 
             self.cmb1['values'] = self.ff.get_function_names()
+
+            # 载入后设置funcname
+            self.set_last_open_funcname()
+
             return self.functions
 
         except Exception as e:
@@ -604,7 +626,6 @@ class App:
             self.info_stack.info('没有选择功能', 2)
             return False
         # 检查功能中是否存在至少一个点是有效的
-        print(self.current_func)
         if not self.current_func.check_effective():
             self.info_stack.info('目标功能中所有点都无效', 2)
             return False
@@ -626,6 +647,8 @@ class App:
             return
 
         self.info_stack.info(self.current_func.func_name + '启动...', 3)
+        # 记录当前function_name作为最后运行功能
+        self.uct.update_last_open_funcname(self.current_func)
 
         self.rf = RunFunction(self.current_func, self.ff, self.tm, self.info_stack)
         self.rf.run_function()

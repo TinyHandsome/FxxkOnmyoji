@@ -13,11 +13,12 @@
 
 from dataclasses import dataclass
 from supports.configure_tools import Configure
+from structure.function import Function
 import os
 
 
 @dataclass
-class Others:
+class UpdateConfigureTools:
     is_test: False
 
     def __post_init__(self):
@@ -42,3 +43,15 @@ class Others:
             open_count += 1
             # 更新软件打开次数
             self.cf.update_value('updateConfigs', 'open_count', str(open_count), True)
+
+    def update_last_open_funcname(self, current_func: Function):
+        """
+        运行后记录该configure对应的功能
+            1. 默认为-1
+        """
+        self.cf.update_value('lastOpen', 'last_open_funcname', current_func.func_name, True)
+
+    def get_last_open_funcname(self):
+        """获取上次最后打开的功能名"""
+        return self.cf.get_option('lastOpen', 'last_open_funcname')
+
