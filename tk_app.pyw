@@ -438,7 +438,7 @@ class App:
             self.cmb1_value.set(last_func_name)
 
         # 设置当前的func为所选功能
-        self.current_func = self.ff.get_function_from_function_name(self.cmb1_value.get())
+        self.get_cmb2_list_from_cmb1()
 
     def load_default_config(self, path='templates/默认保存文件.json', show_info=True):
         """载入数据"""
