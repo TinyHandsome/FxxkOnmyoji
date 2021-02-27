@@ -14,6 +14,7 @@
         3. [threading之线程的开始,暂停和退出](https://www.cnblogs.com/cnhyk/p/13697121.html)
 """
 import datetime
+from functools import partial
 import os
 from dataclasses import dataclass
 from time import sleep
@@ -220,7 +221,7 @@ class App:
         self.b_single_combine.grid(row=2, column=1, sticky='nesw')
         self.b_multiple_combine = Button(self.f21, text='多项融合(N)', command=self.combine_multiple_load, font=font_normal)
         self.b_multiple_combine.grid(row=2, column=2, sticky='nesw')
-        self.b_auto_combine = Button(self.f21, text='自动融合(a)', command=self.combine_auto_load, font=font_normal)
+        self.b_auto_combine = Button(self.f21, text='自动融合(A)', command=self.combine_auto_load, font=font_normal)
         self.b_auto_combine.grid(row=2, column=3, sticky='nesw')
 
         self.f21.pack(fill=BOTH)
@@ -281,18 +282,21 @@ class App:
 
     def hotKey_bind(self):
         """全局快捷键设置"""
-        self.hk.register(('alt', 'w'), callback=lambda e: self.write_info())
-        self.hk.register(('alt', 'c'), callback=lambda e: self.destroy())
-        self.hk.register(('alt', 'r'), callback=lambda e: self.func_start())
-        self.hk.register(('alt', 'p'), callback=lambda e: self.pause())
-        self.hk.register(('alt', 's'), callback=lambda e: self.save_config_as_default())
-        self.hk.register(('alt', 'shift', 's'), callback=lambda e: self.save_config_to_file())
-        self.hk.register(('alt', 'l'), callback=lambda e: self.load_default_config())
-        self.hk.register(('alt', 'shift', 'l'), callback=lambda e: self.load_user_config())
-        self.hk.register(('alt', 'n'), callback=lambda e: self.combine_single_load())
-        self.hk.register(('alt', 'shift', 'n'), callback=lambda e: self.combine_multiple_load())
-        self.hk.register(('alt', 'a'), callback=lambda e: self.combine_auto_load())
-        self.hk.register(('alt', 'd'), callback=lambda e: self.set_two_win_left())
+        # 设置偏函数，这里实现已有映射的覆盖
+        partial_register = partial(self.hk.register, overwrite=True)
+
+        partial_register(('alt', 'w'), callback=lambda e: self.write_info())
+        partial_register(('alt', 'c'), callback=lambda e: self.destroy())
+        partial_register(('alt', 'r'), callback=lambda e: self.func_start())
+        partial_register(('alt', 'p'), callback=lambda e: self.pause())
+        partial_register(('alt', 's'), callback=lambda e: self.save_config_as_default())
+        partial_register(('alt', 'shift', 's'), callback=lambda e: self.save_config_to_file())
+        partial_register(('alt', 'l'), callback=lambda e: self.load_default_config())
+        partial_register(('alt', 'shift', 'l'), callback=lambda e: self.load_user_config())
+        partial_register(('alt', 'n'), callback=lambda e: self.combine_single_load())
+        partial_register(('alt', 'shift', 'n'), callback=lambda e: self.combine_multiple_load())
+        partial_register(('alt', 'shift', 'a'), callback=lambda e: self.combine_auto_load())
+        partial_register(('alt', 'd'), callback=lambda e: self.set_two_win_left())
 
     def clear_logs(self):
         """清除7天前的日志数据"""
