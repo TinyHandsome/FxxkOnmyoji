@@ -61,8 +61,13 @@ class App:
         self.current_time = datetime.datetime.now()
         self.current_date = datetime.datetime.strftime(self.current_time, '%Y-%m-%d')
 
+        self.log_path = './logs/'
+        # 需要检查日志文件夹是否存在，不存在，则自动生成
+        if not os.path.exists(self.log_path):
+            os.makedirs(self.log_path)
+
         log_file_name = self.current_date + '.txt'
-        self.log_file = open('./logs/' + log_file_name, 'a+', encoding='utf-8')
+        self.log_file = open(self.log_path + log_file_name, 'a+', encoding='utf-8')
 
     def init_tk(self):
         """初始化tk"""
@@ -301,7 +306,8 @@ class App:
     def clear_logs(self):
         """清除7天前的日志数据"""
         keep_days = self.settings.get_option('logs', 'keep_days', 'int')
-        path = './logs'
+        path = self.log_path
+
         delta_time = datetime.timedelta(days=keep_days)
         remove_date = self.current_time - delta_time
 
