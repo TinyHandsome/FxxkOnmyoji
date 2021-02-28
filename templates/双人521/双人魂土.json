@@ -349,13 +349,13 @@
                         "point_name": "挑战@lc_1",
                         "point_type": "lc",
                         "point_location": [
-                            795,
-                            979
+                            802,
+                            974
                         ],
                         "point_color": [
-                            46,
-                            34,
-                            23
+                            192,
+                            161,
+                            94
                         ],
                         "click_times": 1
                     }
@@ -387,13 +387,13 @@
                         "point_name": "队长结算状态1@lc_3",
                         "point_type": "lc",
                         "point_location": [
-                            320,
-                            619
+                            308,
+                            615
                         ],
                         "point_color": [
-                            131,
-                            28,
-                            19
+                            122,
+                            24,
+                            16
                         ],
                         "click_times": 3
                     }
@@ -425,13 +425,13 @@
                         "point_name": "队长结算状态2@lc_3",
                         "point_type": "lc",
                         "point_location": [
-                            434,
-                            914
+                            449,
+                            904
                         ],
                         "point_color": [
-                            164,
-                            92,
-                            42
+                            187,
+                            43,
+                            26
                         ],
                         "click_times": 3
                     }

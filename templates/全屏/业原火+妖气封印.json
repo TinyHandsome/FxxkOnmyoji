@@ -30,13 +30,13 @@
                         "point_name": "结算1@lc_3",
                         "point_type": "lc",
                         "point_location": [
-                            834,
-                            862
+                            870,
+                            792
                         ],
                         "point_color": [
-                            42,
-                            38,
-                            35
+                            22,
+                            18,
+                            19
                         ],
                         "click_times": 3
                     }
