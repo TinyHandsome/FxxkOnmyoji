@@ -25,7 +25,7 @@ class InfoPip:
 
     def __post_init__(self):
         # 左边是入口，右边是出口
-        self.queue = [''] * 5
+        self.queue = [''] * 3
         self.first_color = ''
 
     def get_two_var(self):

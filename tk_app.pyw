@@ -108,6 +108,29 @@ class App:
         self.root = Tk()
         self.root.title('狗贼v0.31  【作者：李英俊小朋友】  仅供学习交流使用，禁止用于任何商业用途！')
 
+        """菜单栏"""
+        self.menubar = Menu(self.root)
+        self.file_menu = Menu(self.menubar, tearoff=0)
+        self.setting_menu = Menu(self.menubar, tearoff=0)
+
+        # 菜单
+        self.menubar.add_cascade(label='菜单', menu=self.file_menu)
+        self.file_menu.add_command(label='倒计时', command=...)
+        self.file_menu.add_command(label='占位符', command=...)
+        self.file_menu.add_separator()
+        self.file_menu.add_command(label='退出(c)', command=self.destroy)
+
+        # 配置
+        self.menubar.add_cascade(label='配置', menu=self.setting_menu)
+        self.setting_menu.add_command(label='载入默认配置(l)', command=self.load_default_config)
+        self.setting_menu.add_command(label='选择用户配置(L)', command=self.load_user_config)
+        self.setting_menu.add_separator()
+        self.setting_menu.add_command(label='单项融合(n)', command=self.combine_single_load)
+        self.setting_menu.add_command(label='多项融合(N)', command=self.combine_multiple_load)
+        self.setting_menu.add_command(label='自动融合(A)', command=self.combine_auto_load)
+
+        self.root.config(menu=self.menubar)
+
         """frame1_外框，功能、运行、暂停、退出、调整界面"""
         self.frame_1 = LabelFrame(self.root, text='| 海的那边 |',
                                   labelanchor=N, font=font_labelframe,
@@ -172,13 +195,13 @@ class App:
                          font=font_normal, bg='lightblue')
         self.b6.pack(side=LEFT, fill=BOTH, ipadx=button_ipadx, expand=YES)
 
-        self.b4 = Button(self.f12, text='载入默认配置(l)', command=self.load_default_config, font=font_normal)
-        self.b4.pack(side=LEFT, fill=Y, ipadx=button_ipadx)
-        self.b5 = Button(self.f12, text='选择用户配置(L)', command=self.load_user_config, font=font_normal)
-        self.b5.pack(side=LEFT, fill=Y, ipadx=button_ipadx)
+        # self.b4 = Button(self.f12, text='载入默认配置(l)', command=self.load_default_config, font=font_normal)
+        # self.b4.pack(side=LEFT, fill=Y, ipadx=button_ipadx)
+        # self.b5 = Button(self.f12, text='选择用户配置(L)', command=self.load_user_config, font=font_normal)
+        # self.b5.pack(side=LEFT, fill=Y, ipadx=button_ipadx)
 
-        self.b3 = Button(self.f12, text='退出(c)', command=self.destroy, font=font_normal, width=6)
-        self.b3.pack(side=LEFT, fill=Y, ipadx=button_ipadx)
+        # self.b3 = Button(self.f12, text='退出(c)', command=self.destroy, font=font_normal, width=6)
+        # self.b3.pack(side=LEFT, fill=Y, ipadx=button_ipadx)
 
         self.f13 = Frame(self.frame_1)
 
@@ -220,14 +243,14 @@ class App:
                                      command=self.save_config_to_file)
         self.b_save_to_file.grid(row=1, column=3, sticky='nesw')
 
-        self.l_combine = Label(self.f21, text='合并配置', font=font_normal)
-        self.l_combine.grid(row=2, column=0)
-        self.b_single_combine = Button(self.f21, text='单项融合(n)', command=self.combine_single_load, font=font_normal)
-        self.b_single_combine.grid(row=2, column=1, sticky='nesw')
-        self.b_multiple_combine = Button(self.f21, text='多项融合(N)', command=self.combine_multiple_load, font=font_normal)
-        self.b_multiple_combine.grid(row=2, column=2, sticky='nesw')
-        self.b_auto_combine = Button(self.f21, text='自动融合(A)', command=self.combine_auto_load, font=font_normal)
-        self.b_auto_combine.grid(row=2, column=3, sticky='nesw')
+        # self.l_combine = Label(self.f21, text='合并配置', font=font_normal)
+        # self.l_combine.grid(row=2, column=0)
+        # self.b_single_combine = Button(self.f21, text='单项融合(n)', command=self.combine_single_load, font=font_normal)
+        # self.b_single_combine.grid(row=2, column=1, sticky='nesw')
+        # self.b_multiple_combine = Button(self.f21, text='多项融合(N)', command=self.combine_multiple_load, font=font_normal)
+        # self.b_multiple_combine.grid(row=2, column=2, sticky='nesw')
+        # self.b_auto_combine = Button(self.f21, text='自动融合(A)', command=self.combine_auto_load, font=font_normal)
+        # self.b_auto_combine.grid(row=2, column=3, sticky='nesw')
 
         self.f21.pack(fill=BOTH)
 
