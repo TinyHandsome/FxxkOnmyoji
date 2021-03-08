@@ -32,18 +32,17 @@ class FunctionFactory:
     def init_functions_from_config(self):
         """从functions.ini文件中读取数据，获取初始化的[Function]"""
         cf = Configure('configures/functions.ini')
-        func_names = cf.get_values('func_names')
 
         functions = []
-        pattern = re.compile(r'【(_?)(\d+)】(.*)')
-        for fn in func_names:
+        pattern = re.compile(r'(_?)(\d+)@(.*)')
+        for fn in cf.sections:
             shown, code, name = re.search(pattern, fn).groups()
             shown = 0 if shown == '_' else 1
 
             step_infos = []
             connections = []
 
-            for key, value in cf.get_items(code):
+            for key, value in cf.get_items(fn):
                 if key != 'connections':
                     step_infos.append(value)
                 else:

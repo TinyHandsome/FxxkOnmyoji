@@ -38,16 +38,34 @@ class Step:
         count = 0
         for point_info in self.step_points.split('-'):
             count += 1
-            point_name = self.step_name + '@' + point_info
 
-            # 对每个点，进行点的类型和点击次数的获取，如果没有_，则点击次数为0，类型肯定为l
+            # 对每个点，进行点的类型和点击次数的获取，如果没有_，则点击次数为0，类型肯定为l或者n
             if '_' in point_info:
-                point_type, click_times = point_info.split('_')
+                info_list = point_info.split('_')
+                point_type, click_times = info_list[0], info_list[1:]
             else:
                 point_type = point_info
-                click_times = 0
-            point = Point(point_name, point_type, ('', ''), ('', '', ''), int(click_times))
-            self.points.append(point)
+                click_times = [0]
+
+            # 【v 0.32】名字前面加入编号
+            def set_point_name():
+                return self.step_name + '[' + str(count) + ']' + '@' + pt
+
+            # 如果类型中没有m的话，即为c_1类型
+            if point_type != 'm':
+                pt = point_type
+                point = Point('temp', pt, ('', ''), ('', '', ''), int(click_times[0]))
+                point.point_name = set_point_name()
+                self.points.append(point)
+            else:
+                # 否则需要建立多个点
+                m_index = 0
+                for c_times in click_times:
+                    m_index += 1
+                    pt = point_type + str(m_index)
+                    point = Point('temp', pt, ('', ''), ('', '', ''), int(c_times))
+                    point.point_name = set_point_name()
+                    self.points.append(point)
 
     def get_dict(self):
         points_dict = [p.get_dict() for p in self.points]
