@@ -110,6 +110,9 @@ class App:
         font_labelCurrentLog = (
             font_type,
             self.settings.get_option('font', 'font_size_current_log', 'int'))
+        font_me = (
+            font_type,
+            self.settings.get_option('font', 'font_size_bottom', 'int'))
 
         """底层root初始化"""
         self.root = Tk()
@@ -328,13 +331,13 @@ class App:
 
         """版权信息"""
         self.l_bottom1 = Label(text='仅供学习交流使用，禁止用于任何商业用途！', justify='left',
-                               font=font_labelLog, fg='grey')
+                               font=font_me, fg='grey')
         self.l_bottom1.pack(side=LEFT)
         self.l_bottom1.bind("<Button-1>", lambda e: (
             webbrowser.open("https://github.com/TinyHandsome"),
             self.root.title('点了我的github你就是我的人了吼吼~')
         ))
-        self.l_bottom2 = Label(text='@李英俊小朋友', justify='right', font=font_labelLog, fg='grey')
+        self.l_bottom2 = Label(text='@李英俊小朋友', justify='right', font=font_me, fg='grey')
         self.l_bottom2.pack(side=RIGHT)
         self.l_bottom2.bind("<Button-1>", lambda e: (
             webbrowser.open("https://blog.csdn.net/qq_21579045"),
