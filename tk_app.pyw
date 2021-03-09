@@ -12,8 +12,10 @@
         1. [pip迁移](https://blog.csdn.net/weixin_38781498/article/details/94037008)：pip install -r requirements.txt
         2. [Python3入门之线程threading常用方法](https://www.cnblogs.com/chengd/articles/7770898.html)
         3. [threading之线程的开始,暂停和退出](https://www.cnblogs.com/cnhyk/p/13697121.html)
+        4. [tk.Menu](https://blog.csdn.net/weixin_42272768/article/details/100809120)
 """
 import datetime
+import webbrowser
 from functools import partial
 import os
 from dataclasses import dataclass
@@ -74,7 +76,9 @@ class App:
 
         """读取各种配置"""
         frame_label_pad = self.settings.get_option('gui', 'frame_label_pad', 'int')
+        label_width = self.settings.get_option('gui', 'label_width', 'int')
         label_ipadx = self.settings.get_option('gui', 'label_ipadx', 'int')
+        button_width = self.settings.get_option('gui', 'button_width', 'int')
         button_ipadx = self.settings.get_option('gui', 'button_ipadx', 'int')
         cmb1_width = self.settings.get_option('gui', 'cmb1_width', 'int')
         cmb2_width = self.settings.get_option('gui', 'cmb2_width', 'int')
@@ -83,7 +87,7 @@ class App:
         windows_width_input = self.settings.get_option('gui', 'windows_width_input', 'int')
         block_color = self.settings.get_option('gui', 'block_color')
 
-        default_windows_width = self.settings.get_option('windows', 'win1_loc').split(',')[-1]
+        default_windows_width = self.settings.get_option('windows', 'default_width')
 
         """设置各种字体"""
         # 标题字体的大小
@@ -103,10 +107,14 @@ class App:
         font_labelLog = (
             font_type,
             self.settings.get_option('font', 'font_size_log', 'int'))
+        font_labelCurrentLog = (
+            font_type,
+            self.settings.get_option('font', 'font_size_current_log', 'int'))
 
         """底层root初始化"""
         self.root = Tk()
-        self.root.title('狗贼v0.31  【作者：李英俊小朋友】  仅供学习交流使用，禁止用于任何商业用途！')
+        self.root.title('平平无奇的阴阳师养成工具 v0.32')
+        self.root.resizable(1, 0)
 
         """菜单栏"""
         self.menubar = Menu(self.root)
@@ -115,19 +123,36 @@ class App:
 
         # 菜单
         self.menubar.add_cascade(label='菜单', menu=self.file_menu)
+        self.cb_var_whether_top = BooleanVar()
+        self.file_menu.add_checkbutton(label='置顶', variable=self.cb_var_whether_top,
+                                       onvalue=True, offvalue=False,
+                                       command=self.set_top_window)
+        self.file_menu.add_command(label='调整界面(d)', command=self.set_two_win_left)
+        self.file_menu.add_separator()
+        # 初始化是否置顶
+        self.cb_var_whether_top.set(True)
+
         self.file_menu.add_command(label='倒计时', command=...)
         self.file_menu.add_command(label='占位符', command=...)
         self.file_menu.add_separator()
         self.file_menu.add_command(label='退出(c)', command=self.destroy)
 
         # 配置
-        self.menubar.add_cascade(label='配置', menu=self.setting_menu)
-        self.setting_menu.add_command(label='载入默认配置(l)', command=self.load_default_config)
-        self.setting_menu.add_command(label='选择用户配置(L)', command=self.load_user_config)
+        self.menubar.add_cascade(label='设置', menu=self.setting_menu)
+        setting_menu_partial = partial(self.setting_menu.add_command, hidemargin=False)
+
+        setting_menu_partial(label='载入默认配置(l)', command=self.load_default_config)
+        setting_menu_partial(label='选择用户配置(L)', command=self.load_user_config)
         self.setting_menu.add_separator()
-        self.setting_menu.add_command(label='单项融合(n)', command=self.combine_single_load)
-        self.setting_menu.add_command(label='多项融合(N)', command=self.combine_multiple_load)
-        self.setting_menu.add_command(label='自动融合(A)', command=self.combine_auto_load)
+        setting_menu_partial(label='存为默认配置(s)', command=self.save_config_as_default)
+        setting_menu_partial(label='存为其他文件(S)', command=self.save_config_to_file)
+        self.setting_menu.add_separator()
+        setting_menu_partial(label='单项融合(n)', command=self.combine_single_load)
+        setting_menu_partial(label='多项融合(N)', command=self.combine_multiple_load)
+        setting_menu_partial(label='自动融合(A)', command=self.combine_auto_load)
+
+        # 用户手册
+        self.menubar.add_command(label='用户手册', command=lambda: self.uct.show_my_words_at_first_open(True))
 
         self.root.config(menu=self.menubar)
 
@@ -141,9 +166,8 @@ class App:
         self.cmb1_value = StringVar()
         self.cmb2_value = StringVar()
 
-        self.l1 = Label(self.f11, text='功能', font=font_normal, justify='left')
-        self.l1.pack(side=LEFT, ipadx=label_ipadx, fill=Y)
-
+        self.l1 = Label(self.f11, text='功能', font=font_normal, justify='left', width=label_width)
+        self.l1.pack(side=LEFT, fill=Y)
         self.cmb1 = ttk.Combobox(self.f11, textvariable=self.cmb1_value,
                                  width=cmb1_width, font=font_normal)
         # 初始化功能名字，从ini文件中获取
@@ -152,64 +176,77 @@ class App:
         # 选择第一个为默认
         # self.cmb1.current(0)
         self.cmb1.bind('<<ComboboxSelected>>', self.get_cmb2_list_from_cmb1)
-        self.cmb1.pack(side=LEFT, fill=Y)
-
-        self.cmb2 = ttk.Combobox(self.f11, textvariable=self.cmb2_value,
-                                 width=cmb2_width, font=font_normal)
-        self.cmb2.bind('<<ComboboxSelected>>', self.get_key)
-        self.cmb2.pack(side=LEFT, fill=Y)
-
-        self.b4 = Button(self.f11, text='暂停/继续(p)', command=self.pause, font=font_normal)
-        self.b4.pack(side=LEFT, fill=BOTH, ipadx=button_ipadx, expand=True)
-
-        self.b2 = Button(self.f11, text='运行(r)', command=self.func_start, font=font_normal, width=6)
+        self.cmb1.pack(side=LEFT, fill=BOTH, ipadx=button_ipadx, expand=True)
+        self.b2 = Button(self.f11, text='运行(r)', command=self.func_start, font=font_normal, width=button_width)
         self.b2.pack(side=LEFT, fill=Y, ipadx=button_ipadx)
 
         self.f12 = Frame(self.frame_1)
+        self.l_point = Label(self.f12, text='点位', font=font_normal, justify='left', width=label_width)
+        self.l_point.pack(side=LEFT, fill=Y)
+        self.cmb2 = ttk.Combobox(self.f12, textvariable=self.cmb2_value,
+                                 width=cmb2_width, font=font_normal)
+        self.cmb2.bind('<<ComboboxSelected>>', self.get_key)
+        self.cmb2.pack(side=LEFT, fill=BOTH, ipadx=button_ipadx, expand=True)
+        self.b4 = Button(self.f12, text='暂停/继续(p)', command=self.pause, font=font_normal, width=button_width)
+        self.b4.pack(side=LEFT, fill=Y, ipadx=button_ipadx)
 
+        """调整界面
         self.l_adjust = Label(self.f12, text='定宽', font=font_normal)
         self.l_adjust.pack(side=LEFT, fill=Y, ipadx=label_ipadx)
-
         # 宽度取值
         self.reset_windows_width = StringVar()
         self.e_width = Entry(self.f12, width=windows_width_input,
                              textvariable=self.reset_windows_width, font=font_normal, justify='center')
         self.e_width.insert(END, default_windows_width)
         self.e_width.pack(side=LEFT, fill=Y)
-
         self.b_adjust_win = Button(self.f12, text='调整界面(d)', font=font_normal,
                                    command=self.set_two_win_left)
         self.b_adjust_win.pack(side=LEFT, fill=Y, ipadx=button_ipadx)
+        """
 
-        self.cb_var_whether_top = BooleanVar()
-        self.cb1 = Checkbutton(self.f12, text='置顶', variable=self.cb_var_whether_top,
-                               font=font_normal, onvalue=True, offvalue=False,
-                               command=self.set_top_window,
-                               justify='left',
-                               )
-        # 初始化是否置顶
-        self.cb_var_whether_top.set(True)
-        self.cb1.pack(side=LEFT, fill=Y, ipadx=label_ipadx)
+        self.f13 = Frame(self.frame_1)
+        self.xy_value = StringVar()
+        self.color_value = StringVar()
+        self.l_c = Label(self.f13, text='坐标', font=font_normal, justify='left', width=label_width)
+        self.l_c.pack(side=LEFT, fill=Y)
+        self.e_xy = Entry(self.f13, width=e_xy_length,
+                          textvariable=self.xy_value, font=font_normal, justify='center')
+        self.e_xy.insert(END, self.xy)
+        self.e_xy.pack(side=LEFT, fill=Y)
+        self.e_color = Entry(self.f13, width=e_color_length,
+                             textvariable=self.color_value, font=font_normal, justify='center')
+        self.e_color.insert(END, self.color)
+        self.e_color.pack(side=LEFT, fill=BOTH, expand=True)
+        self.b1 = Button(self.f13, text='写入(w)', command=self.write_info, font=font_normal, width=button_width)
+        self.b1.pack(side=LEFT, fill=Y)
 
-        self.b6 = Button(self.f12, text='用户手册', command=lambda: self.uct.show_my_words_at_first_open(True),
-                         font=font_normal, bg='lightblue')
-        self.b6.pack(side=LEFT, fill=BOTH, ipadx=button_ipadx, expand=YES)
-
+        """置顶、用户手册、载入配置、退出
+        # self.cb_var_whether_top = BooleanVar()
+        # self.cb1 = Checkbutton(self.f12, text='置顶', variable=self.cb_var_whether_top,
+        #                        font=font_normal, onvalue=True, offvalue=False,
+        #                        command=self.set_top_window,
+        #                        justify='left',
+        #                        )
+        # # 初始化是否置顶
+        # self.cb_var_whether_top.set(True)
+        # self.cb1.pack(side=LEFT, fill=Y, ipadx=label_ipadx)
+        # self.b6 = Button(self.f12, text='用户手册', command=lambda: self.uct.show_my_words_at_first_open(True),
+        #                  font=font_normal, bg='lightblue')
+        # self.b6.pack(side=LEFT, fill=BOTH, ipadx=button_ipadx, expand=YES)
         # self.b4 = Button(self.f12, text='载入默认配置(l)', command=self.load_default_config, font=font_normal)
         # self.b4.pack(side=LEFT, fill=Y, ipadx=button_ipadx)
         # self.b5 = Button(self.f12, text='选择用户配置(L)', command=self.load_user_config, font=font_normal)
         # self.b5.pack(side=LEFT, fill=Y, ipadx=button_ipadx)
-
         # self.b3 = Button(self.f12, text='退出(c)', command=self.destroy, font=font_normal, width=6)
         # self.b3.pack(side=LEFT, fill=Y, ipadx=button_ipadx)
-
-        self.f13 = Frame(self.frame_1)
+        """
 
         self.f11.pack(fill=BOTH)
         self.f12.pack(fill=BOTH)
         self.f13.pack(fill=BOTH)
 
-        """frame2外框_各种坐标处理"""
+        """
+        frame2外框_各种坐标处理
         self.frame_2 = LabelFrame(self.root, text='| 坐标之力 |', labelanchor=N, font=font_labelframe, padx=frame_label_pad,
                                   pady=frame_label_pad, fg=block_color)
         self.f21 = Frame(self.frame_2)
@@ -243,16 +280,17 @@ class App:
                                      command=self.save_config_to_file)
         self.b_save_to_file.grid(row=1, column=3, sticky='nesw')
 
-        # self.l_combine = Label(self.f21, text='合并配置', font=font_normal)
-        # self.l_combine.grid(row=2, column=0)
-        # self.b_single_combine = Button(self.f21, text='单项融合(n)', command=self.combine_single_load, font=font_normal)
-        # self.b_single_combine.grid(row=2, column=1, sticky='nesw')
-        # self.b_multiple_combine = Button(self.f21, text='多项融合(N)', command=self.combine_multiple_load, font=font_normal)
-        # self.b_multiple_combine.grid(row=2, column=2, sticky='nesw')
-        # self.b_auto_combine = Button(self.f21, text='自动融合(A)', command=self.combine_auto_load, font=font_normal)
-        # self.b_auto_combine.grid(row=2, column=3, sticky='nesw')
+        self.l_combine = Label(self.f21, text='合并配置', font=font_normal)
+        self.l_combine.grid(row=2, column=0)
+        self.b_single_combine = Button(self.f21, text='单项融合(n)', command=self.combine_single_load, font=font_normal)
+        self.b_single_combine.grid(row=2, column=1, sticky='nesw')
+        self.b_multiple_combine = Button(self.f21, text='多项融合(N)', command=self.combine_multiple_load, font=font_normal)
+        self.b_multiple_combine.grid(row=2, column=2, sticky='nesw')
+        self.b_auto_combine = Button(self.f21, text='自动融合(A)', command=self.combine_auto_load, font=font_normal)
+        self.b_auto_combine.grid(row=2, column=3, sticky='nesw')
 
         self.f21.pack(fill=BOTH)
+        """
 
         """frame3 待开发"""
         self.frame_3 = LabelFrame(self.root, text='| 献出心脏 |', labelanchor=N,
@@ -263,8 +301,8 @@ class App:
         self.f31 = Frame(self.frame_3)
 
         self.current_info = StringVar()
-        self.l_first = Label(self.f31, textvariable=self.current_info, justify=LEFT, font=font_labelLog)
-        self.l_first.pack(anchor=NW, side=TOP)
+        self.l_first = Label(self.f31, textvariable=self.current_info, justify=LEFT, font=font_labelCurrentLog)
+        self.l_first.pack(anchor=W, side=LEFT)
 
         self.history_info = StringVar()
         self.l_history = Label(self.f31,
@@ -274,19 +312,34 @@ class App:
                                font=font_labelLog,
                                fg='grey'
                                )
-        self.l_history.pack(anchor=NW, side=TOP)
+        self.l_history.pack(anchor=NW, side=LEFT, fill=BOTH, expand=True)
 
         # self.l_me = Label(self.f31, text='作者：李英俊小朋友', justify=RIGHT)
         # self.l_me.pack(anchor=SE, side=BOTTOM)
 
-        self.f31.pack(side=LEFT, fill=BOTH, expand=True)
+        self.f31.pack(side=TOP, fill=BOTH, expand=True)
 
         """布局"""
         # padx、pady是框架外部距离框架的距离
-        self.frame_1.pack(side=TOP, fill=None, anchor=NW, padx=frame_label_pad, pady=frame_label_pad)
-        self.frame_2.pack(side=LEFT, fill=None, anchor=NW, padx=frame_label_pad, pady=frame_label_pad)
-        self.frame_3.pack(side=LEFT, fill=BOTH, anchor=NW, padx=frame_label_pad, pady=frame_label_pad,
+        self.frame_1.pack(side=TOP, fill=X, anchor=N, padx=frame_label_pad, pady=frame_label_pad, expand=True)
+        # self.frame_2.pack(side=LEFT, fill=None, anchor=NW, padx=frame_label_pad, pady=frame_label_pad)
+        self.frame_3.pack(side=TOP, fill=BOTH, anchor=N, padx=frame_label_pad, pady=frame_label_pad,
                           expand=True)
+
+        """版权信息"""
+        self.l_bottom1 = Label(text='仅供学习交流使用，禁止用于任何商业用途！', justify='left',
+                               font=font_labelLog, fg='grey')
+        self.l_bottom1.pack(side=LEFT)
+        self.l_bottom1.bind("<Button-1>", lambda e: (
+            webbrowser.open("https://github.com/TinyHandsome"),
+            self.root.title('点了我的github你就是我的人了吼吼~')
+        ))
+        self.l_bottom2 = Label(text='@李英俊小朋友', justify='right', font=font_labelLog, fg='grey')
+        self.l_bottom2.pack(side=RIGHT)
+        self.l_bottom2.bind("<Button-1>", lambda e: (
+            webbrowser.open("https://blog.csdn.net/qq_21579045"),
+            self.root.title('点了我的CSDN你就是我的人了嘻嘻~')
+        ))
 
         # 信息输出栈
         self.info_stack = InfoPip(self.current_info, self.history_info, self.l_first, self.log_file)
@@ -623,7 +676,7 @@ class App:
         def extend_color(color: tuple):
             """将rgb颜色转换为rgb_16进制"""
             ten_six = "#%02x%02x%02x" % (color[0], color[1], color[2])
-            return str(color) + '_' + ten_six, ten_six
+            return str(color) + ' | ' + ten_six, ten_six
 
         # 将暂停检查逻辑从坐标改为颜色
         temp_color = self.color
@@ -645,8 +698,7 @@ class App:
         if tensix != '#-1-1-1':
             # 不改变entry的颜色
             # self.e_color.configure(fg=tensix)
-
-            self.l_c.configure(fg=tensix)
+            self.b1.config(fg=tensix)
         else:
             # self.e_color.configure(fg='red')
             ...
