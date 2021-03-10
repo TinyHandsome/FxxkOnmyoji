@@ -431,9 +431,11 @@ class App:
         for h in range(len(handles)):
             count += 1
             # 提取第h个坐标，h只有1的话，就只提取一个坐标
-            loc = [int(temp) for temp in self.win_settings[h][1].split(',')]
+            # 这里h+1的原因是，第一个参数是默认宽度，不是win_loc
+            loc = [int(temp) for temp in self.win_settings[h + 1][1].split(',')]
             # 按照输入的最新宽度设置界面宽度
-            repair_width = int(self.reset_windows_width.get())
+            # repair_width = int(self.reset_windows_width.get())
+            repair_width = self.settings.get_option('windows', 'default_width', 'int')
             if repair_width != '':
                 loc[-1] = repair_width
                 # 如果输入了数值，则按数值来重设宽度
@@ -456,6 +458,7 @@ class App:
                         loc[0] = win3_locked_1
                 else:
                     self.info_stack.info('你有病不是？你打开这么多阴阳师干嘛啊', 2)
+
             try:
                 self.sw.move_rect(handles[h], loc)
             except Exception as e:
