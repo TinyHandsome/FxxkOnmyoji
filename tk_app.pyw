@@ -29,7 +29,7 @@ from system_hotkey import SystemHotkey
 from structure.function_factory import FunctionFactory
 from structure.run_function import RunFunction
 from supports.configure_tools import Configure
-from supports.functions import get_files_names
+from supports.functions import get_files_names, check_filefolder_exist
 from supports.info_pip import InfoPip
 from supports.mouse_action import MouseAction
 from supports.update_configure_tools import UpdateConfigureTools
@@ -65,9 +65,9 @@ class App:
 
         self.log_path = './logs/'
         # 需要检查日志文件夹是否存在，不存在，则自动生成
-        if not os.path.exists(self.log_path):
-            os.makedirs(self.log_path)
+        check_filefolder_exist(self.log_path)
 
+        # 创建日志文件
         log_file_name = self.current_date + '.txt'
         self.log_file = open(self.log_path + log_file_name, 'a+', encoding='utf-8')
 
@@ -118,6 +118,7 @@ class App:
         self.root = Tk()
         self.root.title('平平无奇的阴阳师养成工具 v0.32')
         self.root.resizable(1, 0)
+        self.root.geometry("+1200+200")
 
         """菜单栏"""
         self.menubar = Menu(self.root)

@@ -31,3 +31,9 @@ def get_files_names(files):
     else:
         print(type(files))
         print('咋肥四鸭？')
+
+
+def check_filefolder_exist(filefolder):
+    """检查文件夹是否存在，否则创建该目录"""
+    if not os.path.exists(filefolder):
+        os.makedirs(filefolder)

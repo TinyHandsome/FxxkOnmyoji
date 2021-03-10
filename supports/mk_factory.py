@@ -31,13 +31,14 @@ class MKFactory:
         :param color: r,g,b
         :param coordinate: 坐标：(x, y)
         """
+        function_info = '[f: mk_factory => colorCheck]'
         # 进行循环的时候检测是否满足循环条件，即按键颜色是否符合目标颜色
         if isinstance(color, str):
             rgb_list = [int(a) for a in color.split(',')]
         elif isinstance(color, tuple) or isinstance(color, list):
             rgb_list = color
         else:
-            self.state = '颜色格式不对', 2
+            self.state = function_info + '颜色格式不对', 2
             return self.state
 
         try:
@@ -45,18 +46,20 @@ class MKFactory:
         except Exception as e:
             # print('配置文件中的数据有误，有一种可能是你导入的别人的配置，'
             #       '但是别人的配置的电脑分辨率跟你的不一致，才导致的。')
-            self.state = '坐标格式问题', 2
+            self.state = function_info + '坐标格式问题', 2
 
         return self.state
 
-    def l1(self, xy, is_random=True):
+    def l1(self, xy, is_random=True, is_tip=True):
         """单击，停顿，是否随机"""
         if is_random:
             x_bias, y_bias = self.t.get_mouse_bias()
             self.m.mouse_click(xy[0]+x_bias, xy[1]+y_bias)
         else:
             self.m.mouse_click(xy[0], xy[1])
-        self.t.tip()
+
+        if is_tip:
+            self.t.tip()
 
     def ln(self, xy, times=None):
         """单击很多次"""

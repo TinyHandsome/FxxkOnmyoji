@@ -9,6 +9,12 @@
 @file: point.py
 @time: 2021/2/2 14:17
 @desc: 点位信息的类
+        1. 已有定位类型：
+            1. l：[定位]识别该点位
+            2. n：[定位]不识别该点位
+        2. 已有操作类型：
+            1. c：[操作]点击
+            2. m：[操作]多次点击中的某一步，后面会跟个数字，如m1，代表多次执行时，第一次执行该点
 """
 
 from dataclasses import dataclass
@@ -66,5 +72,10 @@ class Point:
             return False
         else:
             return True
+
+    def get_m_order(self):
+        """获取m点的order，前提要求是，该点的类型是m"""
+        assert 'm' in self.point_type
+        return int(self.point_type[1:])
 
 

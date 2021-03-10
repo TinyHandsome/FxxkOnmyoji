@@ -86,15 +86,15 @@ class Step:
 
         return l_points
 
-    def get_click_points(self):
+    def get_click_points(self, p_type='c'):
         """获取步骤中需要点击的点"""
-        c_points = []
+        points = []
         for p in self.points:
             # 在这里对不完善信息的点进行了过滤
-            if p.check_type('c') and p.check_effective():
-                c_points.append(p)
+            if p.check_type(p_type) and p.check_effective():
+                points.append(p)
 
-        return c_points
+        return points
 
     def set_step(self, step_name: str, points: [Point]):
         """设置本类的step名字和点信息"""

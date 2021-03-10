@@ -24,6 +24,98 @@ from supports.tip_time import TickTime
 
 
 @dataclass
+class RunStep:
+    """运行步骤"""
+    step: Step
+    info_stack: InfoPip
+    tt: TickTime
+
+    def __post_init__(self):
+        self.location_points = self.step.get_location_points()
+        self.click_points = self.step.get_click_points(p_type='c')
+        self.multi_click_points = self.step.get_click_points(p_type='m')
+
+        # 鼠标键盘工厂
+        self.mkf = MKFactory()
+        # 暂停时间
+        self.t = TipTime()
+
+    def get_location_result(self):
+        """检查当前各个location点位的检查情况"""
+        location_result = [self.check_point_color(p) for p in self.location_points]
+        return sum(location_result) == len(location_result)
+
+    def run_step(self):
+        """识别并点击"""
+        if self.get_location_result():
+            # 检查是否超时
+            if self.tt.update_time_and_check(self.step.step_name):
+                # 超时返回的是True，自己暂停
+                return True
+
+            # 点击每一个需要click的点
+            self.click_all_points()
+        else:
+            # 没有检查到颜色，就暂停会儿叭
+            ...
+        self.t.tip('color')
+
+    def check_point_color(self, point: Point):
+        """【v0.3 需要根据l和n进行判断和返回】检查一个点的颜色是否为True"""
+        xy, color = point.get_loc_color()
+        p_type, p_times = point.get_type_click_time()
+        color_check_result = self.mkf.colorCheck(color, xy)
+
+        try:
+            assert isinstance(color_check_result, bool)
+            if 'l' in p_type:
+                # l的话，该返回啥返回啥
+                return color_check_result
+            elif 'n' in p_type:
+                # n的话，返回反过来的值
+                return not color_check_result
+            else:
+                # 讲道理这种情况是不会出现的，可万一呢
+                self.info_stack.info('狗贼！快联系管理员！', 2)
+                return False
+        except Exception as e:
+            # 如果颜色不是bool的话，那么color_check_result就是结果和颜色
+            self.info_stack.info(*color_check_result)
+            return False
+
+    def click_all_points(self):
+        """点击所有需要点击的点"""
+        # 点击c
+        for p in self.click_points:
+            self.run_click_point(p)
+        # 点击m
+        self.run_multi_click_points(self.multi_click_points)
+
+    def run_click_point(self, point: Point):
+        """点击"""
+        xy, color = point.get_loc_color()
+        if point.click_times == '0':
+            # 讲道理，这种情况是不会有的，万一有憨批呢，对吧
+            ...
+        elif point.click_times == '1':
+            # 点击一次
+            self.mkf.l1(xy)
+        else:
+            # 点击多次
+            self.mkf.ln(xy)
+
+    def run_multi_click_points(self, points: [Point]):
+        """运行顺序点击"""
+        m_point_dict = {}
+        for m_point in points:
+            m_point_dict[m_point.get_m_order()] = m_point
+
+        sorted_points = [y[1] for y in sorted(m_point_dict.items(), key=lambda x: x[0], reverse=True)]
+        for p in sorted_points:
+            self.run_click_point(p)
+
+
+@dataclass
 class RunFunction:
     func: Function
     ff: FunctionFactory
@@ -31,14 +123,12 @@ class RunFunction:
     info_stack: InfoPip
 
     def __post_init__(self):
-        self.t = TipTime()
-        self.mkf = MKFactory()
         # 暂停的标记，开始是不暂停
         self.pause_flag = False
-
         # 时间管理大师，管理功能的所有步骤，如果某一个步骤在短时间内点击多次，则暂停
         self.tt = TickTime()
 
+    '''弃用
     def run_step(self, step: Step):
         """运行一个步骤"""
         # 【检查step中点的颜色】获取每个点的检查结果，如果标记带l的都是True则执行标记带c的点
@@ -69,42 +159,15 @@ class RunFunction:
 
         # 监听频率
         self.t.tip('color')
+    '''
 
-    def check_point_color(self, point: Point):
-        """【v0.3 需要根据l和n进行判断和返回】检查一个点的颜色"""
-        xy, color = point.get_loc_color()
-        p_type, p_times = point.get_type_click_time()
-        color_check_result = self.mkf.colorCheck(color, xy)
-
-        try:
-            assert isinstance(color_check_result, bool)
-            if 'l' in p_type:
-                # l的话，该返回啥返回啥
-                return color_check_result
-            elif 'n' in p_type:
-                # n的话，返回反过来的值
-                return not color_check_result
-            else:
-                # 讲道理这种情况是不会出现的，可万一呢
-                self.info_stack.info('狗贼！快联系管理员！', 2)
-                return False
-        except Exception as e:
-            # 如果颜色不是bool的话，那么color_check_result就是结果和颜色
-            self.info_stack.info(*color_check_result)
-            return False
-
-    def click_point(self, point: Point):
-        """点击"""
-        xy, color = point.get_loc_color()
-        if point.click_times == '0':
-            # 讲道理，这种情况是不会有的，万一有憨批呢，对吧
-            ...
-        elif point.click_times == '1':
-            # 点击一次
-            self.mkf.l1(xy)
-        else:
-            # 点击多次
-            self.mkf.ln(xy)
+    def run_step(self, step: Step):
+        """运行一个步骤"""
+        rs = RunStep(step, self.info_stack, self.tt)
+        need_pause = rs.run_step()
+        if need_pause:
+            self.info_stack.info('脚本检测超时，自动暂停所有功能', 2)
+            self.pause(shown_info=False)
 
     def run_function(self):
         """运行一个功能，包括多个步骤"""
