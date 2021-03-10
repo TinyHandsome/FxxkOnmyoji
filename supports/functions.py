@@ -37,3 +37,8 @@ def check_filefolder_exist(filefolder):
     """检查文件夹是否存在，否则创建该目录"""
     if not os.path.exists(filefolder):
         os.makedirs(filefolder)
+
+
+if __name__ == '__main__':
+    x = get_files_names(r'E:\1-工作\4-工程\FxxkOnmyoji\gouzei.md')
+    print(x)

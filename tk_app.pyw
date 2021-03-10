@@ -58,6 +58,8 @@ class App:
         self.current_func = None
         # 初始化运行的功能
         self.rf = None
+        # 载入文件的名字
+        self.load_file_name_without_suffix = None
 
         # 日记文件，一天一个，每次启动时删除七天前的文件
         self.current_time = datetime.datetime.now()
@@ -517,12 +519,12 @@ class App:
             # print(repr(e))
             self.info_stack.info('保存文件出错！', 2)
 
-    def set_last_open_funcname(self):
+    def set_last_open_funcname(self, load_file_name):
         """
         导入后，设置当前的功能名
             1. 注意：只有show_info为True才设置，因为融合，不设置
         """
-        last_func_name = self.uct.get_last_open_funcname()
+        last_func_name = self.uct.get_last_open_funcname(load_file_name)
         current_func_names = self.cmb1['values']
 
         # 如果功能名不在当前功能名list中，则设置为第一个
@@ -536,6 +538,7 @@ class App:
 
     def load_default_config(self, path='templates/默认保存文件.json', show_info=True):
         """载入数据"""
+        self.load_file_name_without_suffix = get_files_names(path)
         try:
             # 从json中创建数据，同时会获取初始化function_dict
             self.functions = self.ff.load_functions_from_json(path)
@@ -549,7 +552,7 @@ class App:
             self.cmb1['values'] = self.ff.get_function_names()
 
             # 载入后设置funcname
-            self.set_last_open_funcname()
+            self.set_last_open_funcname(self.load_file_name_without_suffix)
 
             return self.functions
 
@@ -741,7 +744,7 @@ class App:
 
         self.info_stack.info(self.current_func.func_name + '启动...', 3)
         # 记录当前function_name作为最后运行功能
-        self.uct.update_last_open_funcname(self.current_func)
+        self.uct.update_last_open_funcname(self.current_func, self.load_file_name_without_suffix)
 
         self.rf = RunFunction(self.current_func, self.ff, self.tm, self.info_stack)
         self.rf.run_function()

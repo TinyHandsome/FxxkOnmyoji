@@ -259,5 +259,32 @@
             }
         ],
         "connections": []
+    },
+    {
+        "func_name": "测试自动暂停",
+        "func_code": "003",
+        "func_shown": 1,
+        "steps": [
+            {
+                "step_name": "测试1",
+                "points": [
+                    {
+                        "point_name": "测试1[1]@lc",
+                        "point_type": "lc",
+                        "point_location": [
+                            1203,
+                            997
+                        ],
+                        "point_color": [
+                            60,
+                            63,
+                            65
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            }
+        ],
+        "connections": []
     }
 ]

@@ -44,14 +44,23 @@ class UpdateConfigureTools:
             # 更新软件打开次数
             self.cf.update_value('updateConfigs', 'open_count', str(open_count), True)
 
-    def update_last_open_funcname(self, current_func: Function):
+    def update_last_open_funcname(self, current_func: Function, load_file_name: str):
         """
         运行后记录该configure对应的功能
             1. 默认为-1
         """
-        self.cf.update_value('lastOpen', 'last_open_funcname', current_func.func_name, True)
+        if load_file_name is not None:
+            # 证明这次里面有导入的文件
+            self.cf.update_value('lastOpen', load_file_name, current_func.func_name, True)
+        else:
+            # 没有导入，则直接记录到默认值里面
+            self.cf.update_value('lastOpen', 'last_open_funcname', current_func.func_name, True)
 
-    def get_last_open_funcname(self):
+    def get_last_open_funcname(self, load_file_name):
         """获取上次最后打开的功能名"""
-        return self.cf.get_option('lastOpen', 'last_open_funcname')
+        try :
+            aim_name = self.cf.get_option('lastOpen', load_file_name)
+            return aim_name
+        except Exception as e:
+            return self.cf.get_option('lastOpen', 'last_open_funcname')
 
