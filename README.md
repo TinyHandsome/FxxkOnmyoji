@@ -315,6 +315,21 @@
 - [x] 新建菜单功能：20210308
 
   优化部分按钮位置，移到菜单中去
+  
+- [x] 界面更新
+
+  1. 将部分功能放入菜单栏中
+  
+  2. 过去界面
+  
+     ![在这里插入图片描述](https://img-blog.csdnimg.cn/20210310093920231.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzIxNTc5MDQ1,size_16,color_FFFFFF,t_70)
+  
+  3. 更新后界面
+  
+     ![在这里插入图片描述](https://img-blog.csdnimg.cn/20210310095547971.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzIxNTc5MDQ1,size_16,color_FFFFFF,t_70)
+  
+     
+  
 
 ### PROBLEMS
 

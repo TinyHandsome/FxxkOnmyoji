@@ -304,18 +304,22 @@ class App:
         self.f31 = Frame(self.frame_3)
 
         self.current_info = StringVar()
-        self.l_first = Label(self.f31, textvariable=self.current_info, justify=LEFT, font=font_labelCurrentLog)
-        self.l_first.pack(anchor=W, side=LEFT)
+        self.l_first = Label(self.f31, textvariable=self.current_info,
+                             justify=LEFT, font=font_labelCurrentLog,
+                             # height=1,
+                             )
+        self.l_first.pack(anchor=N, side=TOP)
 
         self.history_info = StringVar()
         self.l_history = Label(self.f31,
                                textvariable=self.history_info,
                                # wraplength=200,
-                               justify='left',
+                               justify=LEFT,
                                font=font_labelLog,
-                               fg='grey'
+                               fg='grey',
+                               height=2
                                )
-        self.l_history.pack(anchor=NW, side=LEFT, fill=BOTH, expand=True)
+        self.l_history.pack(anchor=N, side=TOP)
 
         # self.l_me = Label(self.f31, text='作者：李英俊小朋友', justify=RIGHT)
         # self.l_me.pack(anchor=SE, side=BOTTOM)
