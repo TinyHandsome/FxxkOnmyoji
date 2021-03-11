@@ -13,6 +13,7 @@
         2. [Python3入门之线程threading常用方法](https://www.cnblogs.com/chengd/articles/7770898.html)
         3. [threading之线程的开始,暂停和退出](https://www.cnblogs.com/cnhyk/p/13697121.html)
         4. [tk.Menu](https://blog.csdn.net/weixin_42272768/article/details/100809120)
+        5. [tk设置窗口图表的三种方式](https://blog.csdn.net/nilvya/article/details/104822196/)
 """
 import datetime
 import webbrowser
@@ -28,9 +29,11 @@ from system_hotkey import SystemHotkey
 
 from structure.function_factory import FunctionFactory
 from structure.run_function import RunFunction
+from structure.row_factory import RowFactory
 from supports.configure_tools import Configure
 from supports.functions import get_files_names, check_filefolder_exist
 from supports.info_pip import InfoPip
+from supports.log_factory import LogFactory
 from supports.mouse_action import MouseAction
 from supports.update_configure_tools import UpdateConfigureTools
 from supports.set_windows import SetWin
@@ -60,18 +63,6 @@ class App:
         self.rf = None
         # 载入文件的名字
         self.load_file_name_without_suffix = None
-
-        # 日记文件，一天一个，每次启动时删除七天前的文件
-        self.current_time = datetime.datetime.now()
-        self.current_date = datetime.datetime.strftime(self.current_time, '%Y-%m-%d')
-
-        self.log_path = './logs/'
-        # 需要检查日志文件夹是否存在，不存在，则自动生成
-        check_filefolder_exist(self.log_path)
-
-        # 创建日志文件
-        log_file_name = self.current_date + '.txt'
-        self.log_file = open(self.log_path + log_file_name, 'a+', encoding='utf-8')
 
     def init_tk(self):
         """初始化tk"""
@@ -115,12 +106,24 @@ class App:
         font_me = (
             font_type,
             self.settings.get_option('font', 'font_size_bottom', 'int'))
+        font_text = (
+            font_type,
+            self.settings.get_option('font', 'font_size_text', 'int')
+        )
 
         """底层root初始化"""
         self.root = Tk()
+        # 第一参数False 表示该图标图像仅适用于该特定窗口，而不适用于将来创建的 toplevels 窗口；
+        # 如果设置为True ，则图标图像也将应用于以后创建的所有 toplevels 图像
+        # self.root.iconphoto(True, PhotoImage(file='./configures/自由之翼.png'))
+        self.root.iconbitmap('./configures/自由之翼.ico')
         self.root.title('平平无奇的阴阳师养成工具 v0.32')
-        self.root.resizable(1, 0)
+        # 设置界面大小和位置
         self.root.geometry("+1200+200")
+        # 设置关闭按钮的功能
+        self.root.protocol('WM_DELETE_WINDOW', self.destroy)
+        # 允许缩放的范围
+        self.root.resizable(1, 0)
 
         """菜单栏"""
         self.menubar = Menu(self.root)
@@ -161,6 +164,18 @@ class App:
         self.menubar.add_command(label='用户手册', command=lambda: self.uct.show_my_words_at_first_open(True))
 
         self.root.config(menu=self.menubar)
+
+        """frame_right_右边的text框"""
+        self.frame_text = LabelFrame(self.root, text='| 自由之翼 |',
+                                     labelanchor=N, font=font_labelframe,
+                                     padx=frame_label_pad,
+                                     pady=frame_label_pad, fg=block_color)
+
+        self.procedure_text = Text(self.frame_text, width=16, height=2, font=font_text, wrap='none')
+        self.procedure_text.pack(side=TOP, fill=BOTH, expand=True)
+
+        self.frame_text.pack(side=RIGHT, fill=BOTH, anchor=N, padx=frame_label_pad, pady=frame_label_pad,
+                             expand=True)
 
         """frame1_外框，功能、运行、暂停、退出、调整界面"""
         self.frame_1 = LabelFrame(self.root, text='| 海的那边 |',
@@ -351,8 +366,11 @@ class App:
             self.root.title('点了我的CSDN你就是我的人了嘻嘻~')
         ))
 
+        """各个跟tk组件有关的工具"""
         # 信息输出栈
-        self.info_stack = InfoPip(self.current_info, self.history_info, self.l_first, self.log_file)
+        self.info_stack = InfoPip(self.current_info, self.history_info, self.l_first, self.log_factory)
+        # 行处理
+        self.row_factory = RowFactory(self.procedure_text)
 
     def init_area(self):
         """初始化区域"""
@@ -370,6 +388,8 @@ class App:
         self.tm = ThreadManagement()
         # 其他效果管理
         self.uct = UpdateConfigureTools(is_test=self.is_test)
+        # 日志管理
+        self.log_factory = LogFactory()
 
     def hotKey_bind(self):
         """全局快捷键设置"""
@@ -392,20 +412,9 @@ class App:
     def clear_logs(self):
         """清除7天前的日志数据"""
         keep_days = self.settings.get_option('logs', 'keep_days', 'int')
-        path = self.log_path
-
-        delta_time = datetime.timedelta(days=keep_days)
-        remove_date = self.current_time - delta_time
-
-        count = 0
-        for file_name in os.listdir(path):
-            file_time = datetime.datetime.strptime(file_name.replace('.txt', ''), '%Y-%m-%d')
-            if file_time < remove_date:
-                os.remove(os.path.join(path, file_name))
-                count += 1
-
-        if count != 0:
-            self.info_stack.info('删除了【' + str(count) + '】个日志文件...', 3)
+        clear_count = self.log_factory.clear_logs(keep_days)
+        if clear_count != 0:
+            self.info_stack.info('删除了【' + str(clear_count) + '】个日志文件...', 3)
 
     def set_top_window(self, shown_info=True):
         """设置是否置顶"""
@@ -498,6 +507,9 @@ class App:
         self.cmb2['values'] = self.current_func.get_point_names()
         # 清空下拉框
         self.cmb2_value.set('')
+
+        # 刷新text数据
+        self.row_factory.generate_row(self.current_func)
 
     def get_key(self, *args):
         """cmb2的对应的函数"""
@@ -755,7 +767,7 @@ class App:
     def destroy(self):
         self.root.quit()
         # 关闭日志文件
-        self.log_file.close()
+        self.log_factory.close_log_file()
 
 
 if __name__ == '__main__':

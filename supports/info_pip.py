@@ -13,7 +13,8 @@
 from dataclasses import dataclass
 import time
 from tkinter import StringVar, Label
-from _io import TextIOWrapper
+
+from supports.log_factory import LogFactory
 
 
 @dataclass
@@ -21,7 +22,7 @@ class InfoPip:
     current_info: StringVar
     history_info: StringVar
     l_first: Label
-    log_file: TextIOWrapper
+    log_factory: LogFactory
 
     def __post_init__(self):
         # 左边是入口，右边是出口
@@ -57,7 +58,8 @@ class InfoPip:
         self.history_info.set(w2)
 
         # 写入日志
-        self.log_file.write(current_time + ': \n' + w1 + '\n\n')
+        info = current_time + ': \n' + w1 + '\n\n'
+        self.log_factory.write(info)
 
     def info(self, word, type):
         """简化输出"""

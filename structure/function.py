@@ -49,6 +49,10 @@ class Function:
         """设置steps的信息"""
         self.steps = steps
 
+    def get_step_names(self):
+        """获取该功能所有的step名字"""
+        return [s.step_name for s in self.steps]
+
     def get_dict(self):
         steps_dict = [s.get_dict() for s in self.steps]
         function_dict = {
