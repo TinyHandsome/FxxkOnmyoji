@@ -101,6 +101,10 @@ class Step:
         self.step_name = step_name
         self.points = points
 
+    def get_name_effective(self):
+        """返回名字和与否"""
+        return self.step_name, self.check_effective()
+
     def check_effective(self):
         """
         检查该step是否是有效的，即是否都为空

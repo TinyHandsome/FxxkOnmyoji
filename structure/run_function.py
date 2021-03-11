@@ -14,6 +14,7 @@
 from dataclasses import dataclass
 from structure.function import Function
 from structure.function_factory import FunctionFactory
+from structure.row_factory import RowFactory
 from structure.step import Step
 from structure.point import Point
 from supports.mk_factory import MKFactory
@@ -29,6 +30,7 @@ class RunStep:
     step: Step
     info_stack: InfoPip
     tt: TickTime
+    row_fac: RowFactory
 
     def __post_init__(self):
         self.location_points = self.step.get_location_points()
@@ -84,7 +86,10 @@ class RunStep:
             return False
 
     def click_all_points(self):
-        """点击所有需要点击的点"""
+        """【v0.32 检查后需要执行一切操作】点击所有需要点击的点"""
+        # TODO 此时需要将当前步骤的编号传过去
+        # self.row_fac.clear_write_line()
+
         # 点击c
         for p in self.click_points:
             self.run_click_point(p)
@@ -121,10 +126,9 @@ class RunFunction:
     ff: FunctionFactory
     tm: ThreadManagement
     info_stack: InfoPip
+    row_fac: RowFactory
 
     def __post_init__(self):
-        # 暂停的标记，开始是不暂停
-        self.pause_flag = False
         # 时间管理大师，管理功能的所有步骤，如果某一个步骤在短时间内点击多次，则暂停
         self.tt = TickTime()
 
@@ -163,11 +167,11 @@ class RunFunction:
 
     def run_step(self, step: Step):
         """运行一个步骤"""
-        rs = RunStep(step, self.info_stack, self.tt)
+        rs = RunStep(step, self.info_stack, self.tt, self.row_fac)
         need_pause = rs.run_step()
         if need_pause:
             self.info_stack.info('脚本检测超时，自动暂停所有功能', 2)
-            self.pause(shown_info=False)
+            self.tm.pause(self.func.func_name, shown_info=False)
 
     def run_function(self):
         """运行一个功能，包括多个步骤"""
@@ -175,26 +179,5 @@ class RunFunction:
         for s in self.ff.get_effective_steps(self.func):
             self.tm.build_thread(self.run_step, s.step_name, is_while=True, args=(s,))
 
-    def pause(self, shown_info=True):
-        """暂停"""
 
-        # 需要暂停的线程，线程名不以_开头
-        pause_threads = [p for p in self.tm.threads if not p.getName().replace('【线程】', '').startswith('_')]
-        # 如果没有需要暂停的线程，即没有启动啥功能，则报错
-        if len(pause_threads) == 0:
-            self.info_stack.info('你啥也没启动啊，暂停个鬼啊', 2)
-            return
 
-        if not self.pause_flag:
-            # 未暂停
-            self.pause_flag = True
-            for t in pause_threads:
-                t.pause()
-            if shown_info:
-                self.info_stack.info('功能' + self.func.func_name + '已暂停', 3)
-        else:
-            # 暂停了则继续
-            self.pause_flag = False
-            for t in pause_threads:
-                t.resume()
-            self.info_stack.info('功能' + self.func.func_name + '已恢复', 3)

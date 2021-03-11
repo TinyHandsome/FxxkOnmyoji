@@ -53,6 +53,16 @@ class Function:
         """获取该功能所有的step名字"""
         return [s.step_name for s in self.steps]
 
+    def get_step_names_effectives(self):
+        """【v0.32 这里生成行的编号】获取所有step的名字和是否有效"""
+        nne = []
+        number = 0
+        for s in self.steps:
+            number += 1
+            name, eff = s.get_name_effective()
+            nne.append((number, name, eff))
+        return nne
+
     def get_dict(self):
         steps_dict = [s.get_dict() for s in self.steps]
         function_dict = {

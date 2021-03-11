@@ -15,7 +15,6 @@
         4. [tk.Menu](https://blog.csdn.net/weixin_42272768/article/details/100809120)
         5. [tk设置窗口图表的三种方式](https://blog.csdn.net/nilvya/article/details/104822196/)
 """
-import datetime
 import webbrowser
 from functools import partial
 import os
@@ -31,7 +30,7 @@ from structure.function_factory import FunctionFactory
 from structure.run_function import RunFunction
 from structure.row_factory import RowFactory
 from supports.configure_tools import Configure
-from supports.functions import get_files_names, check_filefolder_exist
+from supports.functions import get_files_names
 from supports.info_pip import InfoPip
 from supports.log_factory import LogFactory
 from supports.mouse_action import MouseAction
@@ -369,6 +368,8 @@ class App:
         """各个跟tk组件有关的工具"""
         # 信息输出栈
         self.info_stack = InfoPip(self.current_info, self.history_info, self.l_first, self.log_factory)
+        # 线程管理
+        self.tm = ThreadManagement(self.info_stack)
         # 行处理
         self.row_factory = RowFactory(self.procedure_text)
 
@@ -384,8 +385,6 @@ class App:
         self.sw = SetWin()
         # 操作功能配置文件的工具
         self.ff = FunctionFactory()
-        # 线程管理
-        self.tm = ThreadManagement()
         # 其他效果管理
         self.uct = UpdateConfigureTools(is_test=self.is_test)
         # 日志管理
@@ -497,10 +496,11 @@ class App:
         # 开始循环
         self.root.mainloop()
 
-    def get_cmb2_list_from_cmb1(self, *args):
+    def get_cmb2_list_from_cmb1(self, is_shown=True, *args):
         """cmb1对应的函数，获取对应下拉框的list，方便写入后续下拉框"""
         cmb1_v = self.cmb1_value.get()
-        self.info_stack.info(cmb1_v, 1)
+        if is_shown:
+            self.info_stack.info(cmb1_v, 1)
         # 当前功能为
         self.current_func = self.ff.get_function_from_function_name(cmb1_v)
         # 设置下拉框的值
@@ -510,6 +510,7 @@ class App:
 
         # 刷新text数据
         self.row_factory.generate_row(self.current_func)
+        self.row_factory.show_text()
 
     def get_key(self, *args):
         """cmb2的对应的函数"""
@@ -549,7 +550,7 @@ class App:
             self.cmb1_value.set(last_func_name)
 
         # 设置当前的func为所选功能
-        self.get_cmb2_list_from_cmb1()
+        self.get_cmb2_list_from_cmb1(is_shown=False)
 
     def load_default_config(self, path='templates/默认保存文件.json', show_info=True):
         """载入数据"""
@@ -685,7 +686,7 @@ class App:
     def pause(self):
         """暂停"""
         if self.rf is not None:
-            self.rf.pause()
+            self.tm.pause(self.current_func.func_name)
         else:
             self.info_stack.info('未运行任何功能', 2)
 
@@ -761,7 +762,7 @@ class App:
         # 记录当前function_name作为最后运行功能
         self.uct.update_last_open_funcname(self.current_func, self.load_file_name_without_suffix)
 
-        self.rf = RunFunction(self.current_func, self.ff, self.tm, self.info_stack)
+        self.rf = RunFunction(self.current_func, self.ff, self.tm, self.info_stack, self.row_factory)
         self.rf.run_function()
 
     def destroy(self):

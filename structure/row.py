@@ -16,9 +16,25 @@ from dataclasses import dataclass
 
 @dataclass
 class Row:
-    info: str
     line: int
+    info: str
+    # step是否是有效的
+    status: bool
 
     def __post_init__(self):
         ...
 
+    def get_start(self) -> str:
+        """获得插入的位置"""
+        return str(self.line) + '0.1'
+
+    def get_info(self, type_info='normal'):
+        """对原始数据进行处理"""
+        if type_info == 'normal':
+            return '    ' + self.info + '\n'
+        elif type_info == 'running':
+            return '==> ' + self.info + '\n'
+
+    def get_status(self):
+        """获取是否有效"""
+        return self.status
