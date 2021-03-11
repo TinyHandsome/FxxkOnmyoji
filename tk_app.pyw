@@ -509,8 +509,7 @@ class App:
         self.cmb2_value.set('')
 
         # 刷新text数据
-        self.row_factory.generate_row(self.current_func)
-        self.row_factory.show_text()
+        self.row_factory.flush(self.current_func)
 
     def get_key(self, *args):
         """cmb2的对应的函数"""
@@ -696,6 +695,9 @@ class App:
         if p_name != '':
             self.current_func.update_point(p_name, self.xy, self.color)
             self.info_stack.info('写入【' + p_name + '】的坐标', 3)
+
+        # 刷新text
+        self.row_factory.flush(self.current_func)
 
     def get_postion_color(self):
         """设置绑定后的按键操作的值"""

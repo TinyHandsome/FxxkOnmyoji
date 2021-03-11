@@ -31,6 +31,7 @@ class RunStep:
     info_stack: InfoPip
     tt: TickTime
     row_fac: RowFactory
+    func: Function
 
     def __post_init__(self):
         self.location_points = self.step.get_location_points()
@@ -54,9 +55,15 @@ class RunStep:
             if self.tt.update_time_and_check(self.step.step_name):
                 # 超时返回的是True，自己暂停
                 return True
+            else:
+                # 没超时，开始狂点模式
+                # 1. 识别场景后点击，此时更新text
+                self.row_fac.flush_run_step(self.step.step_name)
+                # 2. 点击每一个需要click的点
+                self.click_all_points()
+                # 3. 点玩后，初始化text
+                self.row_fac.flush(self.func)
 
-            # 点击每一个需要click的点
-            self.click_all_points()
         else:
             # 没有检查到颜色，就暂停会儿叭
             ...
@@ -87,9 +94,6 @@ class RunStep:
 
     def click_all_points(self):
         """【v0.32 检查后需要执行一切操作】点击所有需要点击的点"""
-        # TODO 此时需要将当前步骤的编号传过去
-        # self.row_fac.clear_write_line()
-
         # 点击c
         for p in self.click_points:
             self.run_click_point(p)
@@ -167,7 +171,7 @@ class RunFunction:
 
     def run_step(self, step: Step):
         """运行一个步骤"""
-        rs = RunStep(step, self.info_stack, self.tt, self.row_fac)
+        rs = RunStep(step, self.info_stack, self.tt, self.row_fac, self.func)
         need_pause = rs.run_step()
         if need_pause:
             self.info_stack.info('脚本检测超时，自动暂停所有功能', 2)

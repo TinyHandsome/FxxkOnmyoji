@@ -11,13 +11,13 @@
                         "point_name": "挑战[1]@lc",
                         "point_type": "lc",
                         "point_location": [
-                            "",
-                            ""
+                            875,
+                            660
                         ],
                         "point_color": [
-                            "",
-                            "",
-                            ""
+                            43,
+                            43,
+                            43
                         ],
                         "click_times": 1
                     }
@@ -87,13 +87,13 @@
                         "point_name": "队长结算状态2[1]@lc",
                         "point_type": "lc",
                         "point_location": [
-                            "",
-                            ""
+                            1409,
+                            1394
                         ],
                         "point_color": [
-                            "",
-                            "",
-                            ""
+                            60,
+                            63,
+                            65
                         ],
                         "click_times": 1
                     }
@@ -189,13 +189,13 @@
                         "point_name": "测试1[1]@l",
                         "point_type": "l",
                         "point_location": [
-                            442,
-                            690
+                            "",
+                            ""
                         ],
                         "point_color": [
-                            235,
-                            235,
-                            235
+                            "",
+                            "",
+                            ""
                         ],
                         "click_times": 0
                     },
@@ -203,13 +203,13 @@
                         "point_name": "测试1[2]@l",
                         "point_type": "l",
                         "point_location": [
-                            1295,
-                            1002
+                            "",
+                            ""
                         ],
                         "point_color": [
-                            252,
-                            25,
-                            68
+                            "",
+                            "",
+                            ""
                         ],
                         "click_times": 0
                     },
@@ -217,13 +217,13 @@
                         "point_name": "测试1[3]@m1",
                         "point_type": "m1",
                         "point_location": [
-                            1184,
-                            11
+                            "",
+                            ""
                         ],
                         "point_color": [
-                            50,
-                            56,
-                            61
+                            "",
+                            "",
+                            ""
                         ],
                         "click_times": 1
                     },
@@ -231,13 +231,13 @@
                         "point_name": "测试1[3]@m2",
                         "point_type": "m2",
                         "point_location": [
-                            970,
-                            25
+                            "",
+                            ""
                         ],
                         "point_color": [
-                            48,
-                            51,
-                            57
+                            "",
+                            "",
+                            ""
                         ],
                         "click_times": 1
                     },
@@ -245,13 +245,13 @@
                         "point_name": "测试1[3]@m3",
                         "point_type": "m3",
                         "point_location": [
-                            757,
-                            20
+                            "",
+                            ""
                         ],
                         "point_color": [
-                            29,
-                            70,
-                            133
+                            "",
+                            "",
+                            ""
                         ],
                         "click_times": 1
                     }
@@ -272,13 +272,13 @@
                         "point_name": "测试1[1]@lc",
                         "point_type": "lc",
                         "point_location": [
-                            1203,
-                            997
+                            "",
+                            ""
                         ],
                         "point_color": [
-                            60,
-                            63,
-                            65
+                            "",
+                            "",
+                            ""
                         ],
                         "click_times": 1
                     }

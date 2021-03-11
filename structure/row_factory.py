@@ -32,24 +32,49 @@ class RowFactory:
         """生成Row对象"""
         # 读取当前current_func的功能中各个step名
         rows = []
-        for number, name, eef in zip(*current_func.get_step_names_effectives()):
+        for number, name, eef in current_func.get_step_names_effectives():
             row = Row(number, name, eef)
             rows.append(row)
 
         self.rows = rows
 
+    def generate_name_line_dict(self):
+        """生成一个对应关系 根据step名查找row，从而知道line"""
+        name_row_dict = {}
+        for row in self.rows:
+            name_row_dict[row.info] = row
+        return name_row_dict
+
     def clear_current_infos(self):
         """清除text中所有内容"""
         self.text.delete('1.0', 'end')
 
-    def clear_write_line(self, start: str, line_number: int):
-        """清除一行内容，写入一行内容"""
-        self.clear_line(start)
-        self.text.insert(start, row)
+    def flush_run_step(self, step_name: str):
+        """【v0.32 修改正在运行的step输出的text】高亮正在运行的step"""
+        # 根据step_name找到row
+        name_row_dict = self.generate_name_line_dict()
+        aim_row = name_row_dict.get(step_name)
 
-    def clear_line(self, start: str):
+        # 删除row所在text行的信息
+        self.clear_line(aim_row)
+        # 将row的原始信息 加上running的buff
+        self.show_row(aim_row, 'running')
+
+    def clear_line(self, row: Row):
         """清除一行内容"""
-        self.text.delete(start, 'line.end')
+        self.text.delete(row.get_start(), row.get_end())
+
+    def show_row(self, row, show_type='default'):
+        """显示一行内容"""
+        # step无效，没配置，输出红色fg
+        if not row.get_status():
+            self.text.insert(row.get_start(), row.get_info(), 'tag_default_fg_red')
+        # step有效，正在运行
+        elif show_type == 'running':
+            self.text.insert(row.get_start(), row.get_info(type_info='running', next_line=False), 'tag_default_bg_yellow')
+        # step有效，没在运行
+        else:
+            self.text.insert(row.get_start(), row.get_info())
 
     def show_text(self, delete_all_before_insert=True):
         """将rows的信息显示在text组件上"""
@@ -57,7 +82,9 @@ class RowFactory:
         if delete_all_before_insert:
             self.clear_current_infos()
         for row in self.rows:
-            if not row.get_status():
-                self.text.insert(row.get_start(), row.get_info(), 'tag_default_fg_red')
-            else:
-                self.text.insert(row.get_start(), row.get_info())
+            self.show_row(row)
+
+    def flush(self, current_func):
+        """初始化当前功能的步骤，并显示"""
+        self.generate_row(current_func)
+        self.show_text()

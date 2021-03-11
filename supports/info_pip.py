@@ -63,12 +63,13 @@ class InfoPip:
 
     def info(self, word, type):
         """简化输出"""
+        temp_str = ''
         if type == 1:
             # 点击事件
-            self.show_info('【选择】' + word + '...', 'black')
+            self.show_info('【选择】' + word + temp_str, 'black')
         elif type == 2:
             # 错误事件
-            self.show_info('【错误】' + word + '...', 'red')
+            self.show_info('【错误】' + word + temp_str, 'red')
         elif type == 3:
             # 成功事件
-            self.show_info('【成功】' + word + '...', 'green')
+            self.show_info('【成功】' + word + temp_str, 'green')
