@@ -35,7 +35,7 @@ from structure.function_factory import FunctionFactory
 from structure.run_function import RunFunction
 from structure.row_factory import RowFactory
 from supports.configure_tools import Configure
-from supports.functions import get_files_names
+from supports.functions import get_files_names, check_filefolder_exist
 from supports.info_pip import InfoPip
 from supports.log_factory import LogFactory
 from supports.mouse_action import MouseAction
@@ -386,7 +386,7 @@ class App:
         self.ma = MouseAction()
         # 配置初始化
         self.settings = Configure('configures/configs.ini')
-        # 设置初始界面
+        # 设置阴阳师界面位置
         self.sw = SetWin()
         # 操作功能配置文件的工具
         self.ff = FunctionFactory()
@@ -494,6 +494,8 @@ class App:
         self.hotKey_bind()
         # 清除过期的log
         self.clear_logs()
+        # 检查templates文件是否存在
+        check_filefolder_exist('templates')
         # 执行置顶的默认
         self.set_top_window(shown_info=False)
 

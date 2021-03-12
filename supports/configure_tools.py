@@ -15,15 +15,29 @@
 import configparser
 from dataclasses import dataclass
 
+from supports.functions import check_file_exist
+
 
 @dataclass
 class Configure:
     path: str
 
     def __post_init__(self):
+        # 如果路径ini不存在，则创建该ini
+        check_file_exist(self.path)
         self.conf = configparser.ConfigParser()
         self.conf.read(self.path, encoding='utf-8')
         self.sections = self.conf.sections()
+
+    def check_options(self, so_dict: dict):
+        """检查section的option是否存在， seciont: [option]"""
+        for sec, opts in so_dict.items():
+            for opt in opts:
+                try:
+                    self.get_option(sec, opt)
+                except Exception as e:
+                    # 没有的话初始化为空字符串
+                    self.update_value(sec, opt, '')
 
     def get_options(self, sec):
         """获取section中的所有option"""
@@ -51,6 +65,10 @@ class Configure:
 
     def update_value(self, sec, opt, value, is_save=True):
         """修改结果"""
+        if not self.conf.has_section(sec):
+            # 没有sec的话，新建一个sec
+            self.conf.add_section(sec)
+
         self.conf.set(sec, opt, value)
 
         if is_save:
@@ -63,5 +81,6 @@ class Configure:
 
 
 if __name__ == '__main__':
-    cf = Configure('../configures/configs.ini')
-    cf.update_value('others', 'open_count', '0', True)
+    cf = Configure('../configures/asd.ini')
+    cf.check_options({'updateConfigs': ['open_count'], 'lastOpen': ['last_open_funcname']})
+    # cf.update_value('others', 'open_count', '0', True)

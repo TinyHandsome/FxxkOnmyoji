@@ -33,10 +33,26 @@ def get_files_names(files):
         print('咋肥四鸭？')
 
 
-def check_filefolder_exist(filefolder):
+def check_filefolder_exist(filefolder, build=True):
     """检查文件夹是否存在，否则创建该目录"""
     if not os.path.exists(filefolder):
-        os.makedirs(filefolder)
+        if build:
+            os.makedirs(filefolder)
+        else:
+            ...
+        return False
+    return True
+
+
+def check_file_exist(file_path, build=True):
+    """检查文件是否存在，否则创建该文件（暂时不创建目录）"""
+    if not check_filefolder_exist(file_path, False):
+        if build:
+            f = open(file_path, 'w', encoding='utf-8')
+            f.close()
+        return False
+    else:
+        return True
 
 
 if __name__ == '__main__':

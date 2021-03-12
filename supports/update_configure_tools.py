@@ -22,7 +22,15 @@ class UpdateConfigureTools:
     is_test: False
 
     def __post_init__(self):
-        self.cf = Configure('configures/update_configs.ini')
+        path = 'configures/update_configs.ini'
+        # 检查update_configs是否存在，不存在就创建，这里在Configure的类中已经实现了
+        # check_file_exist(path)
+
+        # 初始化update_configs.ini
+        self.cf = Configure(path)
+
+        # 检查里面特定的sec和opt是否存在，不存在则创建和初始化为空字符串
+        self.cf.check_options({'updateConfigs': ['open_count'], 'lastOpen': ['last_open_funcname']})
 
     def show_my_words_at_first_open(self, open_immediately=False):
         """在软件第一次打开的时候，显示我的寄语"""
