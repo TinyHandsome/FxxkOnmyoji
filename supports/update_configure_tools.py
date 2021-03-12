@@ -27,7 +27,11 @@ class UpdateConfigureTools:
     def show_my_words_at_first_open(self, open_immediately=False):
         """在软件第一次打开的时候，显示我的寄语"""
         # 获取cf中的值
-        open_count = self.cf.get_option('updateConfigs', 'open_count', 'int')
+        try:
+            open_count = self.cf.get_option('updateConfigs', 'open_count', 'int')
+        except Exception as e:
+            open_count = 0
+
         if open_count < 1 or open_immediately:
             # 小于1 或者立刻打开为True 就显示
             os.startfile(os.path.join(os.getcwd(), 'configures/致软件使用者.html'))

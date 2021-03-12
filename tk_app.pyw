@@ -14,9 +14,10 @@
         3. [threading之线程的开始,暂停和退出](https://www.cnblogs.com/cnhyk/p/13697121.html)
         4. [tk.Menu](https://blog.csdn.net/weixin_42272768/article/details/100809120)
         5. [tk设置窗口图表的三种方式](https://blog.csdn.net/nilvya/article/details/104822196/)
-        6. [pyinstaller](http://c.biancheng.net/view/2690.html)
-           -w 无窗口
-           pyinstaller -D -n 平平无奇的阴阳师养成工具  -i ./configures/自由之翼.ico  tk_app.pyw
+        6. [pyinstaller参数详解](http://c.biancheng.net/view/2690.html)
+           [pyinstaller官方文档](https://pyinstaller.readthedocs.io/en/v4.2/usage.html)
+           pyinstaller -D -w -y -n 平平无奇的阴阳师养成工具 -i ./configures/自由之翼.ico tk_app.pyw --distpath=C:/Users/LITIAN/Desktop/gouzei/dist --workpath=C:/Users/LITIAN/Desktop/gouzei/build --add-data="configures;configures"
+           【弄完后记得删除configures/update_configs.ini】
 
 """
 import webbrowser
@@ -144,8 +145,8 @@ class App:
         # 初始化是否置顶
         self.cb_var_whether_top.set(True)
 
-        self.file_menu.add_command(label='倒计时', command=...)
-        self.file_menu.add_command(label='占位符', command=...)
+        self.file_menu.add_command(label='倒计时（未完成）', command=...)
+        self.file_menu.add_command(label='占位符（未完成）', command=...)
         self.file_menu.add_separator()
         self.file_menu.add_command(label='退出(c)', command=self.destroy)
 

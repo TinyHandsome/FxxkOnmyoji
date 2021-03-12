@@ -2,7 +2,7 @@
 
 本脚本仅供学习参考，不收取任何费用，如果你是付钱获取的，那么你可真的憨批。
 
-​                                                                                                                    ——作者：李英俊小朋友
+​                                                                                                 ——作者：李英俊小朋友
 
 [TOC]
 
@@ -12,25 +12,84 @@
 
 **重要声明：**
 
-1. 本软件不是无脑使用的软件，有学习门槛，不是基于图片识别而是基于自己思路的软件， 不保证以后不使用图片识别、人工智能等技术。本软件注重于学习编程，也是我学习python的记录或者说笔记，而不是鼓励大家去用脚本来打破游戏平衡，降低自己和他人的游戏体验。
+1. 本软件不是无脑使用的软件，有学习门槛，不是基于图片识别而是基于自己思路的软件， 不保证以后不使用图片识别、人工智能等技术。本软件注重于学习编程，也是我学习python的记录或者说笔记，而不是鼓励大家去用脚本来打破游戏平衡，降低自己和他人的游戏体验。（**请怀着羞耻之心使用该脚本，顺带感谢一下无私的我**）
 
 2. **仅供学习参考，不允许用于任何商业用途。** 使用该脚本造成的任何后果与本人无关（主要是怕网易干我哈哈哈，网易如果想招我是可以考虑下的嘻嘻，毕竟去年面过网易）
 
-3. **严禁任何转载**，毕竟万一以后火了，网易要打我，我只能说，与我无瓜，需要删除时跟我说啊，我删除不就完了嘛。 *如果非有人要转载我的，我也没办法了啊，我也没时间去告他对吧，所以如果有所传播，那网易你们去追责这些人嗷。（歪头）*
+3. **严禁任何转载**，毕竟万一以后火了，网易要打我，我只能说，与我无瓜，需要删除的话及时跟我说啊，我删除不就完了嘛。 *如果非有人要转载我的，我也没办法了啊，我也没时间去告他对吧，所以如果有所传播，那网易你们去追责这些人嗷。（歪头）*
 
 4. 发现任何bug都可以通过github、博客园或者csdn留言给我，联系方式在最后嗷，[**点我直达**](#contact)。最后，希望所有阴阳师玩家、爱好者都谨慎使用，技术无罪，怀璧其罪。（工作室biss）祝大家都能抽到喜欢的式神。
 
 5. **献给所有为了梦想的 程序员们 / 阴阳师们 ~**
 
-   20210110，山东烟台
+   @李英俊小朋友	20210110，山东烟台
 
-6. 【20210212补充】因为是仅供学习参考，所以不会打包为.exe格式的嗷，现在不会，以后更不会，违者与我本人无关，请有关部门追究其相关的法律责任。（为什么不呢？都打包成.exe你跟我说你用来学习？学习？学个peach！）
+6. 【20210212补充】因为是仅供学习参考，所以不会打包为.exe格式的嗷，现在不会，以后更不会，违者与我本人无关，请有关部门追究其相关的法律责任。（为什么不呢？都打包成.exe你跟我说你用来学习？学习？学个peach！但是打包的技术是要学习的，懂我的意思叭[暗示]）
 
 > 如果网易也不问我，也不跟我沟通，就让CSDN、博客园、简书、bilibili搞我、删我博客，我告诉你嗷，这是在玩火。这样的话，我一定不会屈服的。（握拳）
 
+## 使用方法 | Using Method
+
+### 设计思路 | Design
+
+1. 首先，我想做一个双开刷御魂的脚本。这就需要：**识别挑战的位置**
+
+   ![在这里插入图片描述](https://img-blog.csdnimg.cn/20210110081703644.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzIxNTc5MDQ1,size_16,color_FFFFFF,t_70#pic_center)
+
+2. 所以首先要做的就是：识别整个桌面上挑战的位置，然后点击，就可以开始刷图了对吧。
+
+3. 这个观念也是这个脚本的核心，那就是从桌面上找到目标图片（挑战截图）中心的位置，然后利用鼠标模拟点击，实现各种流程的控制。后面无论是刷御魂也好，刷结界突破也好，带狗粮也是，都是这个思路。
+
+4. **划重点了：** 
+
+   1. 场景识别（通过多个点位识别）：都返回True则场景识别返回True
+      1. `l`：该点颜色与写入颜色一致则返回True
+      2. `n`：该点颜色与写入颜色不一致则返回True
+   2. 进行操作（一般一个step只有一个操作）：
+      1. `c`：单点点击
+      2. `m`：多点点击
+   3. 组合step（步骤）为function（功能）：
+      1. 一个功能包含多个step
+      2. 每个step多线程分别执行场景识别
+      3. 识别成功后就进行操作
+   4. 关联其他function（功能）：
+      1. 配置connections：`connections=104-105`
+      2. 主功能运行时，connections（关联功能）也会运行
+      3. 适用于：关闭协同悬赏、接受同心之兰等
+
+### 界面介绍 | Interface
+
+### 操作说明 | Operation
+
+### 快捷键位 | Hotkey
+
+## 从零开始 | Start Zero
+
+> 如果不懂编程的话，下面对你来说真的很难，但是没关系，所有的快乐都是努力之后得到的。成功的喜悦会覆盖所有的懊恼和气馁，一起加油叭。（有任何问题，很简单也不要紧，留言告诉我叭，我会在上面补充的。）
+
+1. **下载`python3.78`**：[官网地址](https://www.python.org/downloads/release/python-378/)，然后安装啊啥的
+
+2. **安装一个特殊的依赖包**：在cmd中输入：`pip install pyHook-1.5.1-cp37-cp37m-win_amd64.whl`，注意，这里的pyHook是拖进来的显示的应该是绝对路径，如下图：（[`pyhook`安装地址](https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyhook)）
+
+   ![在这里插入图片描述](https://img-blog.csdnimg.cn/20210120224908459.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzIxNTc5MDQ1,size_16,color_FFFFFF,t_70)
+
+3. 升级一下pip：`python -m pip install --upgrade pip -i https://pypi.douban.com/simple/` 
+
+4. 去我的[GitHub](https://github.com/TinyHandsome/FxxkOnmyoji)，下载工程文件，解压。
+
+   ![在这里插入图片描述](https://img-blog.csdnimg.cn/2021012022520347.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzIxNTc5MDQ1,size_16,color_FFFFFF,t_70)
+
+5. **安装依赖包**：打开文件夹，看到这个`requirements.txt`了没，跟上面安装`whl`一样，输入：`pip install -r requirements.txt -i https://pypi.douban.com/simple/` ，这里的`requirements.txt`也是要拖进来的，反正是个绝对路径和相对路径的问题。如果有不懂的，留言，我慢慢补充。（tips：按住shift+右键，可以在当前路径召唤`cmd`或者`powershell`）（懂编程的人，自己看着下包就好了，我这里有很多跟这个项目无关的包，懒得改了）
+
+   ![在这里插入图片描述](https://img-blog.csdnimg.cn/2021012023005290.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzIxNTc5MDQ1,size_16,color_FFFFFF,t_70)
+
+   安装完毕：
+
+   ![在这里插入图片描述](https://img-blog.csdnimg.cn/20210120231522657.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzIxNTc5MDQ1,size_16,color_FFFFFF,t_70)
+
 ## 项目计划 | Project Plan
 
-### VERSION
+### 版本控制 | Version
 
 1. 【v0.1】老张手里还有，这个版本我自己都没有了，界面过于挫
 
@@ -44,7 +103,7 @@
    > 4. 新增测试开关，目前关联开关的功能包括：
    >      1. UpdateConfigureTools中的软件打开次数计数，打开测试时重置计数器为0
 
-### TODO
+### 计划列表 | Todo
 
 *逆序显示，最新的思路在最上面。*
 
@@ -83,7 +142,7 @@
 
   从有体力的界面中检测当前体力还剩多少，这样就可以自动计算脚本可以刷多久了
 
-### FINISHED
+### 完成列表 | Finished
 
 *正序显示，最新完成的功能在最下面。*
 
@@ -317,8 +376,10 @@
   1. 普通：黑色fg
   2. 未配置：红色fg
   3. 正在运行：黄色bg
+  
+  ![在这里插入图片描述](https://img-blog.csdnimg.cn/20210312103817902.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzIxNTc5MDQ1,size_16,color_FFFFFF,t_70)
 
-### PROBLEMS
+### 现有问题 | Problems
 
 -  现有问题：
 
@@ -341,41 +402,6 @@
   2. 关于设置`python.exe`或者`pythonw.exe`兼容性-以管理员身份运行后，各种报错问题
      1. 基本报错有：双击`.pyw`结尾的会报错，`pip`也会报错。
      2. 这是因为windows无法加载UAC表单来升级特权，[参考链接](https://www.pythonheidong.com/blog/article/464486/f383227e304162f244bb/)
-
-
-## 从零开始 | Start Zero
-
-1. 首先，我想做一个双开刷御魂的脚本。这就需要：**识别挑战的位置**
-
-   ![在这里插入图片描述](https://img-blog.csdnimg.cn/20210110081703644.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzIxNTc5MDQ1,size_16,color_FFFFFF,t_70#pic_center)
-
-2. 所以首先要做的就是：识别整个桌面上挑战的位置，然后点击，就可以开始刷图了对吧。
-
-3. 这个观念也是这个脚本的核心，那就是从桌面上找到目标图片（挑战截图）中心的位置，然后利用鼠标模拟点击，实现各种流程的控制。后面无论是刷御魂也好，刷结界突破也好，带狗粮也是，都是这个思路。
-
-## 使用方法 | Using Method
-
-> 如果不懂编程的话，下面对你来说真的很难，但是没关系，所有的快乐都是努力之后得到的。成功的喜悦会覆盖所有的懊恼和气馁，一起加油叭。（有任何问题，很简单也不要紧，留言告诉我叭，我会在上面补充的。）
-
-1. **下载`python3.78`**：[官网地址](https://www.python.org/downloads/release/python-378/)，然后安装啊啥的
-
-2. **安装一个特殊的依赖包**：在cmd中输入：`pip install pyHook-1.5.1-cp37-cp37m-win_amd64.whl`，注意，这里的pyHook是拖进来的显示的应该是绝对路径，如下图：（[`pyhook`安装地址](https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyhook)）
-
-   ![在这里插入图片描述](https://img-blog.csdnimg.cn/20210120224908459.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzIxNTc5MDQ1,size_16,color_FFFFFF,t_70)
-
-3. 升级一下pip：`python -m pip install --upgrade pip -i https://pypi.douban.com/simple/` 
-
-4. 去我的[GitHub](https://github.com/TinyHandsome/FxxkOnmyoji)，下载工程文件，解压。
-
-   ![在这里插入图片描述](https://img-blog.csdnimg.cn/2021012022520347.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzIxNTc5MDQ1,size_16,color_FFFFFF,t_70)
-
-5. **安装依赖包**：打开文件夹，看到这个`requirements.txt`了没，跟上面安装`whl`一样，输入：`pip install -r requirements.txt -i https://pypi.douban.com/simple/` ，这里的`requirements.txt`也是要拖进来的，反正是个绝对路径和相对路径的问题。如果有不懂的，留言，我慢慢补充。（tips：按住shift+右键，可以在当前路径召唤`cmd`或者`powershell`）（懂编程的人，自己看着下包就好了，我这里有很多跟这个项目无关的包，懒得改了）
-
-   ![在这里插入图片描述](https://img-blog.csdnimg.cn/2021012023005290.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzIxNTc5MDQ1,size_16,color_FFFFFF,t_70)
-
-   安装完毕：
-
-   ![在这里插入图片描述](https://img-blog.csdnimg.cn/20210120231522657.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzIxNTc5MDQ1,size_16,color_FFFFFF,t_70)
 
 
 ## 联系方式 | Contact Me
