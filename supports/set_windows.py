@@ -21,11 +21,11 @@
 
 from dataclasses import dataclass
 
-import win32con
 import win32gui
+# import win32con
 # import win32ui
-from PIL import Image
-import numpy as np
+# from PIL import Image
+# import numpy as np
 
 
 @dataclass
@@ -109,6 +109,7 @@ class SetWin:
         win32gui.MoveWindow(hWnd, pos[0], pos[1], pos[2], pos[3], 0)
         self.get_handle_rect(hWnd)
 
+    '''获取句柄的截图
     def show_handle(self, hWnd, return_type='cv'):
         """获取句柄的截图，否贼返回图片"""
         left, top, right, bot = self.get_handle_rect(hWnd)
@@ -175,6 +176,8 @@ class SetWin:
             return save_by_windows_api(False)
         else:
             return save_by_opencv(is_save=False, is_show=True)
+            
+    '''
 
 
 if __name__ == '__main__':

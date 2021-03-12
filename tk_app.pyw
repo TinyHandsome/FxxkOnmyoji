@@ -14,6 +14,10 @@
         3. [threading之线程的开始,暂停和退出](https://www.cnblogs.com/cnhyk/p/13697121.html)
         4. [tk.Menu](https://blog.csdn.net/weixin_42272768/article/details/100809120)
         5. [tk设置窗口图表的三种方式](https://blog.csdn.net/nilvya/article/details/104822196/)
+        6. [pyinstaller](http://c.biancheng.net/view/2690.html)
+           -w 无窗口
+           pyinstaller -D -n 平平无奇的阴阳师养成工具  -i ./configures/自由之翼.ico  tk_app.pyw
+
 """
 import webbrowser
 from functools import partial
