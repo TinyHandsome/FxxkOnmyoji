@@ -190,7 +190,7 @@ class FunctionFactory:
                         result_steps.append(ss)
 
                 # 修改f的步骤
-                f.steps = result_steps
+                f.set_steps(result_steps)
 
                 """
                 # 【连接信息应该以基础模板为主，暂时不支持connections的融合】修改f的connections

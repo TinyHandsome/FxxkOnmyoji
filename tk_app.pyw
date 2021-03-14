@@ -596,8 +596,6 @@ class App:
 
     def rebuild_function_factory(self):
         """根据最新的functions，重建function_factory，并更新下拉框"""
-        # 更新每一个func的点映射
-        self.ff.rebuild_function_points_dict(self.functions)
         # 重建function_factory
         self.ff.create_functions_dict(self.functions)
         # 更新下拉框

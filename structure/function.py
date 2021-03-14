@@ -50,8 +50,13 @@ class Function:
             self.point_dict[point.point_name] = point
 
     def set_steps(self, steps: [Step]):
-        """设置steps的信息"""
+        """
+        【v0.34】 修改update更新逻辑，直接修改steps时，增加建立点映射
+        设置steps的信息
+        """
         self.steps = steps
+        # 建立点映射
+        self.create_points_dict()
 
     def get_step_names(self):
         """获取该功能所有的step名字"""
@@ -130,8 +135,5 @@ class Function:
         function_dict['step_infos'] = None
         function = Function(**function_dict)
         function.set_steps(new_steps)
-
-        # 建立点映射
-        function.create_points_dict()
 
         return function
