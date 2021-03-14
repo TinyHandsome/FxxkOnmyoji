@@ -1,6 +1,7 @@
 .*
 __pycache__
 logs
+*.spec
 
 
-!/.gitignore
+!.gitignore
