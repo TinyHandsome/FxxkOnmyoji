@@ -121,7 +121,7 @@ class App:
         # 如果设置为True ，则图标图像也将应用于以后创建的所有 toplevels 图像
         # self.root.iconphoto(True, PhotoImage(file='./configures/自由之翼.png'))
         self.root.iconbitmap('./configures/自由之翼.ico')
-        self.root.title('平平无奇的阴阳师养成工具 v0.32')
+        self.root.title('平平无奇的阴阳师养成工具 v0.33')
         # 设置界面大小和位置
         self.root.geometry("+1200+200")
         # 设置关闭按钮的功能
