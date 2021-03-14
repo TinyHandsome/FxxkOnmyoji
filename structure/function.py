@@ -36,7 +36,11 @@ class Function:
     def info2step(self):
         """根据step信息转为Step"""
         for info in self.step_infos:
-            self.steps.append(Step(info))
+            # 如果ini配置错误，这里跳过
+            try:
+                self.steps.append(Step(info))
+            except Exception as e:
+                ...
 
     def create_points_dict(self):
         """在funciton中创建：根据func_name和point_name找到point的字典"""

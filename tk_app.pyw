@@ -145,8 +145,8 @@ class App:
         # 初始化是否置顶
         self.cb_var_whether_top.set(True)
 
-        self.file_menu.add_command(label='倒计时（未完成）', command=...)
-        self.file_menu.add_command(label='占位符（未完成）', command=...)
+        self.file_menu.add_command(label='计时关闭（未完成）', command=...)
+        self.file_menu.add_command(label='次数限制（未完成）', command=...)
         self.file_menu.add_separator()
         self.file_menu.add_command(label='退出(c)', command=self.destroy)
 
@@ -156,6 +156,7 @@ class App:
 
         setting_menu_partial(label='载入默认配置(l)', command=self.load_default_config)
         setting_menu_partial(label='选择用户配置(L)', command=self.load_user_config)
+        setting_menu_partial(label='重载功能(k)', command=self.update_functions)
         self.setting_menu.add_separator()
         setting_menu_partial(label='存为默认配置(s)', command=self.save_config_as_default)
         setting_menu_partial(label='存为其他文件(S)', command=self.save_config_to_file)
@@ -408,6 +409,7 @@ class App:
         partial_register(('alt', 'shift', 's'), callback=lambda e: self.save_config_to_file())
         partial_register(('alt', 'l'), callback=lambda e: self.load_default_config())
         partial_register(('alt', 'shift', 'l'), callback=lambda e: self.load_user_config())
+        partial_register(('alt', 'k'), callback=lambda e: self.update_functions())
         partial_register(('alt', 'n'), callback=lambda e: self.combine_single_load())
         partial_register(('alt', 'shift', 'n'), callback=lambda e: self.combine_multiple_load())
         partial_register(('alt', 'shift', 'a'), callback=lambda e: self.combine_auto_load())
@@ -629,6 +631,28 @@ class App:
 
         # 输出信息
         self.info_stack.info('<' + file_name_without_suffix + '>已融合进当前功能集中', 3)
+
+    def update_functions(self):
+        """
+        【重载功能】更新当前functions中所有的数据
+        场景：
+            1. 当前功能写入几个点
+            2. 更新了functions.ini的步骤
+            3. 想要在当前的基础上，加入新建的步骤，并且保存已有的点位信息
+        方法：
+            1. 获取初始化功能functions
+            2. 利用single融合的原理，传入初始化到当前中
+        """
+        result_functions = self.ff.init_functions_from_config()
+        for f in self.functions:
+            result_functions = self.ff.set_functions_by_step(result_functions, f)
+
+        # 手动更新functions，并重建字典和下拉框
+        self.functions = result_functions
+        self.rebuild_function_factory()
+
+        # 输出信息
+        self.info_stack.info('所有功能和步骤已更到最新', 3)
 
     def combine_multiple_load(self, auto_file_paths=None):
         """
