@@ -594,8 +594,14 @@ class App:
 
     def rebuild_function_factory(self):
         """根据最新的functions，重建function_factory，并更新下拉框"""
+        # 更新每一个func的点映射
+        self.ff.rebuild_function_points_dict(self.functions)
+        # 重建function_factory
         self.ff.create_functions_dict(self.functions)
+        # 更新下拉框
         self.cmb1['values'] = self.ff.get_function_names()
+        # 重选最新功能
+        self.get_cmb2_list_from_cmb1(False)
 
     def combine_single_load(self):
         """
@@ -748,7 +754,7 @@ class App:
             return False
         # 检查功能中是否存在至少一个点是有效的
         if not self.current_func.check_effective():
-            self.info_stack.info('目标功能中所有点都无效', 2)
+            self.info_stack.info('<' + self.current_func.func_name + '>中所有点都无效', 2)
             return False
         # 检查功能的关联功能是否存在一个点是有效的
         for code in self.current_func.connections:
@@ -764,6 +770,7 @@ class App:
 
     def func_start(self):
         """运行"""
+        # 检查是否能运行
         if not self.check_before_run():
             return
 

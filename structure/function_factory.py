@@ -85,6 +85,11 @@ class FunctionFactory:
 
         return functions
 
+    def rebuild_function_points_dict(self, functions: [Function]):
+        """更新每一个functions中的func的点映射关系"""
+        for f in functions:
+            f.create_points_dict()
+
     def create_functions_dict(self, functions: [Function]):
         """创建按一个从function_name到function的字典"""
         # 创建的时候，需要清空所有的字典
@@ -150,9 +155,12 @@ class FunctionFactory:
 
     def set_functions_by_step(self, functions: [Function], func: Function):
         """
+        【v0.33】在旧功能中查找是否有新功能的同名，有的话，将同名的新功能的step写入旧功能中
         对比step，将同名的func中，更新同名的step
             1. 不同名的，弃用旧的，保留新的
             2. 新增了connections的处理
+        :param functions: 最开始的功能
+        :param func: 新载入的功能
         """
         result_functions = []
         for f in functions:
@@ -164,10 +172,11 @@ class FunctionFactory:
                 result_steps = []
                 # 遍历所有需要的steps
                 for ss in aim_steps:
-                    # 在func的steps中寻找
+                    # 在旧func的steps中寻找
                     is_find = False
                     for func_ss in func_steps:
                         # 如果找到了，且所有的点是有效的，就append，同时跳出循环
+                        # 旧 == 新，新的有效，则用新的
                         if ss.step_name == func_ss.step_name:
                             # 这里不写在一起是因为，找到了，有效就要，无效就撤，提高效率
                             # 即，找到了，但无效，也不找了
@@ -176,7 +185,7 @@ class FunctionFactory:
                                 is_find = True
                             break
 
-                    # 没有找到，就用原来的
+                    # 没有找到，或者无效，就用原来的
                     if not is_find:
                         result_steps.append(ss)
 
