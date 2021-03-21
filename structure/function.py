@@ -20,7 +20,7 @@ class Function:
     func_name: str
     func_code: str
     func_shown: int
-    step_infos: [str]
+    step_infos: [[str, str]]
     connections: [str]
 
     def __post_init__(self):

@@ -19,7 +19,6 @@ from structure.step import Step
 from structure.point import Point
 from supports.mk_factory import MKFactory
 from supports.thread_management import ThreadManagement
-from supports.tip_time import TipTime
 from supports.info_pip import InfoPip
 from supports.tip_time import TickTime
 
@@ -33,6 +32,9 @@ class RunStep:
     row_fac: RowFactory
     func: Function
 
+    # 超时检查的开关
+    overtime_check: bool
+
     def __post_init__(self):
         self.location_points = self.step.get_location_points()
         self.click_points = self.step.get_click_points(p_type='c')
@@ -40,8 +42,6 @@ class RunStep:
 
         # 鼠标键盘工厂
         self.mkf = MKFactory()
-        # 暂停时间
-        self.t = TipTime()
 
     def get_location_result(self):
         """检查当前各个location点位的检查情况"""
@@ -52,7 +52,7 @@ class RunStep:
         """识别并点击"""
         if self.get_location_result():
             # 检查是否超时
-            if self.tt.update_time_and_check(self.step.step_name):
+            if self.tt.update_time_and_check(self.step.step_name) and self.overtime_check and self.step.is_step_check():
                 # 超时返回的是True，自己暂停
                 return True
             else:
@@ -67,7 +67,6 @@ class RunStep:
         else:
             # 没有检查到颜色，就暂停会儿叭
             ...
-        self.t.tip('color')
 
     def check_point_color(self, point: Point):
         """【v0.3 需要根据l和n进行判断和返回】检查一个点的颜色是否为True"""
@@ -132,6 +131,9 @@ class RunFunction:
     info_stack: InfoPip
     row_fac: RowFactory
 
+    # 超时检查的开关
+    overtime_check: bool
+
     def __post_init__(self):
         # 时间管理大师，管理功能的所有步骤，如果某一个步骤在短时间内点击多次，则暂停
         self.tt = TickTime()
@@ -171,7 +173,7 @@ class RunFunction:
 
     def run_step(self, step: Step):
         """运行一个步骤"""
-        rs = RunStep(step, self.info_stack, self.tt, self.row_fac, self.func)
+        rs = RunStep(step, self.info_stack, self.tt, self.row_fac, self.func, self.overtime_check)
         need_pause = rs.run_step()
         if need_pause:
             self.info_stack.info('脚本检测超时，自动暂停所有功能', 2)
@@ -182,6 +184,3 @@ class RunFunction:
         # 获取该功能的所有步骤和connections的所有步骤
         for s in self.ff.get_effective_steps(self.func):
             self.tm.build_thread(self.run_step, s.step_name, is_while=True, args=(s,))
-
-
-

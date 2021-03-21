@@ -136,14 +136,26 @@ class App:
 
         # 菜单
         self.menubar.add_cascade(label='菜单', menu=self.file_menu)
+
+        # 是否置顶
         self.cb_var_whether_top = BooleanVar()
         self.file_menu.add_checkbutton(label='置顶', variable=self.cb_var_whether_top,
                                        onvalue=True, offvalue=False,
                                        command=self.set_top_window)
+        # 初始化 置顶
+        self.cb_var_whether_top.set(True)
+
+        # 是否进行超时检查
+        self.overtime_check = BooleanVar()
+        self.file_menu.add_checkbutton(label='超时检查', variable=self.overtime_check,
+                                       onvalue=True, offvalue=False,
+                                       command=self.change_overtime_check)
+        # 初始化 进行超时检查
+        self.overtime_check.set(True)
+
+
         self.file_menu.add_command(label='调整界面(d)', command=self.set_two_win_left)
         self.file_menu.add_separator()
-        # 初始化是否置顶
-        self.cb_var_whether_top.set(True)
 
         self.file_menu.add_command(label='计时关闭（未完成）', command=...)
         self.file_menu.add_command(label='次数限制（未完成）', command=...)
@@ -421,6 +433,15 @@ class App:
         clear_count = self.log_factory.clear_logs(keep_days)
         if clear_count != 0:
             self.info_stack.info('删除了【' + str(clear_count) + '】个日志文件...', 3)
+
+    def change_overtime_check(self, show_info=True):
+        """设置是否超时检查"""
+        if self.overtime_check.get():
+            if show_info:
+                self.info_stack.info('开启超时检查', 1)
+        else:
+            if show_info:
+                self.info_stack.info('取消超时检查', 1)
 
     def set_top_window(self, shown_info=True):
         """设置是否置顶"""
@@ -800,7 +821,7 @@ class App:
         # 记录当前function_name作为最后运行功能
         self.uct.update_last_open_funcname(self.current_func, self.load_file_name_without_suffix)
 
-        self.rf = RunFunction(self.current_func, self.ff, self.tm, self.info_stack, self.row_factory)
+        self.rf = RunFunction(self.current_func, self.ff, self.tm, self.info_stack, self.row_factory, self.overtime_check.get())
         self.rf.run_function()
 
     def destroy(self):

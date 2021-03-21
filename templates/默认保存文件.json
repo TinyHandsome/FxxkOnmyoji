@@ -6,18 +6,19 @@
         "steps": [
             {
                 "step_name": "挑战",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "挑战[1]@lc",
                         "point_type": "lc",
                         "point_location": [
-                            875,
-                            660
+                            "",
+                            ""
                         ],
                         "point_color": [
-                            43,
-                            43,
-                            43
+                            "",
+                            "",
+                            ""
                         ],
                         "click_times": 1
                     }
@@ -25,6 +26,7 @@
             },
             {
                 "step_name": "队员结算状态1",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "队员结算状态1[1]@lc",
@@ -44,6 +46,7 @@
             },
             {
                 "step_name": "队长结算状态1",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "队长结算状态1[1]@lc",
@@ -63,6 +66,7 @@
             },
             {
                 "step_name": "队员结算状态2",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "队员结算状态2[1]@lc",
@@ -82,18 +86,19 @@
             },
             {
                 "step_name": "队长结算状态2",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "队长结算状态2[1]@lc",
                         "point_type": "lc",
                         "point_location": [
-                            1409,
-                            1394
+                            "",
+                            ""
                         ],
                         "point_color": [
-                            60,
-                            63,
-                            65
+                            "",
+                            "",
+                            ""
                         ],
                         "click_times": 1
                     }
@@ -101,6 +106,7 @@
             },
             {
                 "step_name": "关闭加成",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "关闭加成[1]@l",
@@ -178,44 +184,37 @@
         "connections": []
     },
     {
-        "func_name": "测试",
+        "func_name": "斗鸡",
         "func_code": "002",
         "func_shown": 1,
         "steps": [
             {
-                "step_name": "测试1",
+                "step_name": "战",
+                "step_type": "",
                 "points": [
                     {
-                        "point_name": "测试1[1]@l",
-                        "point_type": "l",
+                        "point_name": "战[1]@lc",
+                        "point_type": "lc",
                         "point_location": [
-                            "",
-                            ""
+                            1500,
+                            457
                         ],
                         "point_color": [
-                            "",
-                            "",
-                            ""
+                            240,
+                            240,
+                            240
                         ],
-                        "click_times": 0
-                    },
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "准备",
+                "step_type": "",
+                "points": [
                     {
-                        "point_name": "测试1[2]@l",
-                        "point_type": "l",
-                        "point_location": [
-                            "",
-                            ""
-                        ],
-                        "point_color": [
-                            "",
-                            "",
-                            ""
-                        ],
-                        "click_times": 0
-                    },
-                    {
-                        "point_name": "测试1[3]@m1",
-                        "point_type": "m1",
+                        "point_name": "准备[1]@lc",
+                        "point_type": "lc",
                         "point_location": [
                             "",
                             ""
@@ -226,10 +225,76 @@
                             ""
                         ],
                         "click_times": 1
-                    },
+                    }
+                ]
+            },
+            {
+                "step_name": "胜利",
+                "step_type": "",
+                "points": [
                     {
-                        "point_name": "测试1[3]@m2",
-                        "point_type": "m2",
+                        "point_name": "胜利[1]@lc",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 3
+                    }
+                ]
+            },
+            {
+                "step_name": "奖励",
+                "step_type": "",
+                "points": [
+                    {
+                        "point_name": "奖励[1]@lc",
+                        "point_type": "lc",
+                        "point_location": [
+                            1512,
+                            467
+                        ],
+                        "point_color": [
+                            240,
+                            240,
+                            240
+                        ],
+                        "click_times": 2
+                    }
+                ]
+            },
+            {
+                "step_name": "失败",
+                "step_type": "",
+                "points": [
+                    {
+                        "point_name": "失败[1]@lc",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 3
+                    }
+                ]
+            },
+            {
+                "step_name": "手动切自动",
+                "step_type": "",
+                "points": [
+                    {
+                        "point_name": "手动切自动[1]@lc",
+                        "point_type": "lc",
                         "point_location": [
                             "",
                             ""
@@ -240,10 +305,36 @@
                             ""
                         ],
                         "click_times": 1
-                    },
+                    }
+                ]
+            },
+            {
+                "step_name": "拔得头筹",
+                "step_type": "",
+                "points": [
                     {
-                        "point_name": "测试1[3]@m3",
-                        "point_type": "m3",
+                        "point_name": "拔得头筹[1]@lc",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "段位保护的战",
+                "step_type": "",
+                "points": [
+                    {
+                        "point_name": "段位保护的战[1]@lc",
+                        "point_type": "lc",
                         "point_location": [
                             "",
                             ""
@@ -261,16 +352,31 @@
         "connections": []
     },
     {
-        "func_name": "测试自动暂停",
+        "func_name": "关闭悬赏邀请",
         "func_code": "003",
         "func_shown": 1,
         "steps": [
             {
-                "step_name": "测试1",
+                "step_name": "关闭",
+                "step_type": "",
                 "points": [
                     {
-                        "point_name": "测试1[1]@lc",
-                        "point_type": "lc",
+                        "point_name": "关闭[1]@l",
+                        "point_type": "l",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 0
+                    },
+                    {
+                        "point_name": "关闭[2]@c",
+                        "point_type": "c",
                         "point_location": [
                             "",
                             ""

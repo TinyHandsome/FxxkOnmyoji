@@ -25,6 +25,8 @@ class Step:
         if self.step_info != '':
             # 如果初始化该类不是用的init，则step_info指定为''，此时不需要进行下面的操作，否则就需要进行
             self.generate_points_stepName()
+            # 初始化后需要根据key获取步骤的类别
+            self.set_step_key_type()
 
     def __repr__(self):
         return str(self.points)
@@ -32,7 +34,8 @@ class Step:
     def generate_points_stepName(self):
         self.points = []
         # 从步骤信息中获取步骤名和各点操作
-        self.step_name, self.step_points = self.step_info.split('@')
+        self.step_key, self.step_value = self.step_info
+        self.step_name, self.step_points = self.step_value.split('@')
 
         # 从多个点位信息中，开始遍历
         count = 0
@@ -67,10 +70,20 @@ class Step:
                     point.point_name = set_point_name()
                     self.points.append(point)
 
+    def set_step_key_type(self):
+        """根据step_key获取类别，一般为step1、step2这种的"""
+        keys = self.step_key.split('_')
+        if len(keys) > 1:
+            # 如果大于1，则有类别
+            self.step_type = keys[-1]
+        else:
+            self.step_type = ''
+
     def get_dict(self):
         points_dict = [p.get_dict() for p in self.points]
         step_dict = {
             'step_name': self.step_name,
+            'step_type': self.step_type,
             'points': points_dict
         }
         return step_dict
@@ -96,9 +109,16 @@ class Step:
 
         return points
 
-    def set_step(self, step_name: str, points: [Point]):
+    def set_step(self, step_name: str, step_type: str, points: [Point]):
         """设置本类的step名字和点信息"""
         self.step_name = step_name
+
+        if step_type:
+            self.step_type = step_type
+        else:
+            # 为None的话置为空
+            self.step_type = ''
+
         self.points = points
 
     def get_name_effective(self):
@@ -123,6 +143,16 @@ class Step:
         else:
             return False
 
+    def is_step_check(self):
+        """
+        返回该step是否需要检查
+            1. u类型的不需要进行 重复检查
+        """
+        if 'u' in self.step_type:
+            return False
+        else:
+            return True
+
     @classmethod
     def get_step_from_dict(cls, step_dict):
         """从step的字典中生成step"""
@@ -132,5 +162,5 @@ class Step:
         for point_dict in step_dict['points']:
             points.append(Point(**point_dict))
 
-        step.set_step(step_dict['step_name'], points)
+        step.set_step(step_dict.get('step_name'), step_dict.get('step_type'), points)
         return step

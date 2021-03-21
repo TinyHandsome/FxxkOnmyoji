@@ -11,10 +11,11 @@
 @desc: 常用methods
         1. [线程的关闭](https://stackoverflow.com/questions/323972/is-there-any-way-to-kill-a-thread)
 """
-from threading import Thread, Event
+from threading import Thread, Event, Lock
 from dataclasses import dataclass
 
 from supports.info_pip import InfoPip
+from supports.tip_time import TipTime
 
 
 @dataclass
@@ -27,10 +28,15 @@ class ThreadManagement:
         self.threads = []
         # 暂停的标记，开始是不暂停
         self.pause_flag = False
+        # 线程锁
+        self.lock = Lock()
+        # 暂停时间
+        self.t = TipTime()
 
     def build_thread(self, func, func_name, is_while=True, args=()):
         """建立线程"""
-        t = Job(target=func, name='【线程】' + func_name, daemon=True, is_while=is_while, args=args)
+        t = Job(target=func, name='【线程】' + func_name, lock=self.lock, tip=self.t, daemon=True, is_while=is_while,
+                args=args)
         self.threads.append(t)
         # 设置守护线程，主线程退出不必等待该线程
         # print(t.name + '，启动...')
@@ -69,16 +75,21 @@ class ThreadManagement:
 
     def get_need_threads(self):
         """获取不以_开头的线程"""
-        return [p for p in self.threads if not p.getName().replace('【线程】', '').startswith('_')]
+        return [p for p in self.threads if not p.ignore_type]
 
 
 class Job(Thread):
-    def __init__(self, target, name, daemon, is_while, args):
+    def __init__(self, target, name, lock: Lock, tip, daemon, is_while, args):
         super().__init__(name=name, daemon=daemon)
         self.target = target
+        self.lock = lock
+        self.tip = tip
         self.args = args
         self.is_while = is_while
         self.flag = Event()
+
+        # 是否是_开头的线程，是的话，不需要停顿
+        self.ignore_type = self.name.replace('【线程】', '').startswith('_')
 
         # 停止按钮
         self.stop_flag = False
@@ -87,6 +98,7 @@ class Job(Thread):
         self.flag.set()
 
     def run(self):
+        self.lock.acquire()
         if self.is_while:
             # 如果是循环检测线程，则一直循环
             while self.flag:
@@ -98,6 +110,13 @@ class Job(Thread):
                 self.target(*self.args)
         else:
             self.target(*self.args)
+
+        # 如果不是_开头的线程，就要停会儿在运行哦
+        if not self.ignore_type:
+            # 暂停一会儿再释放
+            self.tip.tip('color')
+
+        self.lock.release()
 
     def pause(self):
         self.flag.clear()

@@ -44,7 +44,7 @@ class FunctionFactory:
 
             for key, value in cf.get_items(fn):
                 if key != 'connections':
-                    step_infos.append(value)
+                    step_infos.append([key, value])
                 else:
                     connections = value.split('-')
 
