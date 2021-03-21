@@ -196,13 +196,13 @@
                         "point_name": "战[1]@lc",
                         "point_type": "lc",
                         "point_location": [
-                            1500,
-                            457
+                            "",
+                            ""
                         ],
                         "point_color": [
-                            240,
-                            240,
-                            240
+                            "",
+                            "",
+                            ""
                         ],
                         "click_times": 1
                     }
@@ -256,13 +256,13 @@
                         "point_name": "奖励[1]@lc",
                         "point_type": "lc",
                         "point_location": [
-                            1512,
-                            467
+                            "",
+                            ""
                         ],
                         "point_color": [
-                            240,
-                            240,
-                            240
+                            "",
+                            "",
+                            ""
                         ],
                         "click_times": 2
                     }
@@ -364,13 +364,13 @@
                         "point_name": "关闭[1]@l",
                         "point_type": "l",
                         "point_location": [
-                            "",
-                            ""
+                            1032,
+                            693
                         ],
                         "point_color": [
-                            "",
-                            "",
-                            ""
+                            43,
+                            43,
+                            43
                         ],
                         "click_times": 0
                     },
@@ -378,13 +378,13 @@
                         "point_name": "关闭[2]@c",
                         "point_type": "c",
                         "point_location": [
-                            "",
-                            ""
+                            1014,
+                            800
                         ],
                         "point_color": [
-                            "",
-                            "",
-                            ""
+                            50,
+                            50,
+                            50
                         ],
                         "click_times": 1
                     }

@@ -16,7 +16,7 @@
         5. [tk设置窗口图表的三种方式](https://blog.csdn.net/nilvya/article/details/104822196/)
         6. [pyinstaller参数详解](http://c.biancheng.net/view/2690.html)
            [pyinstaller官方文档](https://pyinstaller.readthedocs.io/en/v4.2/usage.html)
-           pyinstaller -D -w -y -n 平平无奇的阴阳师养成工具 -i ./configures/自由之翼.ico tk_app.pyw --distpath=C:/Users/liyingjun/Desktop/gouzei/dist --workpath=C:/Users/liyingjun/Desktop/gouzei/build --add-data="configures;configures"
+           pyinstaller -D -w -y -n 平平无奇的阴阳师养成工具[v0.33] -i ./configures/自由之翼.ico tk_app.pyw --distpath=C:/Users/liyingjun/Desktop/gouzei/dist --workpath=C:/Users/liyingjun/Desktop/gouzei/build --add-data="configures;configures"
            【弄完后记得删除configures/update_configs.ini】
 
 """
