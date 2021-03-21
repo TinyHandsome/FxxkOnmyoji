@@ -364,8 +364,8 @@
                         "point_name": "关闭[1]@l",
                         "point_type": "l",
                         "point_location": [
-                            1032,
-                            693
+                            1013,
+                            551
                         ],
                         "point_color": [
                             43,
@@ -378,13 +378,47 @@
                         "point_name": "关闭[2]@c",
                         "point_type": "c",
                         "point_location": [
-                            1014,
-                            800
+                            992,
+                            691
                         ],
                         "point_color": [
-                            50,
-                            50,
-                            50
+                            43,
+                            43,
+                            43
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "测试2",
+                "step_type": "",
+                "points": [
+                    {
+                        "point_name": "测试2[1]@l",
+                        "point_type": "l",
+                        "point_location": [
+                            993,
+                            519
+                        ],
+                        "point_color": [
+                            43,
+                            43,
+                            43
+                        ],
+                        "click_times": 0
+                    },
+                    {
+                        "point_name": "测试2[2]@c",
+                        "point_type": "c",
+                        "point_location": [
+                            736,
+                            497
+                        ],
+                        "point_color": [
+                            43,
+                            43,
+                            43
                         ],
                         "click_times": 1
                     }

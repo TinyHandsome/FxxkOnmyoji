@@ -11,7 +11,7 @@
 @desc: 常用methods
         1. [线程的关闭](https://stackoverflow.com/questions/323972/is-there-any-way-to-kill-a-thread)
 """
-from threading import Thread, Event, Lock
+from threading import Thread, Event
 from dataclasses import dataclass
 
 from supports.info_pip import InfoPip
@@ -30,10 +30,13 @@ class ThreadManagement:
         self.pause_flag = False
         # 暂停时间
         self.t = TipTime()
+        # 进程控制，保证只有一个在运行
+        self.lock = Event()
+        self.lock.set()
 
     def build_thread(self, func, func_name, is_while=True, args=()):
         """建立线程"""
-        t = Job(target=func, name='【线程】' + func_name, tip=self.t, daemon=True, is_while=is_while,
+        t = Job(target=func, name='【线程】' + func_name, tip=self.t, lock=self.lock, daemon=True, is_while=is_while,
                 args=args)
         self.threads.append(t)
         # 设置守护线程，主线程退出不必等待该线程
@@ -77,10 +80,11 @@ class ThreadManagement:
 
 
 class Job(Thread):
-    def __init__(self, target, name, tip, daemon, is_while, args):
+    def __init__(self, target, name, tip, lock, daemon, is_while, args):
         super().__init__(name=name, daemon=daemon)
         self.target = target
         self.tip = tip
+        self.lock = lock
         self.args = args
         self.is_while = is_while
         self.flag = Event()
@@ -97,14 +101,19 @@ class Job(Thread):
     def run(self):
         if self.is_while:
             # 如果是循环检测线程，则一直循环
-            while self.flag:
+            while True:
                 # 如果检测到停止按钮，就直接退出
                 if self.stop_flag:
                     break
 
+                # 运行时锁住
+                self.lock.wait()
+                self.lock.clear()
+
                 self.flag.wait()
                 self.target(*self.args)
 
+                self.lock.set()
                 # 如果不是_开头的线程，就要停会儿在运行哦
                 if not self.ignore_type:
                     # 暂停一会儿再释放
