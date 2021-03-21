@@ -39,6 +39,14 @@ class MouseAction:
         """鼠标移动到x，y"""
         self.m.move(x, y)
 
+    def mouse_press(self, x, y):
+        """将鼠标移动到xy，并按下，不弹起"""
+        self.m.press(x, y)
+
+    def mouse_release(self, x, y):
+        """将鼠标移动到xy，弹起"""
+        self.m.release(x, y)
+
     def mouse_click(self, x, y):
         """将鼠标移动到(x,y)，左键点一次"""
         self.m.click(x, y, 1, 1)
