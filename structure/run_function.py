@@ -40,8 +40,11 @@ class RunStep:
         self.location_points = self.step.get_location_points()
         self.click_points = self.step.get_click_points(p_type='c')
         self.multi_click_points = self.step.get_click_points(p_type='m')
-        self.press_release_points = [self.step.get_click_points(p_type='p')[0],
-                                     self.step.get_click_points(p_type='r')[0]]
+        try:
+            self.press_release_points = [self.step.get_click_points(p_type='p')[0],
+                                         self.step.get_click_points(p_type='r')[0]]
+        except:
+            self.press_release_points = []
         self.pause_points = self.step.get_click_points(p_type='pause')
 
         # 鼠标键盘工厂
@@ -103,9 +106,15 @@ class RunStep:
         # 点击m
         self.run_multi_click_points(self.multi_click_points)
         # 进行拖拽
-        self.run_press_release_points(self.press_release_points[0], self.press_release_points[1])
+        try:
+            self.run_press_release_points(self.press_release_points[0], self.press_release_points[1])
+        except:
+            ...
         # 暂停：多个暂停点，一个step只取最后的时间
-        self.run_pause_points(self.pause_points[-1])
+        try:
+            self.run_pause_points(self.pause_points[-1])
+        except:
+            ...
 
     def run_click_point(self, point: Point):
         """点击"""
