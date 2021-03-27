@@ -119,10 +119,10 @@ class RunStep:
     def run_click_point(self, point: Point):
         """点击"""
         xy, color = point.get_loc_color()
-        if point.click_times == '0':
+        if int(point.click_times) == 0:
             # 讲道理，这种情况是不会有的，万一有憨批呢，对吧
             ...
-        elif point.click_times == '1':
+        elif int(point.click_times) == 1:
             # 点击一次
             self.mkf.l1(xy)
         else:
@@ -137,7 +137,10 @@ class RunStep:
 
         sorted_points = [y[1] for y in sorted(m_point_dict.items(), key=lambda x: x[0], reverse=True)]
         for p in sorted_points:
+            sleep_secs = p.click_times
+            p.click_times = 1
             self.run_click_point(p)
+            time.sleep(sleep_secs)
 
     def run_press_release_points(self, point_p: Point, point_r: Point):
         """运行拖拽点"""
