@@ -105,6 +105,10 @@ class TipTime:
         temp = uniform(aim_set[0], aim_set[1])
         time.sleep(temp)
 
+    def sleep(self, seconds):
+        """暂停时间"""
+        time.sleep(seconds)
+
     def get_mouse_bias(self):
         """获取鼠标偏移量"""
 

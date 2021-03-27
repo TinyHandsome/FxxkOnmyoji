@@ -51,24 +51,35 @@ class Step:
                 click_times = [0]
 
             # 【v 0.32】名字前面加入编号
-            def set_point_name():
+            def set_point_name(pt):
                 return self.step_name + '[' + str(count) + ']' + '@' + pt
 
-            # 如果类型中没有m的话，即为c_1类型
-            if point_type != 'm':
-                pt = point_type
-                point = Point('temp', pt, ('', ''), ('', '', ''), int(click_times[0]))
-                point.point_name = set_point_name()
-                self.points.append(point)
-            else:
-                # 否则需要建立多个点
+            def get_temp_point(pt, c_time):
+                p = Point('temp', pt, ('', ''), ('', '', ''), c_time)
+                p.point_name = set_point_name(pt)
+                self.points.append(p)
+
+            if point_type == 'm':
+                # 如果类型为多重点击
                 m_index = 0
                 for c_times in click_times:
                     m_index += 1
                     pt = point_type + str(m_index)
-                    point = Point('temp', pt, ('', ''), ('', '', ''), int(c_times))
-                    point.point_name = set_point_name()
-                    self.points.append(point)
+                    get_temp_point(pt, int(c_times))
+            elif point_type == 'pr':
+                # 如果类型为press release型，拖动滑动条
+                pt = 'p'
+                get_temp_point(pt, 0)
+                pt = 'r'
+                get_temp_point(pt, 0)
+            elif point_type == 'pause':
+                # 如果类型为pause型，则执行暂停
+                pt = 'pause'
+                get_temp_point(pt, int(click_times[0]))
+            else:
+                # 否则为c_1类型
+                pt = point_type
+                get_temp_point(pt, int(click_times[0]))
 
     def set_step_key_type(self):
         """根据step_key获取类别，一般为step1、step2这种的"""
@@ -130,6 +141,7 @@ class Step:
         检查该step是否是有效的，即是否都为空
             1. 步骤中所有点都有信息，就是有效的，这点跟function的不一样
             2. 只要有一个点没信息，step就是无效的
+            3. 如果点的类型是pause则可以跳过检查
         """
 
         point_states = []
@@ -164,3 +176,4 @@ class Step:
 
         step.set_step(step_dict.get('step_name'), step_dict.get('step_type'), points)
         return step
+

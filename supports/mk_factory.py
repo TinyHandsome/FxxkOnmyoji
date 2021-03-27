@@ -86,6 +86,9 @@ class MKFactory:
     def l_pr(self, xy1, xy2):
         """实现鼠标xy1按下，xy2弹起，实现拖动效果"""
         self.m.mouse_press(xy1[0], xy1[1])
+        self.t.tip()
+        self.m.mouse_move_to(xy2[0], xy2[1])
+        self.t.tip()
         self.m.mouse_release(xy2[0], xy2[1])
         self.t.tip()
 

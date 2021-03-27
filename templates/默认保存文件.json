@@ -364,13 +364,13 @@
                         "point_name": "关闭[1]@l",
                         "point_type": "l",
                         "point_location": [
-                            1013,
-                            551
+                            "",
+                            ""
                         ],
                         "point_color": [
-                            43,
-                            43,
-                            43
+                            "",
+                            "",
+                            ""
                         ],
                         "click_times": 0
                     },
@@ -378,13 +378,13 @@
                         "point_name": "关闭[2]@c",
                         "point_type": "c",
                         "point_location": [
-                            992,
-                            691
+                            "",
+                            ""
                         ],
                         "point_color": [
-                            43,
-                            43,
-                            43
+                            "",
+                            "",
+                            ""
                         ],
                         "click_times": 1
                     }
@@ -398,8 +398,50 @@
                         "point_name": "测试2[1]@l",
                         "point_type": "l",
                         "point_location": [
-                            993,
-                            519
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 0
+                    },
+                    {
+                        "point_name": "测试2[2]@c",
+                        "point_type": "c",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            }
+        ],
+        "connections": []
+    },
+    {
+        "func_name": "测试拖动",
+        "func_code": "004",
+        "func_shown": 1,
+        "steps": [
+            {
+                "step_name": "测试",
+                "step_type": "",
+                "points": [
+                    {
+                        "point_name": "测试[1]@l",
+                        "point_type": "l",
+                        "point_location": [
+                            1238,
+                            878
                         ],
                         "point_color": [
                             43,
@@ -409,18 +451,32 @@
                         "click_times": 0
                     },
                     {
-                        "point_name": "测试2[2]@c",
-                        "point_type": "c",
+                        "point_name": "测试[2]@p",
+                        "point_type": "p",
                         "point_location": [
-                            736,
-                            497
+                            1762,
+                            832
+                        ],
+                        "point_color": [
+                            86,
+                            86,
+                            86
+                        ],
+                        "click_times": 0
+                    },
+                    {
+                        "point_name": "测试[2]@r",
+                        "point_type": "r",
+                        "point_location": [
+                            1760,
+                            647
                         ],
                         "point_color": [
                             43,
                             43,
                             43
                         ],
-                        "click_times": 1
+                        "click_times": 0
                     }
                 ]
             }

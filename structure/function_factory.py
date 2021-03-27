@@ -153,7 +153,7 @@ class FunctionFactory:
 
         return result_functions
 
-    def set_functions_by_step(self, functions: [Function], func: Function):
+    def set_functions_by_step(self, functions: [Function], func: Function, reload_points=False):
         """
         【v0.33】在旧功能中查找是否有新功能的同名，有的话，将同名的新功能的step写入旧功能中
         对比step，将同名的func中，更新同名的step
@@ -161,6 +161,7 @@ class FunctionFactory:
             2. 新增了connections的处理
         :param functions: 最开始的功能
         :param func: 新载入的功能
+        :reload_points: 是否重载点信息，否则只重载step信息
         """
         result_functions = []
         for f in functions:
@@ -178,11 +179,41 @@ class FunctionFactory:
                         # 如果找到了，且所有的点是有效的，就append，同时跳出循环
                         # 旧 == 新，新的有效，则用新的
                         if ss.step_name == func_ss.step_name:
+
+                            """
+                            找到了流程之后，根据是否下入到点，进行不同的处理
+                                1. 直接抄有数据的流程
+                                2. 下入到流程的每个点，把有数据的点抄一遍，没数据就保留
+                            """
                             # 这里不写在一起是因为，找到了，有效就要，无效就撤，提高效率
                             # 即，找到了，但无效，也不找了
-                            if func_ss.check_effective():
-                                result_steps.append(func_ss)
-                                is_find = True
+                            if not reload_points:
+                                if func_ss.check_effective():
+                                    result_steps.append(func_ss)
+
+                            # 如果深入到点位进行替换的话
+                            else:
+                                ss_points = ss.points
+                                func_ss_points = func_ss.points
+
+                                result_points = []
+
+                                for ssp in ss_points:
+                                    find_point = False
+                                    for fsp in func_ss_points:
+                                        # 找到点名字之后，有效就抄一遍
+                                        if ssp.point_name == fsp.point_name:
+                                            if fsp.check_effective():
+                                                result_points.append(fsp)
+                                                find_point = True
+                                            break
+                                    # 如果没有找到点，就用原来的点
+                                    if not find_point:
+                                        result_points.append(ssp)
+                                ss.points = result_points
+                                result_steps.append(ss)
+
+                            is_find = True
                             break
 
                     # 没有找到，或者无效，就用原来的

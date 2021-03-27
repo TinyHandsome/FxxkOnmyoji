@@ -15,6 +15,9 @@
         2. 已有操作类型：
             1. c：[操作]点击
             2. m：[操作]多次点击中的某一步，后面会跟个数字，如m1，代表多次执行时，第一次执行该点
+            3. p：[操作]press，按下
+            4. r: [操作]release，放开
+            5. pause: [操作]暂停
 """
 
 from dataclasses import dataclass
@@ -34,6 +37,14 @@ class Point:
     def get_type_click_time(self):
         """获取点的类型和点击次数"""
         return self.point_type, self.click_times
+
+    def get_click_time(self):
+        """获取点的点击次数"""
+        return self.click_times
+
+    def get_loc(self):
+        """获取位置信息"""
+        return self.point_location
 
     def get_loc_color(self):
         """获取位置和颜色信息"""
@@ -66,7 +77,10 @@ class Point:
         """
         自身点位信息检查，只要坐标和颜色有一个为空值则False
             1. 注意：这里只检查点的颜色和坐标是否都有，有就是True
+            2. 如果点的类型是暂停，则直接有效
         """
+        if self.point_type == 'pause':
+            return True
 
         if '' in self.point_location or '' in self.point_color:
             return False

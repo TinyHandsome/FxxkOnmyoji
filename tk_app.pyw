@@ -16,7 +16,7 @@
         5. [tk设置窗口图表的三种方式](https://blog.csdn.net/nilvya/article/details/104822196/)
         6. [pyinstaller参数详解](http://c.biancheng.net/view/2690.html)
            [pyinstaller官方文档](https://pyinstaller.readthedocs.io/en/v4.2/usage.html)
-           pyinstaller -D -w -y -n 平平无奇的阴阳师养成工具[v0.33] -i ./configures/自由之翼.ico tk_app.pyw --distpath=C:/Users/liyingjun/Desktop/gouzei/dist --workpath=C:/Users/liyingjun/Desktop/gouzei/build --add-data="configures;configures"
+           pyinstaller -D -w -y -n 平平无奇的阴阳师养成工具[v0.34] -i ./configures/自由之翼.ico tk_app.pyw --distpath=C:/Users/liyingjun/Desktop/gouzei/dist --workpath=C:/Users/liyingjun/Desktop/gouzei/build --add-data="configures;configures"
            【弄完后记得删除configures/update_configs.ini】
 
 """
@@ -121,7 +121,7 @@ class App:
         # 如果设置为True ，则图标图像也将应用于以后创建的所有 toplevels 图像
         # self.root.iconphoto(True, PhotoImage(file='./configures/自由之翼.png'))
         self.root.iconbitmap('./configures/自由之翼.ico')
-        self.root.title('平平无奇的阴阳师养成工具 v0.33')
+        self.root.title('平平无奇的阴阳师养成工具 v0.34')
         # 设置界面大小和位置
         self.root.geometry("+1200+200")
         # 设置关闭按钮的功能
@@ -139,7 +139,7 @@ class App:
 
         # 是否置顶
         self.cb_var_whether_top = BooleanVar()
-        self.file_menu.add_checkbutton(label='置顶', variable=self.cb_var_whether_top,
+        self.file_menu.add_checkbutton(label='置顶(t)', variable=self.cb_var_whether_top,
                                        onvalue=True, offvalue=False,
                                        command=self.set_top_window)
         # 初始化 置顶
@@ -147,12 +147,11 @@ class App:
 
         # 是否进行超时检查
         self.overtime_check = BooleanVar()
-        self.file_menu.add_checkbutton(label='超时检查', variable=self.overtime_check,
+        self.file_menu.add_checkbutton(label='超时检查(C)', variable=self.overtime_check,
                                        onvalue=True, offvalue=False,
                                        command=self.change_overtime_check)
         # 初始化 进行超时检查
         self.overtime_check.set(True)
-
 
         self.file_menu.add_command(label='调整界面(d)', command=self.set_two_win_left)
         self.file_menu.add_separator()
@@ -419,6 +418,8 @@ class App:
         partial_register(('alt', 'p'), callback=lambda e: self.pause())
         partial_register(('alt', 's'), callback=lambda e: self.save_config_as_default())
         partial_register(('alt', 'shift', 's'), callback=lambda e: self.save_config_to_file())
+        partial_register(('alt', 't'), callback=lambda e: self.set_top_window(is_click=False))
+        partial_register(('alt', 'shift', 'c'), callback=lambda e: self.change_overtime_check(is_click=False))
         partial_register(('alt', 'l'), callback=lambda e: self.load_default_config())
         partial_register(('alt', 'shift', 'l'), callback=lambda e: self.load_user_config())
         partial_register(('alt', 'k'), callback=lambda e: self.update_functions())
@@ -434,8 +435,11 @@ class App:
         if clear_count != 0:
             self.info_stack.info('删除了【' + str(clear_count) + '】个日志文件...', 3)
 
-    def change_overtime_check(self, show_info=True):
+    def change_overtime_check(self, show_info=True, is_click=True):
         """设置是否超时检查"""
+        if not is_click:
+            self.overtime_check.set(not self.overtime_check.get())
+
         if self.overtime_check.get():
             if show_info:
                 self.info_stack.info('开启超时检查', 1)
@@ -443,8 +447,11 @@ class App:
             if show_info:
                 self.info_stack.info('取消超时检查', 1)
 
-    def set_top_window(self, shown_info=True):
+    def set_top_window(self, shown_info=True, is_click=True):
         """设置是否置顶"""
+        if not is_click:
+            self.cb_var_whether_top.set(not self.cb_var_whether_top.get())
+
         if self.cb_var_whether_top.get():
             if shown_info:
                 self.info_stack.info('设置软件置顶', 1)
@@ -664,7 +671,8 @@ class App:
         """
         result_functions = self.ff.init_functions_from_config()
         for f in self.functions:
-            result_functions = self.ff.set_functions_by_step(result_functions, f)
+            # 【v0.34】 这里新增修改每个点
+            result_functions = self.ff.set_functions_by_step(result_functions, f, reload_points=True)
 
         # 手动更新functions，并重建字典和下拉框
         self.functions = result_functions
@@ -821,7 +829,8 @@ class App:
         # 记录当前function_name作为最后运行功能
         self.uct.update_last_open_funcname(self.current_func, self.load_file_name_without_suffix)
 
-        self.rf = RunFunction(self.current_func, self.ff, self.tm, self.info_stack, self.row_factory, self.overtime_check.get())
+        self.rf = RunFunction(self.current_func, self.ff, self.tm, self.info_stack, self.row_factory,
+                              self.overtime_check.get())
         self.rf.run_function()
 
     def destroy(self):

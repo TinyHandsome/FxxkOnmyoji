@@ -12,6 +12,7 @@
 """
 
 from dataclasses import dataclass
+import time
 from structure.function import Function
 from structure.function_factory import FunctionFactory
 from structure.row_factory import RowFactory
@@ -39,6 +40,9 @@ class RunStep:
         self.location_points = self.step.get_location_points()
         self.click_points = self.step.get_click_points(p_type='c')
         self.multi_click_points = self.step.get_click_points(p_type='m')
+        self.press_release_points = [self.step.get_click_points(p_type='p')[0],
+                                     self.step.get_click_points(p_type='r')[0]]
+        self.pause_points = self.step.get_click_points(p_type='pause')
 
         # 鼠标键盘工厂
         self.mkf = MKFactory()
@@ -51,7 +55,7 @@ class RunStep:
     def run_step(self):
         """识别并点击"""
         if self.get_location_result():
-            # 检查是否超时
+            # 检查是否超时： [是否超时 and 超时检查是否打开 and 该step需要检查]
             if self.tt.update_time_and_check(self.step.step_name) and self.overtime_check and self.step.is_step_check():
                 # 超时返回的是True，自己暂停
                 return True
@@ -98,6 +102,10 @@ class RunStep:
             self.run_click_point(p)
         # 点击m
         self.run_multi_click_points(self.multi_click_points)
+        # 进行拖拽
+        self.run_press_release_points(self.press_release_points[0], self.press_release_points[1])
+        # 暂停：多个暂停点，一个step只取最后的时间
+        self.run_pause_points(self.pause_points[-1])
 
     def run_click_point(self, point: Point):
         """点击"""
@@ -121,6 +129,14 @@ class RunStep:
         sorted_points = [y[1] for y in sorted(m_point_dict.items(), key=lambda x: x[0], reverse=True)]
         for p in sorted_points:
             self.run_click_point(p)
+
+    def run_press_release_points(self, point_p: Point, point_r: Point):
+        """运行拖拽点"""
+        self.mkf.l_pr(point_p.get_loc(), point_r.get_loc())
+
+    def run_pause_points(self, point: Point):
+        """暂停点"""
+        time.sleep(point.get_click_time())
 
 
 @dataclass
