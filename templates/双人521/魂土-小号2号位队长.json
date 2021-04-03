@@ -6,6 +6,7 @@
         "steps": [
             {
                 "step_name": "挑战",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "挑战@lc_1",
@@ -25,6 +26,7 @@
             },
             {
                 "step_name": "队员结算1",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "队员结算1@lc_3",
@@ -44,6 +46,7 @@
             },
             {
                 "step_name": "队员结算2",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "队员结算2@lc_1",
@@ -63,6 +66,7 @@
             },
             {
                 "step_name": "队长结算1",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "队长结算1@lc_3",
@@ -82,6 +86,7 @@
             },
             {
                 "step_name": "队长结算2",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "队长结算2@lc_1",
@@ -109,6 +114,7 @@
         "steps": [
             {
                 "step_name": "开始",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "开始@lc_1",
@@ -128,6 +134,7 @@
             },
             {
                 "step_name": "结算1",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "结算1@lc_3",
@@ -147,6 +154,7 @@
             },
             {
                 "step_name": "结算2",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "结算2@lc_1",
@@ -181,6 +189,7 @@
         "steps": [
             {
                 "step_name": "组队",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "组队@n",
@@ -214,6 +223,7 @@
             },
             {
                 "step_name": "自动匹配",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "自动匹配@lc_1",
@@ -233,6 +243,7 @@
             },
             {
                 "step_name": "准备",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "准备@lc_1",
@@ -252,6 +263,7 @@
             },
             {
                 "step_name": "结束1",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "结束1@lc_3",
@@ -271,6 +283,7 @@
             },
             {
                 "step_name": "结束2",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "结束2@lc_1",
@@ -298,6 +311,7 @@
         "steps": [
             {
                 "step_name": "刷新",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "刷新@lc_1",
@@ -317,6 +331,7 @@
             },
             {
                 "step_name": "加入",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "加入@lc_1",
@@ -344,18 +359,19 @@
         "steps": [
             {
                 "step_name": "挑战",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "挑战@lc_1",
                         "point_type": "lc",
                         "point_location": [
-                            802,
-                            974
+                            791,
+                            985
                         ],
                         "point_color": [
-                            192,
-                            161,
-                            94
+                            51,
+                            38,
+                            26
                         ],
                         "click_times": 1
                     }
@@ -363,13 +379,34 @@
             },
             {
                 "step_name": "队员结算状态1",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "队员结算状态1@lc_3",
                         "point_type": "lc",
                         "point_location": [
-                            468,
-                            384
+                            334,
+                            143
+                        ],
+                        "point_color": [
+                            170,
+                            27,
+                            17
+                        ],
+                        "click_times": 3
+                    }
+                ]
+            },
+            {
+                "step_name": "队长结算状态1",
+                "step_type": "",
+                "points": [
+                    {
+                        "point_name": "队长结算状态1@lc_3",
+                        "point_type": "lc",
+                        "point_location": [
+                            467,
+                            998
                         ],
                         "point_color": [
                             16,
@@ -381,26 +418,8 @@
                 ]
             },
             {
-                "step_name": "队长结算状态1",
-                "points": [
-                    {
-                        "point_name": "队长结算状态1@lc_3",
-                        "point_type": "lc",
-                        "point_location": [
-                            308,
-                            615
-                        ],
-                        "point_color": [
-                            122,
-                            24,
-                            16
-                        ],
-                        "click_times": 3
-                    }
-                ]
-            },
-            {
                 "step_name": "队员结算状态2",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "队员结算状态2@lc_3",
@@ -420,6 +439,7 @@
             },
             {
                 "step_name": "队长结算状态2",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "队长结算状态2@lc_3",
@@ -439,6 +459,7 @@
             },
             {
                 "step_name": "队员失败结算1",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "队员失败结算1@lc_3",
@@ -458,6 +479,7 @@
             },
             {
                 "step_name": "队长失败结算1",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "队长失败结算1@lc_3",
@@ -477,6 +499,7 @@
             },
             {
                 "step_name": "队长自动邀请框",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "队长自动邀请框@l",
@@ -510,6 +533,7 @@
             },
             {
                 "step_name": "队长邀请",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "队长邀请@lc_1",
@@ -529,6 +553,7 @@
             },
             {
                 "step_name": "队员接受",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "队员接受@lc_1",
@@ -548,6 +573,7 @@
             },
             {
                 "step_name": "队员自动接受",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "队员自动接受@lc_1",
@@ -567,6 +593,7 @@
             },
             {
                 "step_name": "队员准备",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "队员准备@lc_1",
@@ -586,6 +613,7 @@
             },
             {
                 "step_name": "关闭体力不足",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "关闭体力不足@l",
@@ -619,6 +647,7 @@
             },
             {
                 "step_name": "点开加成",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "点开加成@lc_1",
@@ -638,6 +667,7 @@
             },
             {
                 "step_name": "关闭双倍",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "关闭双倍@lc_1",
@@ -665,6 +695,7 @@
         "steps": [
             {
                 "step_name": "挑战",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "挑战@lc_1",
@@ -684,6 +715,7 @@
             },
             {
                 "step_name": "胜利",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "胜利@lc_1",
@@ -703,6 +735,7 @@
             },
             {
                 "step_name": "结算",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "结算@lc_1",
@@ -730,6 +763,7 @@
         "steps": [
             {
                 "step_name": "界面1",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "界面1@l",
@@ -771,6 +805,7 @@
         "steps": [
             {
                 "step_name": "双倍开关",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "双倍开关@lc",
@@ -790,6 +825,7 @@
             },
             {
                 "step_name": "点击关闭",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "点击关闭@lc",
@@ -817,6 +853,7 @@
         "steps": [
             {
                 "step_name": "1号位关闭悬赏",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "1号位关闭悬赏@l",

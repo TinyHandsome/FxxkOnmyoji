@@ -6,6 +6,7 @@
         "steps": [
             {
                 "step_name": "挑战",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "挑战[1]@lc",
@@ -25,6 +26,7 @@
             },
             {
                 "step_name": "队员结算状态1",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "队员结算状态1[1]@lc",
@@ -44,6 +46,7 @@
             },
             {
                 "step_name": "队长结算状态1",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "队长结算状态1[1]@lc",
@@ -63,6 +66,7 @@
             },
             {
                 "step_name": "队员结算状态2",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "队员结算状态2[1]@lc",
@@ -82,6 +86,7 @@
             },
             {
                 "step_name": "队长结算状态2",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "队长结算状态2[1]@lc",
@@ -101,6 +106,7 @@
             },
             {
                 "step_name": "关闭加成",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "关闭加成[1]@l",
@@ -184,6 +190,7 @@
         "steps": [
             {
                 "step_name": "战",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "战[1]@lc",
@@ -203,6 +210,7 @@
             },
             {
                 "step_name": "准备",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "准备[1]@lc",
@@ -222,6 +230,7 @@
             },
             {
                 "step_name": "胜利",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "胜利[1]@lc",
@@ -241,6 +250,7 @@
             },
             {
                 "step_name": "奖励",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "奖励[1]@lc",
@@ -260,6 +270,7 @@
             },
             {
                 "step_name": "失败",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "失败[1]@lc",
@@ -279,18 +290,19 @@
             },
             {
                 "step_name": "手动切自动",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "手动切自动[1]@lc",
                         "point_type": "lc",
                         "point_location": [
-                            66,
-                            968
+                            84,
+                            988
                         ],
                         "point_color": [
-                            88,
-                            78,
-                            112
+                            86,
+                            73,
+                            55
                         ],
                         "click_times": 1
                     }
@@ -298,6 +310,7 @@
             },
             {
                 "step_name": "拔得头筹",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "拔得头筹[1]@lc",
@@ -317,10 +330,73 @@
             },
             {
                 "step_name": "段位保护的战",
+                "step_type": "",
                 "points": [
                     {
                         "point_name": "段位保护的战[1]@lc",
                         "point_type": "lc",
+                        "point_location": [
+                            1787,
+                            928
+                        ],
+                        "point_color": [
+                            83,
+                            83,
+                            86
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "段位保护的战2",
+                "step_type": "",
+                "points": [
+                    {
+                        "point_name": "段位保护的战2[1]@lc",
+                        "point_type": "lc",
+                        "point_location": [
+                            1815,
+                            931
+                        ],
+                        "point_color": [
+                            88,
+                            104,
+                            118
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            }
+        ],
+        "connections": []
+    },
+    {
+        "func_name": "关闭悬赏邀请",
+        "func_code": "003",
+        "func_shown": 1,
+        "steps": [
+            {
+                "step_name": "关闭",
+                "step_type": "",
+                "points": [
+                    {
+                        "point_name": "关闭[1]@l",
+                        "point_type": "l",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 0
+                    },
+                    {
+                        "point_name": "关闭[2]@c",
+                        "point_type": "c",
                         "point_location": [
                             "",
                             ""

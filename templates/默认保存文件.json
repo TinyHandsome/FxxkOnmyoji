@@ -347,6 +347,540 @@
                         "click_times": 1
                     }
                 ]
+            },
+            {
+                "step_name": "段位保护的战2",
+                "step_type": "",
+                "points": [
+                    {
+                        "point_name": "段位保护的战2[1]@lc",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            }
+        ],
+        "connections": []
+    },
+    {
+        "func_name": "百鬼夜行",
+        "func_code": "003",
+        "func_shown": 1,
+        "steps": [
+            {
+                "step_name": "邀请好友",
+                "step_type": "",
+                "points": [
+                    {
+                        "point_name": "邀请好友[1]@lc",
+                        "point_type": "lc",
+                        "point_location": [
+                            264,
+                            901
+                        ],
+                        "point_color": [
+                            255,
+                            243,
+                            207
+                        ],
+                        "click_times": 1
+                    },
+                    {
+                        "point_name": "邀请好友[2]@pause",
+                        "point_type": "pause",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "点击好友",
+                "step_type": "",
+                "points": [
+                    {
+                        "point_name": "点击好友[1]@lc",
+                        "point_type": "lc",
+                        "point_location": [
+                            929,
+                            424
+                        ],
+                        "point_color": [
+                            234,
+                            199,
+                            160
+                        ],
+                        "click_times": 1
+                    },
+                    {
+                        "point_name": "点击好友[2]@pause",
+                        "point_type": "pause",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "点击进入",
+                "step_type": "",
+                "points": [
+                    {
+                        "point_name": "点击进入[1]@n",
+                        "point_type": "n",
+                        "point_location": [
+                            283,
+                            933
+                        ],
+                        "point_color": [
+                            77,
+                            43,
+                            55
+                        ],
+                        "click_times": 0
+                    },
+                    {
+                        "point_name": "点击进入[2]@l",
+                        "point_type": "l",
+                        "point_location": [
+                            1185,
+                            932
+                        ],
+                        "point_color": [
+                            34,
+                            21,
+                            25
+                        ],
+                        "click_times": 0
+                    },
+                    {
+                        "point_name": "点击进入[3]@c",
+                        "point_type": "c",
+                        "point_location": [
+                            1661,
+                            865
+                        ],
+                        "point_color": [
+                            108,
+                            50,
+                            14
+                        ],
+                        "click_times": 1
+                    },
+                    {
+                        "point_name": "点击进入[4]@pause",
+                        "point_type": "pause",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "选择中间的鬼王",
+                "step_type": "",
+                "points": [
+                    {
+                        "point_name": "选择中间的鬼王[1]@l",
+                        "point_type": "l",
+                        "point_location": [
+                            1002,
+                            1008
+                        ],
+                        "point_color": [
+                            25,
+                            20,
+                            19
+                        ],
+                        "click_times": 0
+                    },
+                    {
+                        "point_name": "选择中间的鬼王[2]@c",
+                        "point_type": "c",
+                        "point_location": [
+                            969,
+                            695
+                        ],
+                        "point_color": [
+                            7,
+                            6,
+                            7
+                        ],
+                        "click_times": 1
+                    },
+                    {
+                        "point_name": "选择中间的鬼王[3]@pause",
+                        "point_type": "pause",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "开始",
+                "step_type": "",
+                "points": [
+                    {
+                        "point_name": "开始[1]@l",
+                        "point_type": "l",
+                        "point_location": [
+                            1004,
+                            389
+                        ],
+                        "point_color": [
+                            178,
+                            132,
+                            93
+                        ],
+                        "click_times": 0
+                    },
+                    {
+                        "point_name": "开始[2]@c",
+                        "point_type": "c",
+                        "point_location": [
+                            1729,
+                            874
+                        ],
+                        "point_color": [
+                            194,
+                            157,
+                            128
+                        ],
+                        "click_times": 1
+                    },
+                    {
+                        "point_name": "开始[3]@pause",
+                        "point_type": "pause",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "10个豆子",
+                "step_type": "",
+                "points": [
+                    {
+                        "point_name": "10个豆子[1]@l",
+                        "point_type": "l",
+                        "point_location": [
+                            752,
+                            36
+                        ],
+                        "point_color": [
+                            83,
+                            34,
+                            52
+                        ],
+                        "click_times": 0
+                    },
+                    {
+                        "point_name": "10个豆子[2]@l",
+                        "point_type": "l",
+                        "point_location": [
+                            619,
+                            994
+                        ],
+                        "point_color": [
+                            59,
+                            41,
+                            37
+                        ],
+                        "click_times": 0
+                    },
+                    {
+                        "point_name": "10个豆子[3]@p",
+                        "point_type": "p",
+                        "point_location": [
+                            617,
+                            997
+                        ],
+                        "point_color": [
+                            59,
+                            41,
+                            37
+                        ],
+                        "click_times": 0
+                    },
+                    {
+                        "point_name": "10个豆子[3]@r",
+                        "point_type": "r",
+                        "point_location": [
+                            880,
+                            992
+                        ],
+                        "point_color": [
+                            107,
+                            102,
+                            119
+                        ],
+                        "click_times": 0
+                    },
+                    {
+                        "point_name": "10个豆子[4]@pause",
+                        "point_type": "pause",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 2
+                    }
+                ]
+            },
+            {
+                "step_name": "不是背景色就砸豆子1",
+                "step_type": "u",
+                "points": [
+                    {
+                        "point_name": "不是背景色就砸豆子1[1]@l",
+                        "point_type": "l",
+                        "point_location": [
+                            159,
+                            994
+                        ],
+                        "point_color": [
+                            200,
+                            150,
+                            48
+                        ],
+                        "click_times": 0
+                    },
+                    {
+                        "point_name": "不是背景色就砸豆子1[2]@nc",
+                        "point_type": "nc",
+                        "point_location": [
+                            335,
+                            718
+                        ],
+                        "point_color": [
+                            159,
+                            84,
+                            68
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "不是背景色就砸豆子2",
+                "step_type": "u",
+                "points": [
+                    {
+                        "point_name": "不是背景色就砸豆子2[1]@l",
+                        "point_type": "l",
+                        "point_location": [
+                            161,
+                            991
+                        ],
+                        "point_color": [
+                            225,
+                            199,
+                            87
+                        ],
+                        "click_times": 0
+                    },
+                    {
+                        "point_name": "不是背景色就砸豆子2[2]@nc",
+                        "point_type": "nc",
+                        "point_location": [
+                            1124,
+                            710
+                        ],
+                        "point_color": [
+                            177,
+                            103,
+                            88
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "不是背景色就砸豆子3",
+                "step_type": "u",
+                "points": [
+                    {
+                        "point_name": "不是背景色就砸豆子3[1]@l",
+                        "point_type": "l",
+                        "point_location": [
+                            159,
+                            993
+                        ],
+                        "point_color": [
+                            211,
+                            171,
+                            60
+                        ],
+                        "click_times": 0
+                    },
+                    {
+                        "point_name": "不是背景色就砸豆子3[2]@nc",
+                        "point_type": "nc",
+                        "point_location": [
+                            539,
+                            710
+                        ],
+                        "point_color": [
+                            162,
+                            82,
+                            71
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "不是背景色就砸豆子4",
+                "step_type": "u",
+                "points": [
+                    {
+                        "point_name": "不是背景色就砸豆子4[1]@l",
+                        "point_type": "l",
+                        "point_location": [
+                            156,
+                            994
+                        ],
+                        "point_color": [
+                            201,
+                            153,
+                            56
+                        ],
+                        "click_times": 0
+                    },
+                    {
+                        "point_name": "不是背景色就砸豆子4[2]@nc",
+                        "point_type": "nc",
+                        "point_location": [
+                            1241,
+                            709
+                        ],
+                        "point_color": [
+                            173,
+                            95,
+                            79
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "不是背景色就砸豆子5",
+                "step_type": "u",
+                "points": [
+                    {
+                        "point_name": "不是背景色就砸豆子5[1]@l",
+                        "point_type": "l",
+                        "point_location": [
+                            158,
+                            1000
+                        ],
+                        "point_color": [
+                            176,
+                            107,
+                            27
+                        ],
+                        "click_times": 0
+                    },
+                    {
+                        "point_name": "不是背景色就砸豆子5[2]@nc",
+                        "point_type": "nc",
+                        "point_location": [
+                            1578,
+                            713
+                        ],
+                        "point_color": [
+                            156,
+                            78,
+                            67
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "点旁边退出",
+                "step_type": "",
+                "points": [
+                    {
+                        "point_name": "点旁边退出[1]@lc",
+                        "point_type": "lc",
+                        "point_location": [
+                            1901,
+                            578
+                        ],
+                        "point_color": [
+                            22,
+                            21,
+                            57
+                        ],
+                        "click_times": 1
+                    },
+                    {
+                        "point_name": "点旁边退出[2]@pause",
+                        "point_type": "pause",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 1
+                    }
+                ]
             }
         ],
         "connections": []
@@ -387,96 +921,6 @@
                             ""
                         ],
                         "click_times": 1
-                    }
-                ]
-            },
-            {
-                "step_name": "测试2",
-                "step_type": "",
-                "points": [
-                    {
-                        "point_name": "测试2[1]@l",
-                        "point_type": "l",
-                        "point_location": [
-                            "",
-                            ""
-                        ],
-                        "point_color": [
-                            "",
-                            "",
-                            ""
-                        ],
-                        "click_times": 0
-                    },
-                    {
-                        "point_name": "测试2[2]@c",
-                        "point_type": "c",
-                        "point_location": [
-                            "",
-                            ""
-                        ],
-                        "point_color": [
-                            "",
-                            "",
-                            ""
-                        ],
-                        "click_times": 1
-                    }
-                ]
-            }
-        ],
-        "connections": []
-    },
-    {
-        "func_name": "测试拖动",
-        "func_code": "004",
-        "func_shown": 1,
-        "steps": [
-            {
-                "step_name": "测试",
-                "step_type": "",
-                "points": [
-                    {
-                        "point_name": "测试[1]@l",
-                        "point_type": "l",
-                        "point_location": [
-                            1238,
-                            878
-                        ],
-                        "point_color": [
-                            43,
-                            43,
-                            43
-                        ],
-                        "click_times": 0
-                    },
-                    {
-                        "point_name": "测试[2]@p",
-                        "point_type": "p",
-                        "point_location": [
-                            1762,
-                            832
-                        ],
-                        "point_color": [
-                            86,
-                            86,
-                            86
-                        ],
-                        "click_times": 0
-                    },
-                    {
-                        "point_name": "测试[2]@r",
-                        "point_type": "r",
-                        "point_location": [
-                            1760,
-                            647
-                        ],
-                        "point_color": [
-                            43,
-                            43,
-                            43
-                        ],
-                        "click_times": 0
                     }
                 ]
             }
