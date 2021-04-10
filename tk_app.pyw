@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
-# coding=utf-8 
+# coding=utf-8
 
 """
 @author: Li Tian
@@ -825,7 +825,13 @@ class App:
         if not self.check_before_run():
             return
 
+        """检查通过，可以运行"""
+        # 输出信息
         self.info_stack.info(self.current_func.func_name + '启动...', 3)
+        # 将暂停置为未暂停
+        self.tm.pause_flag = False
+        # 清除所有的不需要忽略的threads
+        self.tm.clear_not_ignored_threads()
         # 记录当前function_name作为最后运行功能
         self.uct.update_last_open_funcname(self.current_func, self.load_file_name_without_suffix)
 

@@ -34,6 +34,22 @@ class ThreadManagement:
         self.lock = Event()
         self.lock.set()
 
+    def get_all_threads(self):
+        """查看所有线程"""
+        return self.threads
+
+    def get_need_threads(self):
+        """获取不以_开头的线程"""
+        return [p for p in self.threads if not p.ignore_type]
+
+    def clear_not_ignored_threads(self):
+        """清除不需要忽略的线程"""
+        # 停止已有的线程
+        for p in self.get_need_threads():
+            p.stop()
+        # 清空线程
+        self.threads.clear()
+
     def build_thread(self, func, func_name, is_while=True, args=()):
         """建立线程"""
         t = Job(target=func, name='【线程】' + func_name, tip=self.t, lock=self.lock, daemon=True, is_while=is_while,
@@ -73,10 +89,6 @@ class ThreadManagement:
             for t in pause_threads:
                 t.resume()
             self.info_stack.info('功能' + func_name + '已恢复', 3)
-
-    def get_need_threads(self):
-        """获取不以_开头的线程"""
-        return [p for p in self.threads if not p.ignore_type]
 
 
 class Job(Thread):
