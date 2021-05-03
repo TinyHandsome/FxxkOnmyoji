@@ -8,11 +8,13 @@
 
 ## 写在前面 | Write Head
 
-这是一个关于 **阴阳师** 的脚本，如果你不小心点进来了，赶紧出去，现在还来得急。
+> 这是一个关于 **阴阳师** 的脚本，如果你不小心点进来了，赶紧出去，现在还来得急。
+>
+> 同时，该脚本可用于任何鼠标模拟，基于阴阳师，但超越阴阳师。
 
 **重要声明：**
 
-1. 本软件不是无脑使用的软件，有学习门槛，不是基于图片识别而是基于自己思路的软件， 不保证以后不使用图片识别、人工智能等技术。本软件注重于学习编程，也是我学习python的记录或者说笔记，而不是鼓励大家去用脚本来打破游戏平衡，降低自己和他人的游戏体验。（**请怀着羞耻之心使用该脚本，顺带感谢一下无私的我**）
+1. 本软件不是无脑使用的软件，有学习门槛，不是基于图片识别而是基于鼠标模拟的软件， 不保证以后不使用图片识别、人工智能等技术。本软件注重于学习编程，也是我学习python的记录或者说笔记，而不是鼓励大家去用脚本来打破游戏平衡，降低自己和他人的游戏体验。（**请怀着羞耻之心使用该脚本，顺带感谢一下无私的我**）
 
 2. **仅供学习参考，不允许用于任何商业用途。** 使用该脚本造成的任何后果与本人无关（主要是怕网易干我哈哈哈，网易如果想招我是可以考虑下的嘻嘻，毕竟去年面过网易）
 
@@ -38,32 +40,230 @@
 
 2. 所以首先要做的就是：识别整个桌面上挑战的位置，然后点击，就可以开始刷图了对吧。
 
-3. 这个观念也是这个脚本的核心，那就是从桌面上找到目标图片（挑战截图）中心的位置，然后利用鼠标模拟点击，实现各种流程的控制。后面无论是刷御魂也好，刷结界突破也好，带狗粮也是，都是这个思路。
+3. 这个思路也是这个脚本的核心，那就是从桌面上找到目标图片（挑战截图）中心的位置，然后利用鼠标模拟点击，实现各种流程的控制。后面无论是刷御魂也好，刷结界突破也好，带狗粮也是，都是这个思路。
 
 4. **划重点了：** 
 
    1. 场景识别（通过多个点位识别）：都返回True则场景识别返回True
       1. `l`：该点颜色与写入颜色一致则返回True
       2. `n`：该点颜色与写入颜色不一致则返回True
+      
    2. 进行操作（一般一个step只有一个操作）：
       1. `c`：单点点击
       2. `m`：多点点击，`m_1_2`，点击A后暂停1s，点击B后暂停2s
       3. `p`：按下
       4. `r`：释放
       5. `pause`：暂停
+      
    3. 组合step（步骤）为function（功能）：
       1. 一个功能包含多个step
       2. 每个step多线程分别执行场景识别
       3. 识别成功后就进行操作
+      
    4. 关联其他function（功能）：
       1. 配置connections：`connections=104-105`
       2. 主功能运行时，connections（关联功能）也会运行
       3. 适用于：关闭协同悬赏、接受同心之兰等
+      
+   5. function配置举例：
+   
+      ```ini
+      [001@双人御魂（一个电脑）]
+      step1 = 挑战@lc_1
+      step2 = 队员结算状态1@lc_3
+      step3 = 队长结算状态1@lc_3
+      step4 = 队员结算状态2@lc_1
+      step5 = 队长结算状态2@lc_1
+      step7 = 队员自动接受@lc_1
+      step8 = 队长自动邀请@l-m_1_1
+      
+      step6 = 关闭加成@l-l-m_1_1_1
+      
+      [002@斗鸡]
+      step1 = 战@lc_1
+      step2 = 准备@lc_1
+      step3 = 胜利@lc_3
+      step4 = 奖励@lc_2
+      step5 = 失败@lc_3
+      step6 = 手动切自动@lc_1
+      step7 = 拔得头筹@lc_1
+      step8 = 段位保护的战@lc_1
+      step9 = 段位保护的战2@lc_1
+      
+      [003@百鬼夜行]
+      step1 = 邀请好友@lc_1-pause_1
+      step2 = 点击好友@lc_1-pause_1
+      step3 = 点击进入@n-l-c_1-pause_1
+      step4 = 选择中间的鬼王@l-c_1-pause_1
+      step55 = 开始@l-c_1-pause_1
+      step7 = 10个豆子@l-l-pr-pause_2
+      step5_u = 不是背景色就砸豆子1@l-nc_1
+      step8_u = 不是背景色就砸豆子2@l-nc_1
+      step9_u = 不是背景色就砸豆子3@l-nc_1
+      step10_u = 不是背景色就砸豆子4@l-nc_1
+      step11_u = 不是背景色就砸豆子5@l-nc_1
+      step6 = 点旁边退出@lc_1-pause_1
+      
+      [004@刷图结算专用]
+      step1 = 结算1@lc_3
+      step2 = 结算2@lc_3
+      step11 = 结算11@lc_3
+      step12 = 结算12@lc_3
+      step3 = 继续探索@lc_1
+      step41 = 关闭1号经验加倍1@lc_1
+      step42 = 关闭1号经验加倍2@lc_1
+      step51 = 关闭2号经验加倍1@lc_1
+      step52 = 关闭2号经验加倍2@lc_1
+      
+      [005@蓝蛋上13]
+      step1 = 继续育成@lc_1-pause_1
+      step2 = 确认@lc_1
+      
+      [010@关闭悬赏邀请]
+      step1 = 关闭@l-c_1
+      ```
 
 ### 界面介绍 | Interface
 
+1. 主界面：
+
+   ![在这里插入图片描述](https://img-blog.csdnimg.cn/20210503085828890.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzIxNTc5MDQ1,size_16,color_FFFFFF,t_70)
+
+2. 海的那边：
+
+   1. 参考配置：
+
+      ```ini
+      [001@双人御魂（一个电脑）]
+      step1 = 挑战@lc_1
+      step2 = 队员结算状态1@lc_3
+      step3 = 队长结算状态1@lc_3
+      step4 = 队员结算状态2@lc_1
+      step5 = 队长结算状态2@lc_1
+      step7 = 队员自动接受@lc_1
+      step8 = 队长自动邀请@l-m_1_1
+      
+      step6 = 关闭加成@l-l-m_1_1_1
+      ```
+
+   2. 功能：显示functions.ini配置的功能
+
+      ![在这里插入图片描述](https://img-blog.csdnimg.cn/20210503090109512.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzIxNTc5MDQ1,size_16,color_FFFFFF,t_70)
+
+      选择功能后，自由之翼处会出现配置的各个step
+
+      - 红色：未配置点位
+      - 黑色：已配置点位
+
+      ![在这里插入图片描述](https://img-blog.csdnimg.cn/20210503090157765.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzIxNTc5MDQ1,size_16,color_FFFFFF,t_70)
+
+   3. 点位：选择的功能，对应的所有点信息
+
+      ![在这里插入图片描述](https://img-blog.csdnimg.cn/20210503090342459.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzIxNTc5MDQ1,size_16,color_FFFFFF,t_70)
+
+      比如：`step8 = 队长自动邀请@l-m_1_1`就会在点位处显示：
+
+      ```
+      队长自动邀请[1]@l
+      队长自动邀请[2]@m1
+      队长自动邀请[2]@m2
+      ```
+
+      解释：
+
+      - [1]、[2]代表`-`分隔的序号
+      - `@`后面代表操作的类型
+      - 总体：该step定义了三个点位（`l`、`m1`、`m2`），完成识别了一个点的颜色之后（`l`），进行 多重点击 操作（`m1`、暂停1s、`m2`、暂停1s）
+
+      如果一个step中所有的点都写入了之后，右侧对应step的名称将变成黑色
+
+   4. 坐标：鼠标所在位置的坐标和颜色，右边的写入按键显示对应的前景色
+
+      ![在这里插入图片描述](https://img-blog.csdnimg.cn/20210503091213600.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzIxNTc5MDQ1,size_16,color_FFFFFF,t_70)
+
+   5. 运行：选择功能后，点击运行则可执行脚本（注意自由之翼位置，只有黑色的step才可以正常运行）
+
+   6. 暂停/继续：字面意思，暂停和继续脚本
+
+   7. 写入：将当前的坐标信息写入点位数据中
+
+3. 献出心脏：
+
+   1. 第一行显示最近操作信息、报错信息、完成信息
+   2. 下两行显示历史信息
+
+4. 自由之翼：
+
+   1. 功能对应的step名，connections不显示（讲道理connections用的不多，考虑的较少）
+   2. 完整写入点位后，会从红色变成黑色，黑色的step才能正常运行
+   3. 显示当前正在运行的step，背景色变为黄色
+
+5. 菜单：
+
+   ![在这里插入图片描述](https://img-blog.csdnimg.cn/2021050309222392.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzIxNTc5MDQ1,size_16,color_FFFFFF,t_70)
+
+   1. 置顶：字面意思，是否窗口最前
+
+   2. 超时检查：字面意思，如果老是进行一个step，一直狂点，就会自动暂停
+
+      针对部分需要，就是要狂点的，可以取消该检查，或者在步骤名中加入`u`关键字：`step5_u = 不是背景色就砸豆子1@l-nc_1`
+
+   3. 调整界面：字面意思，调整阴阳师的界面布局（这里我懒得解释了，很复杂），如果是1920*1080的话，按我的配置最好，如果还是想自己捣鼓，指路`configs.ini`自己研究，或者留言告诉我，我有空再详说
+
+      ```ini
+      [windows]
+      # 第n个界面的坐标，单开取第一个
+      default_width = 521
+      win1_loc = -10, 0, 300, 521
+      win2_loc = -10, 700, 300, 521
+      win3_loc = 710, 0, 300, 521
+      # 写死结果，如果下面的值不是-1的话，则只用下面的值
+      # 写死第二个界面的第二个参数
+      win2_locked_2 = -1
+      # 写死第三个界面的第一个参数
+      win3_locked_1 = -1
+      ```
+
+   4. 下面未完成的，就是准备做但是没时间做、或者来不及做了，忽视它们
+
+6. 设置
+
+   ![在这里插入图片描述](https://img-blog.csdnimg.cn/20210503092821224.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzIxNTc5MDQ1,size_16,color_FFFFFF,t_70)
+
+   1. 载入默认配置：字面意思，在`templates`文件夹中有一个`默认保存文件.json`，就是指这个，载入就完了。
+
+   2. 选择用户配置：同上，只不过可以自己选了
+
+   3. 重载功能：这个比较复杂，就是说，你现在载入了一个功能对吧，然后你想加点东西啥的，比如新增一个step，那么就要修改`functions.ini`，但是并没有生效啊，那么你就要重新打开，然后全部重新布局点位，是不是很麻烦。
+
+      所以这个 **重载功能** 就是：你去修改`functions.ini`之后，然后点这个重载功能，就会发现，新增的step出现了，点位信息也有了，之前保存的step信息也还在，不用重新弄，只需要补充刚刚增加的step点位信息就行了。
+
+      看不懂就别弄了，或者留言给我。
+
+      ---
+
+   4. 存为默认配置：跟载入默认配置相对应，没什么好说的。
+
+   5. 存为其他文件：跟选择用户配置相对应，没什么好说的。
+
+      ---
+
+   6. 单项融合：就是当前你选的功能（选了、没选都可以，没选就是默认的functions.ini的所有功能，但是没有点信息），跟一个你选的另一个功能进行合并。
+
+   7. 多项融合：单项理解了，多项就简单了，多个功能合并呗（不止一个/两个）。
+
+   8. 自动融合：就是你的`templates`文件夹中（不遍历子文件夹哦）所有.json文件融合，基本没啥用，慎用。
+
+   **融合总结：**
+
+   1. 对上面的融合功能做一个简单的解释，在使用的时候，一般会为了一个功能保存一个`.json`文件，但是保存的时候其他的功能名等信息也是有的，也就是说保存了很多功能，只有你用的那个有信息。切换功能的时候就只能重新导入其他的功能，这样是不是就不是很方便。
+   2. 于是融合就是针对上面这个应用场景定制的三种融合方式，实现多个功能在一起，可以随便切换。（基本用不着，因为我还是喜欢用一个加载一个，看个人叭）
+
+7. 用户手册：字面意思呗，就是该文档`README.md`的`html`格式，如果该软件是第一次打开，会自动弹出用户手册。（实际上没必要，因为使用时的计数器一直在增加，我也懒得归零）
+
 ### 操作说明 | Operation
 
+- 见b站视频
 - **注意：**
   1. 设计时，尽量设计为：多类场景检测+单类点击事件+暂停事件
   2. 点击事件的优先顺序：
@@ -74,23 +274,29 @@
 
 ### 快捷键位 | Hotkey
 
+1. 约定：小写字母代表`alt+字母`，大写字母代表`alt+shift+字母`
+2. 注意：该快捷键是全局高优先级快捷键，意思就是比如你正在微信聊天，想用`alt+C`关闭微信，但是会直接关闭该脚本，而不是微信。
+3. 懒得写了，自己研究叭
+
 ## 从零开始 | Start Zero
 
 > 如果不懂编程的话，下面对你来说真的很难，但是没关系，所有的快乐都是努力之后得到的。成功的喜悦会覆盖所有的懊恼和气馁，一起加油叭。（有任何问题，很简单也不要紧，留言告诉我叭，我会在上面补充的。）
 
 1. **下载`python3.78`**：[官网地址](https://www.python.org/downloads/release/python-378/)，然后安装啊啥的
 
-2. **安装一个特殊的依赖包**：在cmd中输入：`pip install pyHook-1.5.1-cp37-cp37m-win_amd64.whl`，注意，这里的pyHook是拖进来的显示的应该是绝对路径，如下图：（[`pyhook`安装地址](https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyhook)）
-
-   ![在这里插入图片描述](https://img-blog.csdnimg.cn/20210120224908459.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzIxNTc5MDQ1,size_16,color_FFFFFF,t_70)
-
 3. 升级一下pip：`python -m pip install --upgrade pip -i https://pypi.douban.com/simple/` 
 
-4. 去我的[GitHub](https://github.com/TinyHandsome/FxxkOnmyoji)，下载工程文件，解压。
+3. 去我的[GitHub](https://github.com/TinyHandsome/FxxkOnmyoji)，下载工程文件，解压。
 
    ![在这里插入图片描述](https://img-blog.csdnimg.cn/2021012022520347.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzIxNTc5MDQ1,size_16,color_FFFFFF,t_70)
 
-5. **安装依赖包**：打开文件夹，看到这个`requirements.txt`了没，跟上面安装`whl`一样，输入：`pip install -r requirements.txt -i https://pypi.douban.com/simple/` ，这里的`requirements.txt`也是要拖进来的，反正是个绝对路径和相对路径的问题。如果有不懂的，留言，我慢慢补充。（tips：按住shift+右键，可以在当前路径召唤`cmd`或者`powershell`）（懂编程的人，自己看着下包就好了，我这里有很多跟这个项目无关的包，懒得改了）
+4. **安装一个特殊的依赖包**：在cmd中输入：`pip install pyHook-1.5.1-cp37-cp37m-win_amd64.whl`，注意，这里的pyHook是拖进来的显示的应该是绝对路径，如下图：~~（[`pyhook`安装地址](https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyhook)）~~（我在package文件夹中已经放入这个包了，不用你去下了）
+
+   ![在这里插入图片描述](https://img-blog.csdnimg.cn/20210120224908459.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzIxNTc5MDQ1,size_16,color_FFFFFF,t_70)
+
+5. **安装依赖包**：
+
+   打开文件夹，看到这个`requirements.txt`了没，跟上面安装`whl`一样，输入：`pip install -r requirements.txt -i https://pypi.douban.com/simple/` ，这里的`requirements.txt`也是要拖进来的，反正是个绝对路径和相对路径的问题。如果有不懂的，留言，我慢慢补充。（tips：按住shift+右键，可以在当前路径召唤`cmd`或者`powershell`）（懂编程的人，自己看着下包就好了，我这里有很多跟这个项目无关的包，懒得改了）
 
    ![在这里插入图片描述](https://img-blog.csdnimg.cn/2021012023005290.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzIxNTc5MDQ1,size_16,color_FFFFFF,t_70)
 
@@ -476,4 +682,4 @@
 - :snowflake: 我的博客园：https://www.cnblogs.com/lyjun/
 - :sunny: 我的Github：https://github.com/TinyHandsome
 
-碌碌谋生，谋其所爱。:ocean:
+碌碌谋生，谋其所爱。:ocean:          @李英俊小朋友
