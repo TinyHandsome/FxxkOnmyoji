@@ -681,5 +681,6 @@
 - :cloud: 我的CSDN：https://blog.csdn.net/qq_21579045
 - :snowflake: 我的博客园：https://www.cnblogs.com/lyjun/
 - :sunny: 我的Github：https://github.com/TinyHandsome
+- :rainbow: 我的Gitee：https://gitee.com/li_yingjun
 
-碌碌谋生，谋其所爱。:ocean:          @李英俊小朋友
+碌碌谋生，谋其所爱。:ocean:              @李英俊小朋友
