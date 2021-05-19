@@ -13,6 +13,7 @@
 >
 > 1. 【补充】视频教程连接：https://www.bilibili.com/video/BV1o64y117kY
 > 2. 本文档更新时间：20210506，请记得看最新文档。
+> 3. 除去了Gitee的链接，**Gitee已不可信**，过段时间我将注销在Gitee上的账户，并且删除其他的库，不再更新，所有的更新只在Github上，请周知。
 
 **重要声明：**
 
@@ -683,7 +684,6 @@
 - :cloud: 我的CSDN：https://blog.csdn.net/qq_21579045
 - :snowflake: 我的博客园：https://www.cnblogs.com/lyjun/
 - :sunny: 我的Github：https://github.com/TinyHandsome
-- :rainbow: 我的Gitee：https://gitee.com/li_yingjun
-- :palm_tree: 我的bilibili：https://space.bilibili.com/8182822
+- :rainbow: 我的bilibili：https://space.bilibili.com/8182822
 
 碌碌谋生，谋其所爱。:ocean:              @李英俊小朋友
