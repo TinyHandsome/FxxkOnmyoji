@@ -21,6 +21,7 @@
 
 """
 import webbrowser
+from elevate import elevate
 from functools import partial
 import os
 from dataclasses import dataclass
@@ -407,6 +408,18 @@ class App:
         # 日志管理
         self.log_factory = LogFactory()
 
+    '''TODO
+    def hotKey_bind(self):
+        """优化后的全局快捷键设置"""
+        self.root.bind('<Alt-w>', lambda e: self.write_info())
+        self.root.bind('<Alt-c>', lambda e: self.destroy())
+        self.root.bind('<Alt-r>', lambda e: self.func_start())
+        self.root.bind('<Alt-p>', lambda e: self.pause())
+        self.root.bind('<Alt-s>', lambda e: self.save_config_as_default())
+        self.root.bind('<Alt-Shift-s>', lambda e: self.save_config_to_file())
+    '''
+
+    # '''
     def hotKey_bind(self):
         """全局快捷键设置"""
         # 设置偏函数，这里实现已有映射的覆盖
@@ -427,6 +440,7 @@ class App:
         partial_register(('alt', 'shift', 'n'), callback=lambda e: self.combine_multiple_load())
         partial_register(('alt', 'shift', 'a'), callback=lambda e: self.combine_auto_load())
         partial_register(('alt', 'd'), callback=lambda e: self.set_two_win_left())
+    # '''
 
     def clear_logs(self):
         """清除7天前的日志数据"""
@@ -846,4 +860,5 @@ class App:
 
 
 if __name__ == '__main__':
+    elevate()
     App(is_test=False).run()

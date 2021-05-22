@@ -180,13 +180,13 @@
                         "point_name": "关闭加成[1]@l",
                         "point_type": "l",
                         "point_location": [
-                            1193,
-                            384
+                            "",
+                            ""
                         ],
                         "point_color": [
-                            50,
-                            50,
-                            50
+                            "",
+                            "",
+                            ""
                         ],
                         "click_times": 0
                     },
@@ -194,13 +194,13 @@
                         "point_name": "关闭加成[2]@l",
                         "point_type": "l",
                         "point_location": [
-                            997,
-                            649
+                            "",
+                            ""
                         ],
                         "point_color": [
-                            43,
-                            43,
-                            43
+                            "",
+                            "",
+                            ""
                         ],
                         "click_times": 0
                     },
@@ -208,13 +208,13 @@
                         "point_name": "关闭加成[3]@m1",
                         "point_type": "m1",
                         "point_location": [
-                            976,
-                            738
+                            "",
+                            ""
                         ],
                         "point_color": [
-                            43,
-                            43,
-                            43
+                            "",
+                            "",
+                            ""
                         ],
                         "click_times": 1
                     },
@@ -222,13 +222,13 @@
                         "point_name": "关闭加成[3]@m2",
                         "point_type": "m2",
                         "point_location": [
-                            1209,
-                            511
+                            "",
+                            ""
                         ],
                         "point_color": [
-                            43,
-                            43,
-                            43
+                            "",
+                            "",
+                            ""
                         ],
                         "click_times": 1
                     },
@@ -236,13 +236,33 @@
                         "point_name": "关闭加成[3]@m3",
                         "point_type": "m3",
                         "point_location": [
-                            1306,
-                            362
+                            "",
+                            ""
                         ],
                         "point_color": [
-                            50,
-                            50,
-                            50
+                            "",
+                            "",
+                            ""
+                        ],
+                        "click_times": 1
+                    }
+                ]
+            },
+            {
+                "step_name": "你好",
+                "step_type": "",
+                "points": [
+                    {
+                        "point_name": "你好[1]@lc",
+                        "point_type": "lc",
+                        "point_location": [
+                            "",
+                            ""
+                        ],
+                        "point_color": [
+                            "",
+                            "",
+                            ""
                         ],
                         "click_times": 1
                     }
