@@ -84,6 +84,7 @@ class App:
         e_color_length = self.settings.get_option('gui', 'e_color_length', 'int')
         windows_width_input = self.settings.get_option('gui', 'windows_width_input', 'int')
         block_color = self.settings.get_option('gui', 'block_color')
+        activebackground_deprecated = self.settings.get_option('gui', 'activebackground_deprecated')
 
         default_windows_width = self.settings.get_option('windows', 'default_width')
 
@@ -154,7 +155,11 @@ class App:
         # 初始化 进行超时检查
         self.overtime_check.set(True)
 
-        self.file_menu.add_command(label='调整界面(d)', command=self.set_two_win_left)
+        self.file_menu.add_command(label='【弃用】调整界面(d)',
+                                   # command=self.set_two_win_left,
+                                   command=lambda: self.info_stack.info('调整界面功能已弃用', 2),
+                                   activebackground=activebackground_deprecated
+                                   )
         self.file_menu.add_separator()
 
         self.file_menu.add_command(label='计时关闭（未完成）', command=...)
@@ -440,6 +445,7 @@ class App:
         partial_register(('alt', 'shift', 'n'), callback=lambda e: self.combine_multiple_load())
         partial_register(('alt', 'shift', 'a'), callback=lambda e: self.combine_auto_load())
         partial_register(('alt', 'd'), callback=lambda e: self.set_two_win_left())
+
     # '''
 
     def clear_logs(self):
