@@ -1,6 +1,3 @@
-PyMouse==1.0
 PyUserInput==0.1.11
 PyAutoGUI==0.9.52
-pyperclip==1.8.2
 system-hotkey==1.0.3
-elevate==0.1.3

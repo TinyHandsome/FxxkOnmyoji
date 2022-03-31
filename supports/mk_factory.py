@@ -90,7 +90,6 @@ class MKFactory:
         self.m.mouse_move_to(xy2[0], xy2[1])
         self.t.tip()
         self.m.mouse_release(xy2[0], xy2[1])
-        self.t.tip()
 
     def k_str(self, strs):
         """输入str，停顿"""

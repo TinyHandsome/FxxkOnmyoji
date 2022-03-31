@@ -15,7 +15,6 @@
 from dataclasses import dataclass
 import re
 import json
-import pyperclip
 
 from supports.configure_tools import Configure
 from structure.function import Function, Step
@@ -58,13 +57,6 @@ class FunctionFactory:
     def get_dict_from_functions(self, functions: [Function]):
         """将functions转为dict"""
         return [f.get_dict() for f in functions]
-
-    def get_json_from_functions(self, functions: [Function]):
-        """【测试专用】获取functions的json，并放到粘贴板"""
-        info = json.dumps(self.get_dict_from_functions(functions), indent=4, ensure_ascii=False)
-        pyperclip.copy(info)
-        print('json信息已经复制到粘贴板')
-        return info
 
     def save_functions2json(self, functions: [Function], save_path):
         """将functions的list保存为json文件"""

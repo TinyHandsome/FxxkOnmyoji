@@ -21,7 +21,6 @@
 
 """
 import webbrowser
-from elevate import elevate
 from functools import partial
 import os
 from dataclasses import dataclass
@@ -866,5 +865,4 @@ class App:
 
 
 if __name__ == '__main__':
-    elevate()
     App(is_test=False).run()

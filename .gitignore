@@ -2,6 +2,7 @@
 __pycache__
 logs
 *.spec
+venv
 
 
 !.gitignore

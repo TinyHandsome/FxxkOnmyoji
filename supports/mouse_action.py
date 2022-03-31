@@ -47,6 +47,14 @@ class MouseAction:
         """将鼠标移动到xy，弹起"""
         self.m.release(x, y)
 
+    def mouse_drag(self, x_start, y_start, x_end, y_end):
+        """将鼠标在坐标1按下，移动到坐标2松开"""
+        self.mouse_press(x_start, y_start)
+        import time
+        time.sleep(0.2)
+        self.mouse_move_to(x_end, y_end)
+        self.mouse_release(x_end, y_end)
+
     def mouse_click(self, x, y):
         """将鼠标移动到(x,y)，左键点一次"""
         self.m.click(x, y, 1, 1)
@@ -101,4 +109,4 @@ if __name__ == '__main__':
     mouse = MouseAction()
     mouse.get_mouse_postion(True)
     mouse.get_mouse_color(True)
-    print(mouse.get_mouse_color())
+    print(mouse.mouse_drag(1275, 16, 1011, 533))
